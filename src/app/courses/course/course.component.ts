@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Course} from '../../../../shared/course';
+import {Course} from '../../../../../shared/course';
 import {Observable} from 'rxjs';
-import {Lesson} from '../../../../shared/lesson';
+import {Lesson} from '../../../../../shared/lesson';
 import {concatMap, delay, filter, first, map, shareReplay, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import {CoursesHttpService} from '../services/courses-http.service';
 import {MatPaginator, PageEvent} from '@angular/material';
