@@ -1,15 +1,23 @@
-import {Controller, Get} from '@nestjs/common';
+import {Body, Controller, Get, Param, Put} from '@nestjs/common';
 import {Course} from '../../../../shared/course';
 import {findAllCourses} from '../../../db-data';
+import {CoursesRepository} from '../courses.repository';
 
-@Controller()
+@Controller('courses')
 export class CoursesController {
     // tslint:disable-next-line:no-empty
-    constructor() {
+    constructor(private coursesRepository: CoursesRepository) {
     }
 
-    @Get('/api/courses')
+    @Get()
     async findAllCourses(): Promise<Course[]> {
-        return findAllCourses();
+        return this.coursesRepository.findAll();
+    }
+
+    @Put(':courseId')
+    async updateCourse(@Param('courseId') courseId: string,
+                       @Body() changes: Partial<Course>): Promise<Course> {
+        return this.coursesRepository.updateCourse(courseId, changes);
+
     }
 }
