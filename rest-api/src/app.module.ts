@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import {CoursesController} from './courses/controllers/courses.controller';
+import {CoursesModule} from './courses/courses.module';
+import {MongooseModule} from '@nestjs/mongoose';
+import {MONGO_CONNECTION} from './constants';
 
 @Module({
-  imports: [],
-  controllers: [CoursesController],
+  imports: [CoursesModule, MongooseModule.forRoot(MONGO_CONNECTION)],
   providers: [],
 })
 export class AppModule {}
