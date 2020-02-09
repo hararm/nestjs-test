@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {Course} from '../../../../shared/course';
 import {findAllCourses} from '../../../db-data';
 import {CoursesRepository} from '../courses.repository';
@@ -7,6 +7,11 @@ import {CoursesRepository} from '../courses.repository';
 export class CoursesController {
     // tslint:disable-next-line:no-empty
     constructor(private coursesRepository: CoursesRepository) {
+    }
+
+    @Post()
+    async createCourse(@Body() course: Partial<Course>): Promise<Course> {
+        return this.coursesRepository.addCourse(course);
     }
 
     @Get()
@@ -19,5 +24,10 @@ export class CoursesController {
                        @Body() changes: Partial<Course>): Promise<Course> {
         return this.coursesRepository.updateCourse(courseId, changes);
 
+    }
+
+    @Delete(':courseId')
+    async deleteCourse(@Param('courseId') courseId: string) {
+        return this.coursesRepository.deleteCourse(courseId);
     }
 }
