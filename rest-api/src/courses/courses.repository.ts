@@ -32,7 +32,6 @@ export class CoursesRepository {
         // const result = await this.courseModel.create(course);
 
         // this allows to manipulate the model in memory, before saving it
-        course.seqNo = 0;
         const newCourse = this.courseModel(course);
         await newCourse.save();
         return newCourse.toObject({versionKey: false});
