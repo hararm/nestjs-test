@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {compareCourses, Course} from '../../../../../shared/course';
+import {compareCourses} from '../../../../../shared/course';
 import {map} from 'rxjs/operators';
 import {Lesson} from '../../../../../shared/lesson';
 import {environment} from '../../../environments/environment';
+import {Course} from "../models/course.model";
 
 
 @Injectable()
