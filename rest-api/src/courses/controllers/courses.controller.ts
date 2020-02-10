@@ -15,6 +15,7 @@ import {findAllCourses} from '../../../db-data';
 import {CoursesRepository} from '../courses.repository';
 import {HttpExceptionFilter} from '../../filters/http.filter';
 import {Course} from '../models/course.model';
+import {ToIntegerPipe} from '../../pipes/to-integer.pipe';
 
 @Controller('courses')
 // @UseFilters( new HttpExceptionFilter())
@@ -35,6 +36,7 @@ export class CoursesController {
 
     @Put(':courseId')
     async updateCourse(@Param('courseId') courseId: string,
+                       @Body('seqNo', ToIntegerPipe)
                        @Body() changes: Partial<Course>): Promise<Course> {
         if (changes._id) {
             throw new BadRequestException('Can\'t update course id');
