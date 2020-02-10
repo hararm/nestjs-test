@@ -1,4 +1,4 @@
-export interface Course {
+export interface ICourse {
   _id: string;
   seqNo: number;
   url: string;
@@ -12,7 +12,7 @@ export interface Course {
 }
 
 
-export function compareCourses(c1: Course, c2: Course) {
+export function compareCourses(c1: ICourse, c2: ICourse) {
 
   const compare = c1.seqNo - c2.seqNo;
 

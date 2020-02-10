@@ -10,10 +10,11 @@ import {
     Put,
     UseFilters,
 } from '@nestjs/common';
-import {Course} from '../../../../shared/course';
+
 import {findAllCourses} from '../../../db-data';
 import {CoursesRepository} from '../courses.repository';
 import {HttpExceptionFilter} from '../../filters/http.filter';
+import {Course} from '../models/course.model';
 
 @Controller('courses')
 // @UseFilters( new HttpExceptionFilter())
