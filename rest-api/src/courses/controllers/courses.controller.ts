@@ -25,7 +25,7 @@ export class CoursesController {
     }
 
     @Post()
-    async createCourse(@Body() course: Partial<Course>): Promise<Course> {
+    async createCourse(@Body() course: Course): Promise<Course> {
         return this.coursesRepository.addCourse(course);
     }
 
@@ -36,8 +36,7 @@ export class CoursesController {
 
     @Put(':courseId')
     async updateCourse(@Param('courseId') courseId: string,
-                       @Body('seqNo', ToIntegerPipe)
-                       @Body() changes: Partial<Course>): Promise<Course> {
+                       @Body() changes: Course): Promise<Course> {
         if (changes._id) {
             throw new BadRequestException('Can\'t update course id');
         }
