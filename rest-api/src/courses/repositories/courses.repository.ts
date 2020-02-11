@@ -1,8 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
-import {Course} from './models/course.model';
-
+import {Course} from '../models/course.model';
 
 @Injectable()
 export class CoursesRepository {

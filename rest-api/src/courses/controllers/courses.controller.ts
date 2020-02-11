@@ -4,7 +4,7 @@ import {
     Controller,
     Delete,
     Get,
-    HttpException,
+    HttpException, NotFoundException,
     Param,
     Post,
     Put,
@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 
 import {findAllCourses} from '../../../db-data';
-import {CoursesRepository} from '../courses.repository';
+import {CoursesRepository} from '../repositories/courses.repository';
 import {HttpExceptionFilter} from '../../filters/http.filter';
 import {Course} from '../models/course.model';
 import {ToIntegerPipe} from '../../pipes/to-integer.pipe';
@@ -32,6 +32,15 @@ export class CoursesController {
     @Get()
     async findAllCourses(): Promise<Course[]> {
         return this.coursesRepository.findAll();
+    }
+
+    @Get(':courseUrl')
+    async findCourseByUrl(@Param('courseUrl') courseUrl: string) {
+        const course = await this.coursesRepository.findCourseByUrl(courseUrl);
+        if (!course) {
+            throw new NotFoundException('Could not find course for url ' + courseUrl);
+        }
+        return course;
     }
 
     @Put(':courseId')
