@@ -52,7 +52,7 @@ const routes: Routes = [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi:true,
+      multi: true,
     },
   ],
   bootstrap: [AppComponent]
