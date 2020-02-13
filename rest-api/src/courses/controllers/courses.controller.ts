@@ -4,7 +4,7 @@ import {
     Controller,
     Delete,
     Get,
-    HttpException, NotFoundException,
+    HttpException, Logger, NotFoundException,
     Param,
     Post,
     Put,
@@ -20,6 +20,7 @@ import {ToIntegerPipe} from '../../pipes/to-integer.pipe';
 @Controller('courses')
 // @UseFilters( new HttpExceptionFilter())
 export class CoursesController {
+    private logger = new Logger('CoursesController');
     // tslint:disable-next-line:no-empty
     constructor(private coursesRepository: CoursesRepository) {
     }
@@ -31,6 +32,7 @@ export class CoursesController {
 
     @Get()
     async findAllCourses(): Promise<Course[]> {
+        this.logger.verbose(`Retrieving all courses`);
         return this.coursesRepository.findAll();
     }
 
