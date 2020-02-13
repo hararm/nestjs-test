@@ -42,6 +42,7 @@ export class CoursesController {
         if (!course) {
             throw new NotFoundException('Could not find course for url ' + courseUrl);
         }
+        this.logger.verbose(`Retrieving the course ${course.description}`);
         return course;
     }
 
