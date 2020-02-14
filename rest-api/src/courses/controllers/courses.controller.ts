@@ -4,20 +4,20 @@ import {
     Controller,
     Delete,
     Get,
-    HttpException, Logger, NotFoundException,
+    Logger, NotFoundException,
     Param,
     Post,
     Put,
-    UseFilters,
+    UseGuards,
 } from '@nestjs/common';
 
-import {findAllCourses} from '../../../db-data';
 import {CoursesRepository} from '../repositories/courses.repository';
-import {HttpExceptionFilter} from '../../filters/http.filter';
 import {Course} from '../models/course.model';
-import {ToIntegerPipe} from '../../pipes/to-integer.pipe';
+import {AuthenticationGuard} from '../../guards/authentication.guard';
+import {AdminGuard} from '../../guards/admin.guard';
 
 @Controller('courses')
+@UseGuards(AuthenticationGuard)
 // @UseFilters( new HttpExceptionFilter())
 export class CoursesController {
     private logger = new Logger('CoursesController');
@@ -26,6 +26,7 @@ export class CoursesController {
     }
 
     @Post()
+    @UseGuards(AdminGuard)
     async createCourse(@Body() course: Course): Promise<Course> {
         return this.coursesRepository.addCourse(course);
     }
@@ -47,6 +48,7 @@ export class CoursesController {
     }
 
     @Put(':courseId')
+    @UseGuards(AdminGuard)
     async updateCourse(@Param('courseId') courseId: string,
                        @Body() changes: Course): Promise<Course> {
         if (changes._id) {
@@ -56,6 +58,7 @@ export class CoursesController {
     }
 
     @Delete(':courseId')
+    @UseGuards(AdminGuard)
     async deleteCourse(@Param('courseId') courseId: string) {
         return this.coursesRepository.deleteCourse(courseId);
     }
