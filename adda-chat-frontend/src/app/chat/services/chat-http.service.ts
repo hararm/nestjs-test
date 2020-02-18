@@ -1,8 +1,16 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
+import {Group} from '../models/group.model';
+import {environment} from '../../../../../frontend/src/environments/environment';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class ChatHttpService {
-  addGroup() {
+  apiPath = environment.apiPath;
 
+  constructor(private http: HttpClient) {
+  }
+
+  addGroup(group: Group) {
+    return this.http.post(`${this.apiPath}groups`, group);
   }
 }

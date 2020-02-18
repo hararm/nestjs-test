@@ -3,7 +3,7 @@ import {AdminGuard} from '../../guards/admin.guard';
 import {GroupRepository} from '../repositories/group.repository';
 import {Group} from '../models/group.model';
 
-@Controller('courses')
+@Controller('groups')
 export class GroupsController {
     private logger = new Logger('GroupsController');
 

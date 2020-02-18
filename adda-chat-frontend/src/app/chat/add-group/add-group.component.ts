@@ -2,6 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
 import {Group} from '../../../../../rest-api/src/chat/models/group.model';
+import {ChatHttpService} from "../services/chat-http.service";
 
 @Component({
   selector: 'app-add-group',
@@ -15,7 +16,7 @@ export class AddGroupComponent implements OnInit {
   group: Group;
   isNew: boolean;
 
-  constructor(public modalFormRef: BsModalRef, private fb: FormBuilder,) {
+  constructor(public modalFormRef: BsModalRef, private fb: FormBuilder, private chatHttpService: ChatHttpService) {
     if(!this.isNew) {
       this.group = new Group();
     }
@@ -41,7 +42,10 @@ export class AddGroupComponent implements OnInit {
   }
 
   submitClick() {
-    this.modalFormRef.hide();
+    const res = this.addGroupForm.value;
+    this.chatHttpService.addGroup(res).subscribe( () => {
+      this.modalFormRef.hide();
+    });
   }
 
   hideModal() {

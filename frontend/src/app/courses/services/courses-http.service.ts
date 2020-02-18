@@ -51,6 +51,6 @@ export class CoursesHttpService {
   }
 
   createCourse(changes: Partial<Course>) {
-    return this.http.post('/api/courses', changes);
+    return this.http.post(`${this.apiPath}courses`, changes);
   }
 }
