@@ -11,7 +11,7 @@ export const chatRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(chatRoutes)],
+  imports: [AppBootstrapModule, RouterModule.forChild(chatRoutes)],
   declarations: [
     ChatComponent
   ],

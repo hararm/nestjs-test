@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { Routes, RouterModule } from '@angular/router';
-import {AppBootstrapModule} from "./bootsrap.module";
+import {AppBootstrapModule} from './bootsrap.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http';
 const routes: Routes = [
   {
     path: 'chat',
@@ -20,9 +22,9 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
-    RouterModule,
-    AppBootstrapModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
