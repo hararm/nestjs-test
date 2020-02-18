@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
@@ -16,6 +16,7 @@ import {AuthModule} from './auth/auth.module';
 import {environment} from '../environments/environment';
 import {MatProgressSpinnerModule} from '@angular/material';
 import {AuthInterceptor} from './auth/auth.interceptor';
+import {BrowserModule} from '@angular/platform-browser';
 
 
 const routes: Routes = [
