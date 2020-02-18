@@ -9,15 +9,17 @@ export class GroupRepository {
 
     }
 
-    async addGroup(group: Partial<Group>): Promise<Group> {
+    async addGroup(data: any): Promise<Group> {
 
         // another way of creating a model, when we want to save it immediately
         // const result = await this.courseModel.create(course);
 
         // this allows to manipulate the model in memory, before saving it
-        const newGroup = this.groupModel(group);
+        /*const newGroup = this.groupModel(group);
         await newGroup.save();
-        return newGroup.toObject({versionKey: false});
+        return newGroup.toObject({versionKey: false});*/
+
+        return new Group();
     }
 
     async findAll(): Promise<Group[]> {

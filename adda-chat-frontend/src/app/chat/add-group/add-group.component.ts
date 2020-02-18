@@ -15,6 +15,7 @@ export class AddGroupComponent implements OnInit {
   addGroupForm: FormGroup;
   group: Group;
   isNew: boolean;
+  file: any;
 
   constructor(public modalFormRef: BsModalRef, private fb: FormBuilder, private chatHttpService: ChatHttpService) {
     if(!this.isNew) {
@@ -30,20 +31,25 @@ export class AddGroupComponent implements OnInit {
   initForm() {
     this.addGroupForm = this.fb.group({
       name: [null, Validators.required],
-      image: [null],
+      image: [''],
     });
   }
 
   fillForm() {
     this.addGroupForm.patchValue({
       name: this.group.name,
-      image: this.group.image,
     });
   }
 
+  fileChanged(e) {
+    this.file = e.target.files[0];
+  }
+
   submitClick() {
-    const res = this.addGroupForm.value;
-    this.chatHttpService.addGroup(res).subscribe( () => {
+    const res = this.addGroupForm.controls;
+    const formData = new FormData();
+    formData.append('file', this.file);
+    this.chatHttpService.addGroup(formData).subscribe( () => {
       this.modalFormRef.hide();
     });
   }

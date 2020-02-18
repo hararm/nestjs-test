@@ -10,7 +10,7 @@ export class ChatHttpService {
   constructor(private http: HttpClient) {
   }
 
-  addGroup(group: Group) {
-    return this.http.post(`${this.apiPath}groups`, group);
+  addGroup(data: FormData) {
+    return this.http.post(`${this.apiPath}groups`, data);
   }
 }

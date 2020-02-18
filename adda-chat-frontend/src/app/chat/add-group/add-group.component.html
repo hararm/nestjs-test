@@ -13,7 +13,7 @@
       </div>
       <div class="form-group">
         <label for="image" class="col-form-label">Add Image:</label>
-        <input id="image" type="file"  class="form-control-file"  name="group" accept="image/x-png,image/gif,image/jpeg" formControlName="image">
+        <input id="image" type="file"  class="form-control-file" (change)="fileChanged($event)"  name="group" accept="image/x-png,image/gif,image/jpeg" formControlName="image">
       </div>
     </form>
   </div>

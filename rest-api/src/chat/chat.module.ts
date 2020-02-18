@@ -17,6 +17,6 @@ import {GroupRepository} from './repositories/group.repository';
        GroupRepository
     ],
 })
-export class CoursesModule {
+export class ChatModule {
 
 }
