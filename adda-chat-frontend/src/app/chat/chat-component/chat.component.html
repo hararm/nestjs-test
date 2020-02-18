@@ -15,7 +15,7 @@
       </button>
       <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu"
           role="menu" aria-labelledby="button-animated">
-        <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click)="onAddGroup()">Add Group</a></li>
         <li role="menuitem"><a class="dropdown-item" href="#">Another action</a>
         </li>
         <li role="menuitem"><a class="dropdown-item" href="#">Something else
@@ -26,7 +26,7 @@
 </nav>
 
 <div class="col-md-12">
-  <form action="#" method="post">
+ <!-- <form action="#" method="post">
     <div class="form-group ad-30" style="margin-top:8px;">
       <div class="input-group search-style">
         <input class="form-control new-search-bar" name="country" id="search" placeholder="Enter Your Group Name"
@@ -36,7 +36,7 @@
                 </span>
       </div>
     </div>
-  </form>
+  </form>-->
 </div>
 
 <div class="col-md-12">
@@ -81,7 +81,7 @@
 
                   <div class="col-xs-12 col-md-6">
                     <button class="btn add-fav">
-                      Add To Favorite
+                      Subscribe
                     </button>
                   </div>
                 </div>
@@ -94,7 +94,7 @@
 
                   <div class="col-xs-12 col-md-6">
                     <button class="btn add-fav">
-                      Add To Favorite
+                      Subscribe
                     </button>
                   </div>
                 </div>

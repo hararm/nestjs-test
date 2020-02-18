@@ -6,9 +6,10 @@ import {AuthModule} from './auth/auth.module';
 import {GetUserMiddleware} from './middleware/get-user.middleware';
 import {CoursesController} from './courses/controllers/courses.controller';
 import {LessonsController} from './courses/controllers/lessons.controller';
+import {GroupsController} from './chat/controllers/groups.controller';
 
 @Module({
-    imports: [AuthModule, CoursesModule, MongooseModule.forRoot(MONGO_CONNECTION)],
+    imports: [AuthModule, CoursesModule, CoursesModule, MongooseModule.forRoot(MONGO_CONNECTION)],
     providers: [],
 })
 export class AppModule implements NestModule {
@@ -17,7 +18,8 @@ export class AppModule implements NestModule {
             .apply(GetUserMiddleware)
             .forRoutes(
                 CoursesController,
-                LessonsController
+                LessonsController,
+                GroupsController
             );
 
     }
