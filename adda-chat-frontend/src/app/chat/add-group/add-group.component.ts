@@ -37,7 +37,7 @@ export class AddGroupComponent implements OnInit {
 
   fillForm() {
     this.addGroupForm.patchValue({
-      name: this.group.name,
+      name: this.group.groupName,
     });
   }
 
