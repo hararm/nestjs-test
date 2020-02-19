@@ -3,5 +3,5 @@ export class  Group implements IGroup {
   _id: string;
   image: any;
   members: [];
-  name: string;
+  groupName: string;
 }

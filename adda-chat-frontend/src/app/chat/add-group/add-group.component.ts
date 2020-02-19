@@ -49,6 +49,7 @@ export class AddGroupComponent implements OnInit {
     const res = this.addGroupForm.controls;
     const formData = new FormData();
     formData.append('file', this.file);
+    formData.append('name', res.name.value);
     this.chatHttpService.addGroup(formData).subscribe( () => {
       this.modalFormRef.hide();
     });

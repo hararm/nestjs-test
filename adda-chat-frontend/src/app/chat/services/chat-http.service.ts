@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Group} from '../models/group.model';
 import {environment} from '../../../../../frontend/src/environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 @Injectable()
 export class ChatHttpService {

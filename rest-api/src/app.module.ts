@@ -8,9 +8,17 @@ import {CoursesController} from './courses/controllers/courses.controller';
 import {LessonsController} from './courses/controllers/lessons.controller';
 import {GroupsController} from './chat/controllers/groups.controller';
 import {ChatModule} from './chat/chat.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-    imports: [AuthModule, ChatModule, CoursesModule, MongooseModule.forRoot(MONGO_CONNECTION)],
+    imports: [
+        AuthModule,
+        ChatModule,
+        CoursesModule,
+        MulterModule.register({
+            dest: './files',
+        }),
+        MongooseModule.forRoot(MONGO_CONNECTION)],
     providers: [],
 })
 export class AppModule implements NestModule {

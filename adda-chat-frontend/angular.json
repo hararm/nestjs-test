@@ -120,6 +120,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "adda-chat-frontend"
+    }
+  },
+  "defaultProject": "adda-chat-frontend",
+  "cli": {
+    "analytics": false
+  }
 }

@@ -7,7 +7,7 @@ export class FallbackExceptionFilter implements ExceptionFilter {
 
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
-
+        const request = ctx.getRequest();
         return response.status(500).json( {
             statusCode: 500,
             createdBy: 'FallbackExceptionFilter',

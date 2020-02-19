@@ -5,7 +5,7 @@ export class  Group implements IGroup {
     @IsString()
     @IsMongoId()
     _id: string;
-    image: any;
+    @IsString() image: string;
     members: [];
-    @IsString() name: string;
+    @IsString() groupName: string;
 }

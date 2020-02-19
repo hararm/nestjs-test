@@ -1,6 +1,6 @@
 export interface IGroup {
     _id: string;
-   name: string;
+   groupName: string;
    image: any;
    members: [];
 }
