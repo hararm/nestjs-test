@@ -13,7 +13,7 @@ export class GroupRepository {
         const group = new Group();
         group.image = data;
         group.groupName = name;
-        const newGroup = this.groupModel();
+        const newGroup = this.groupModel(group);
         await newGroup.save();
         return newGroup.toObject({versionKey: false});
     }
