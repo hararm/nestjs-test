@@ -8,6 +8,8 @@ import {ChatHttpService} from './services/chat-http.service';
 import {CommonModule} from '@angular/common';
 import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {GroupChatComponent} from './group-chat/group-chat.component';
+import {ChatIOService} from './services/chat-io.service';
+import {WebsocketService} from './services/websocket.service';
 
 export const chatRoutes: Routes = [
   {
@@ -21,7 +23,14 @@ export const chatRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [AppBootstrapModule, RouterModule.forChild(chatRoutes), FormsModule, ReactiveFormsModule, CommonModule, SelectDropDownModule],
+  imports: [
+    AppBootstrapModule,
+    RouterModule.forChild(chatRoutes),
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    SelectDropDownModule
+  ],
   declarations: [
     ChatComponent,
     AddGroupComponent,
@@ -32,6 +41,8 @@ export const chatRoutes: Routes = [
   ],
   providers: [
     ChatHttpService,
+    WebsocketService,
+    ChatIOService
   ],
   entryComponents: [
     AddGroupComponent

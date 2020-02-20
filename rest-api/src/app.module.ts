@@ -9,6 +9,7 @@ import {LessonsController} from './courses/controllers/lessons.controller';
 import {GroupsController} from './chat/controllers/groups.controller';
 import {ChatModule} from './chat/chat.module';
 import { MulterModule } from '@nestjs/platform-express';
+import {AppGateway} from './app.gateway';
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { MulterModule } from '@nestjs/platform-express';
             dest: './files',
         }),
         MongooseModule.forRoot(MONGO_CONNECTION)],
-    providers: [],
+    providers: [AppGateway],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {

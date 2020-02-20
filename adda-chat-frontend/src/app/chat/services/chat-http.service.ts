@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Group} from '../models/group.model';
-import {environment} from '../../../../../frontend/src/environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()

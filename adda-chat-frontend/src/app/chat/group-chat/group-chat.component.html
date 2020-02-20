@@ -6,7 +6,7 @@
   </button>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item active">
-      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-link" href="#"><i class="fa fa-home"  style="color: white"></i></a>
     </li>
   </ul>
 </nav>
@@ -98,7 +98,7 @@
                 <textarea class="form-control" name="message" id="msg" placeholder="Type a message"></textarea>
                 <div class="clearfix"></div>
                 <div class="chat_bottom">
-                  <button id="send-message" class="pull-right btn btn-primary" style="background: #4aa1f3; border: #4aa1f3; ">
+                  <button id="send-message" class="pull-right btn btn-primary" (click)="onSendToGroup()" style="background: #4aa1f3; border: #4aa1f3; ">
                     Send
                   </button>
                 </div>
