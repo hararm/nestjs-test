@@ -3,6 +3,7 @@ import {MongooseModule} from '@nestjs/mongoose';
 import {GroupSchema} from './schemas/group.schema';
 import {GroupsController} from './controllers/groups.controller';
 import {GroupRepository} from './repositories/group.repository';
+import {ClinicsController} from './controllers/clinics.controller';
 
 @Module({
     imports: [
@@ -11,7 +12,8 @@ import {GroupRepository} from './repositories/group.repository';
         ]),
     ],
     controllers: [
-        GroupsController
+        GroupsController,
+        ClinicsController
     ],
     providers: [
        GroupRepository

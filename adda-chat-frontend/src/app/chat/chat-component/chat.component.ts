@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {BsDropdownConfig, BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {FormBuilder} from '@angular/forms';
 import {AddGroupComponent} from '../add-group/add-group.component';
+import {Group} from '../models/group.model';
+import {Subscription} from 'rxjs';
+import {ChatHttpService} from '../services/chat-http.service';
 
 @Component({
   selector: 'chat-component',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
-  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{provide: BsDropdownConfig, useValue: {isAnimated: true, autoClose: true}}]
 })
 
 export class ChatComponent implements OnInit {
@@ -19,18 +23,69 @@ export class ChatComponent implements OnInit {
     ignoreBackdropClick: true
   };
 
-  constructor(private fb: FormBuilder, public modalFormRef: BsModalRef, private modalService: BsModalService,) {
+  chatGroups: Group[];
+  subscription: Subscription;
+
+  config = {
+    displayKey: 'description', // if objects array passed which key to be displayed defaults to description
+    search: true, // true/false for the search functionlity defaults to false,
+    height: 'auto', // height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
+    placeholder: 'Select', // text to be displayed when no item is selected defaults to Select,
+    customComparator: () => {
+    },// a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
+    moreText: 'more', // text to be displayed whenmore than one items are selected like Option 1 + 5 more
+    noResultsFound: 'No results found!', // text to be displayed when no items are found while searching
+    searchPlaceholder: 'Search', // label thats displayed in search input,
+    searchOnKey: 'name', // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
+    clearOnSelection: true // clears search criteria when an option is selected if set to true, default is false
+  };
+
+  dropdownOptions = [
+    'All',
+    'ASP Group Clinic1',
+    'ASP Group Clinic2',
+    'CBI Group Clinic1',
+    'CBI Group Clinic2',
+  ];
+
+  dataModel: string = null;
+
+  constructor(private fb: FormBuilder, public modalFormRef: BsModalRef, private ref: ChangeDetectorRef,
+              private chatHttpService: ChatHttpService, private modalService: BsModalService) {
+    this.subscription = new Subscription();
   }
 
   ngOnInit() {
+    this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
+      this.chatGroups = groups;
+      this.ref.markForCheck();
+    }));
   }
 
   onAddGroup() {
     this.modalConfig.initialState = {
-      data: {
-      }
+      data: {}
     };
     this.modalFormRef = this.modalService.show(AddGroupComponent, Object.assign({}, this.modalConfig));
+  }
+
+  onSelectByClinic() {
+    if(this.dataModel === 'All') {
+      this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
+        this.chatGroups = groups;
+        this.ref.markForCheck();
+      }));
+    } else {
+      this.subscription.add(this.chatHttpService.findGroupByClinicName(this.dataModel).subscribe(groups => {
+        this.chatGroups = groups;
+        this.ref.markForCheck();
+      }));
+    }
+    this.dataModel = null;
+  }
+
+  clinicsDropDownSelectionChanged(event) {
+    this.dataModel = event.value;
   }
 
 }

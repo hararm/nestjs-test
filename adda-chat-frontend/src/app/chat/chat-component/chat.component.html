@@ -26,17 +26,16 @@
 </nav>
 
 <div class="col-md-12">
- <!-- <form action="#" method="post">
-    <div class="form-group ad-30" style="margin-top:8px;">
-      <div class="input-group search-style">
-        <input class="form-control new-search-bar" name="country" id="search" placeholder="Enter Your Group Name"
-               type="text">
-        <span class="input-group-btn">
-                    <button class="btn input-btn" type="" id="search-form">Search</button>
+  <div class="form-group ad-30" style="margin-top:8px;">
+    <div class="input-group search-style">
+      <input class="form-control new-search-bar" name="country" id="search" placeholder="Enter Your Group Name"
+             type="text">
+      <span class="input-group-btn">
+                    <button class="btn input-btn" [disabled]="!this.dataModel" type="button"
+                            id="search-form">Search</button>
                 </span>
-      </div>
     </div>
-  </form>-->
+  </div>
 </div>
 
 <div class="col-md-12">
@@ -47,17 +46,13 @@
           <form action="#" method="post">
             <div class="content">
               <p class="filter">
-                FILTER
+                Filter by Clinic
               </p>
               <hr/>
-              <select class="form-control" name="country" id="country">
-                <option value="">Filter By Group</option>
-                <option>Clinic 1</option>
-                <option>Clinic 2</option>
-                <option>Clinic 3</option>
-              </select>
-              <div class="clearfix"></div>
-              <button class="btn add-apply">Apply</button>
+              <ngx-select-dropdown [config]="config" [options]="dropdownOptions"
+                                   (change)="clinicsDropDownSelectionChanged($event)"
+                                   [multiple]="false"></ngx-select-dropdown>
+              <button class="btn add-apply"  [disabled]="!this.dataModel" (click)="onSelectByClinic()">Apply</button>
             </div>
           </form>
         </div>
@@ -65,43 +60,27 @@
     </div>
     <div class="col-md-6">
       <div class="category-list">
-        <form action="#" method="post" id="add-fav">
-          <div class="item col-md-4">
-            <div class="thumbnail">
-              <img alt="">
-              <div class="caption">
-                <h4>Group Name</h4>
-
-                <div class="row">
-                  <div class="col-xs-12 col-md-6">
-                    <p>
-                      Practitioners
-                    </p>
-                  </div>
-
-                  <div class="col-xs-12 col-md-6">
-                    <button class="btn add-fav">
-                      Subscribe
-                    </button>
-                  </div>
+        <div *ngFor="let group of chatGroups" class="item col-md-4">
+          <div class="thumbnail">
+            <img alt="">
+            <div class="caption">
+              <h4>{{group.groupName}}</h4>
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <p>
+                    {{group.clinicName}}
+                  </p>
                 </div>
-                <div class="row">
-                  <div class="col-xs-12 col-md-6">
-                    <p>
-                      Receptionists
-                    </p>
-                  </div>
 
-                  <div class="col-xs-12 col-md-6">
-                    <button class="btn add-fav">
-                      Subscribe
-                    </button>
-                  </div>
+                <div class="col-xs-12 col-md-6">
+                  <button class="btn add-fav" [routerLink]="['/chat', group.groupName]">
+                    Connect
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

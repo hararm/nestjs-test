@@ -4,4 +4,5 @@ export class  Group implements IGroup {
   image: any;
   members: [];
   groupName: string;
+  clinicName: string;
 }

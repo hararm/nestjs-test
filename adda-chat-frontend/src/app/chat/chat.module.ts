@@ -5,19 +5,27 @@ import {AppBootstrapModule} from '../bootsrap.module';
 import {AddGroupComponent} from './add-group/add-group.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ChatHttpService} from './services/chat-http.service';
+import {CommonModule} from '@angular/common';
+import {SelectDropDownModule} from 'ngx-select-dropdown';
+import {GroupChatComponent} from './group-chat/group-chat.component';
 
 export const chatRoutes: Routes = [
   {
     path: '',
-    component: ChatComponent
+    component: ChatComponent,
+  },
+  {
+    path: ':groupName',
+    component: GroupChatComponent
   }
 ];
 
 @NgModule({
-  imports: [AppBootstrapModule, RouterModule.forChild(chatRoutes), FormsModule, ReactiveFormsModule],
+  imports: [AppBootstrapModule, RouterModule.forChild(chatRoutes), FormsModule, ReactiveFormsModule, CommonModule, SelectDropDownModule],
   declarations: [
     ChatComponent,
-    AddGroupComponent
+    AddGroupComponent,
+    GroupChatComponent
   ],
   exports: [
     ChatComponent

@@ -8,4 +8,5 @@ export class  Group implements IGroup {
     @IsString() image: string;
     members: [];
     @IsString() groupName: string;
+    @IsString() clinicName: string;
 }

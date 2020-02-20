@@ -12,6 +12,10 @@
         <input id="name"  class="form-control"  type="text" name="group" placeholder="Group Name" formControlName="name">
       </div>
       <div class="form-group">
+        <label for="clinicName" class="col-form-label" >Clinic Name:</label>
+        <input id="clinicName"  class="form-control"  type="text" name="group" placeholder="Clinic Name" formControlName="clinicName">
+      </div>
+      <div class="form-group">
         <label for="image" class="col-form-label">Add Image:</label>
         <input id="image" type="file"  class="form-control-file" (change)="fileChanged($event)"  name="group" accept="image/x-png,image/gif,image/jpeg" formControlName="image">
       </div>

@@ -1,0 +1,115 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <a class="navbar-brand mx-auto" href="#">Group Chat ({{groupName}})</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item active">
+      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+    </li>
+  </ul>
+</nav>
+<div class="col-md-12">
+  <div class="col-md-12">
+    <div class="chat_container">
+      <div class="row">
+
+        <div class="col-sm-4 col-md-3 mob-clearfix">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-container">
+                <div class="card">
+                  <div class="front">
+                    <div class="cover">
+
+                    </div>
+                    <div class="user cover-img">
+                      <img src="https://placehold.it/200x200" class="img-circle" alt="">
+                    </div>
+                    <div class="content">
+                      <div class="main">
+                        <h3 class="name">Username || Fullname</h3>
+                        <p class="profession-online">
+                          <i class="fa fa-circle online" aria-hidden="true"></i>
+                          Online
+                        </p>
+                        <p class="text-center">
+                          Mantra
+                        </p>
+                      </div>
+                      <div class="footer">
+                        <i class="fa fa-mail-forward"></i>
+                        <a href="#">
+                          View My Profile
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="col-md-12">
+              <div class="card-container">
+                <div class="card">
+                  <div class="front">
+
+                    <div class="content main-scroll">
+                      <div class="main" id="main_scroll">
+                        <p class="friends" style="margin-bottom:0px;">
+                          Online Users <span id="numOfFriends"></span>
+                        </p>
+                        <hr style="margin-top:10px" />
+
+                        <div class="onlineFriends"></div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5 col-md-6 message_section">
+          <div class="row">
+            <div class="new_message_head">
+              <div class="pull-left">
+                <button class="club_name">
+                  Group Name
+                </button>
+              </div>
+              <div class="pull-right">
+              </div>
+            </div>
+
+            <div class="chat_area">
+            </div>
+            <div class="message_write">
+              <form action="#" id="message-form" method="post">
+
+                <textarea class="form-control" name="message" id="msg" placeholder="Type a message"></textarea>
+                <div class="clearfix"></div>
+                <div class="chat_bottom">
+                  <button id="send-message" class="pull-right btn btn-primary" style="background: #4aa1f3; border: #4aa1f3; ">
+                    Send
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

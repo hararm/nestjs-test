@@ -31,6 +31,7 @@ export class AddGroupComponent implements OnInit {
   initForm() {
     this.addGroupForm = this.fb.group({
       name: [null, Validators.required],
+      clinicName: [null],
       image: [''],
     });
   }
@@ -38,6 +39,7 @@ export class AddGroupComponent implements OnInit {
   fillForm() {
     this.addGroupForm.patchValue({
       name: this.group.groupName,
+      clinicName: this.group.clinicName
     });
   }
 
@@ -50,6 +52,7 @@ export class AddGroupComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.file);
     formData.append('name', res.name.value);
+    formData.append('clinicName', res.clinicName.value);
     this.chatHttpService.addGroup(formData).subscribe( () => {
       this.modalFormRef.hide();
     });

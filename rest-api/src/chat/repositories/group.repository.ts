@@ -9,10 +9,11 @@ export class GroupRepository {
 
     }
 
-    async addGroup(data: any, name: string): Promise<Group> {
+    async addGroup(data: any, name: string, clinicName: string): Promise<Group> {
         const group = new Group();
         group.image = data;
         group.groupName = name;
+        group.clinicName = clinicName;
         const newGroup = this.groupModel(group);
         await newGroup.save();
         return newGroup.toObject({versionKey: false});
@@ -24,6 +25,10 @@ export class GroupRepository {
 
     async findGroupByName(groupName: string): Promise<Group> {
         return this.groupModel.findOne({name: groupName});
+    }
+
+    async findGroupByClinicName(clinicName: string) {
+        return this.groupModel.find({clinicName});
     }
 
     async updateGroup(groupId: string, changes: Partial<Group>): Promise<Group> {
