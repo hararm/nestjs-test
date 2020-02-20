@@ -83,7 +83,7 @@
             <div class="new_message_head">
               <div class="pull-left">
                 <button class="club_name">
-                  Group Name
+                  Group Name: {{groupName}}
                 </button>
               </div>
               <div class="pull-right">
@@ -91,11 +91,21 @@
             </div>
 
             <div class="chat_area">
+              <div class="message-container message flex-start">
+                <img src="https://placehold.it/100x100" class="img-circle" alt="" style="width:100%;">
+                <p>Hello. How are you today?</p>
+                <span class="time-right">11:00</span>
+              </div>
+
+              <div class="message-container my-message flex-end">
+                <img src="https://placehold.it/100x100" class="img-circle" alt="" class="right" style="width:100%;">
+                <p>Hey! I'm fine. Thanks for asking!</p>
+                <span class="time-left">11:01</span>
+              </div>
             </div>
             <div class="message_write">
-              <form action="#" id="message-form" method="post">
-
-                <textarea class="form-control" name="message" id="msg" placeholder="Type a message"></textarea>
+              <form [formGroup]="msgForm" id="message-form">
+                <textarea class="form-control" formControlName="message" id="msg" placeholder="Type a message"></textarea>
                 <div class="clearfix"></div>
                 <div class="chat_bottom">
                   <button id="send-message" class="pull-right btn btn-primary" (click)="onSendToGroup()" style="background: #4aa1f3; border: #4aa1f3; ">

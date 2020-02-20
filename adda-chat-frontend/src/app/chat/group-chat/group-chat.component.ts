@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ChatIOService} from '../services/chat-io.service';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-group-chat',
@@ -10,6 +11,9 @@ import {ChatIOService} from '../services/chat-io.service';
 export class GroupChatComponent implements OnInit {
 
   groupName: string;
+  msgForm = new FormGroup({
+    message: new FormControl(''),
+  });
   constructor(private chatIOService: ChatIOService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -25,8 +29,9 @@ export class GroupChatComponent implements OnInit {
     })
   }
 
+
   onSendToGroup() {
-    console.log('Message sent');
-    this.chatIOService.sendMessage('Ku');
+    console.log(this.msgForm.value);
+    this.chatIOService.sendMessage(this.msgForm.get('message').value);
   }
 }

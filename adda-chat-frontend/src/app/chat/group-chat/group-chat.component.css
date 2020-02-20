@@ -83,6 +83,8 @@ h3 {
 }
 
 .chat_area {
+  display:  flex;
+  flex-direction: column;
   background: white;
   float: left;
   height: 360px;
@@ -119,6 +121,66 @@ h3 {
 
 .chat_area li:last-child {
   padding-bottom: 10px;
+}
+
+.message-container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 50%;
+}
+.flex-start {
+  -webkit-align-self: flex-start;
+  align-self: flex-start;
+}
+
+.flex-end {
+  -webkit-align-self: flex-end;
+  align-self: flex-end;
+}
+
+.message {
+  border-color: #aaaaaa;
+  background-color: #aaaaaa;
+  align-items: flex-end;
+}
+
+.my-message {
+  border-color: #4aa1f3;
+  background-color: #4aa1f3;
+  align-items: flex-end;
+}
+
+.message-container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.message-container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.message-container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
 }
 
 .message_write {

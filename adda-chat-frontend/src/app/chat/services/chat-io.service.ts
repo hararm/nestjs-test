@@ -20,5 +20,4 @@ export class ChatIOService {
   sendMessage(msg) {
     this.messages.next(msg);
   }
-
 }

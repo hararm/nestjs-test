@@ -2,28 +2,28 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '../../../environments/environment';
 import {Observable, Subject} from 'rxjs';
-
+import Socket = SocketIOClient.Socket;
 
 
 @Injectable()
 export class WebsocketService {
 
   // Our socket connection
-  private socket;
+  private socket: Socket;
 
   constructor() { }
 
   connect(): Subject<MessageEvent> {
     // If you aren't familiar with environment variables then
     // you can hard code `environment.ws_url` as `http://localhost:9000`
-    this.socket = io(environment.ws_url);
+    this.socket = io.connect(environment.ws_url, {autoConnect: true, rejectUnauthorized: true});
 
     // We define our observable which will observe any incoming messages
     // from our socket.io server.
-    const observable = new Observable(observer => {
+    const observable = new Observable(obs => {
       this.socket.on('msgToClient', (data) => {
         console.log('Received message from Websocket Server');
-        observer.next(data);
+        obs.next(data);
       });
       return () => {
         this.socket.disconnect();
@@ -36,13 +36,12 @@ export class WebsocketService {
     const observer = {
       next: (data: object) => {
         console.log('Send message to Websocket Server');
-        this.socket.emit('msgToServer', JSON.stringify(data));
+        // this.createRoom('Room1');
+         this.socket.emit('msgToServer', JSON.stringify(data));
       },
     };
-
     // we return our Rx.Subject which is a combination
     // of both an observer and observable.
     return Subject.create(observer, observable);
   }
-
 }
