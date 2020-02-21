@@ -26,12 +26,14 @@ export class GroupChatComponent implements OnInit {
 
     this.chatIOService.messages.subscribe(msg => {
       console.log(msg);
-    })
+    });
+
+    this.chatIOService.joinRoom(this.groupName,'Armen');
   }
 
 
   onSendToGroup() {
     console.log(this.msgForm.value);
-    this.chatIOService.sendMessage(this.msgForm.get('message').value);
+    this.chatIOService.sendMessage(this.msgForm.get('message').value, this.groupName, 'Armen');
   }
 }

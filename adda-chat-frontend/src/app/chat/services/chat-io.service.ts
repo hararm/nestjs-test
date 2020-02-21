@@ -17,7 +17,15 @@ export class ChatIOService {
 
   // Our simplified interface for sending
   // messages back to our socket.io server
-  sendMessage(msg) {
-    this.messages.next(msg);
+  sendMessage(msg: string, roomName: string, sender: string) {
+    this.messages.next({event: 'msgToServer', data: {sender, room: roomName, message: msg}});
+  }
+
+  joinRoom(roomName: string, sender: string) {
+    this.messages.next({event: 'joinRoom', data: roomName});
+  }
+
+  leaveRoom(roomName: string, sender: string) {
+    this.messages.next({event: 'leaveRoom', data: roomName});
   }
 }

@@ -34,10 +34,9 @@ export class WebsocketService {
     // from our other components and send messages back to our
     // socket server whenever the `next()` method is called.
     const observer = {
-      next: (data: object) => {
+      next: (event: {event: string, data: object}) => {
         console.log('Send message to Websocket Server');
-        // this.createRoom('Room1');
-         this.socket.emit('msgToServer', JSON.stringify(data));
+         this.socket.emit(event.event, JSON.stringify(event.data));
       },
     };
     // we return our Rx.Subject which is a combination

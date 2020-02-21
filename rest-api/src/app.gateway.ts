@@ -1,37 +1,51 @@
 import {
-  SubscribeMessage,
-  WebSocketGateway,
-  OnGatewayInit,
-  WebSocketServer,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
+    SubscribeMessage,
+    WebSocketGateway,
+    OnGatewayInit,
+    WebSocketServer,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
 
 @WebSocketGateway()
 export class AppGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() server: Server;
+    implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    @WebSocketServer() server: Server;
 
-  private logger: Logger = new Logger('AppGateway');
+    private logger: Logger = new Logger('AppGateway');
 
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: string): void {
-    this.logger.debug(`Message: ${payload}`);
-    this.server.clients().emit('msgToClient', payload);
-  }
+    @SubscribeMessage('msgToServer')
+    handleMessage(client: Socket, payload: { sender: string, room: string, message: string }): void {
+        this.logger.debug(`Message: ${JSON.stringify(payload)}`);
+        this.server.to(payload.room).emit('msgToClient', payload);
+    }
 
-  afterInit(server: Server) {
-    this.logger.log('Init');
-  }
+    @SubscribeMessage('joinRoom')
+    handleJoinRoom(client: Socket, room: string) {
+      client.join(room);
+      this.logger.log(`Client joined room:: ${room}`);
+      client.emit('joinedRoom');
+    }
 
-  handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
-  }
+    @SubscribeMessage('leaveRoom')
+    handleLeaveRoom(client: Socket, room: string) {
+      client.leave(room);
+      this.logger.log(`Client left room:: ${room}`);
+      client.emit('leftRoom');
+    }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
-    this.logger.log(`Client connected Args: ${JSON.stringify(args)}`);
-  }
+    afterInit(server: Server) {
+        this.logger.log('Init');
+    }
+
+    handleDisconnect(client: Socket) {
+        this.logger.log(`Client disconnected: ${client.id}`);
+    }
+
+    handleConnection(client: Socket, ...args: any[]) {
+        this.logger.log(`Client connected: ${client.id}`);
+        this.logger.log(`Client connected Args: ${JSON.stringify(args)}`);
+    }
 }
