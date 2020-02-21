@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { WebsocketService } from './websocket.service';
+import {Injectable} from '@angular/core';
+import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -8,24 +8,22 @@ export class ChatIOService {
 
   messages: Subject<any>;
 
-  // Our constructor calls our wsService connect method
   constructor(private wsService: WebsocketService) {
-    this.messages = (wsService.connect().pipe(map((response: any): any => {
-        return response;
-      })) as Subject<any>)
+    this.wsService.connect();
+    this.messages = (wsService.subscribeToEvents().pipe(map((response: any): any => {
+      return response;
+    })) as Subject<any>)
   }
 
-  // Our simplified interface for sending
-  // messages back to our socket.io server
-  sendMessage(msg: string, roomName: string, sender: string) {
-    this.messages.next({event: 'msgToServer', data: {sender, room: roomName, message: msg}});
+  sendMessage(msg: string, groupId: string, sender: string) {
+    this.messages.next({event: 'msgToServer', data: {sender, room: groupId, message: msg}});
   }
 
-  joinRoom(roomName: string, sender: string) {
-    this.messages.next({event: 'joinRoom', data: roomName});
+  joinRoom(groupId: string, sender: string) {
+    this.messages.next({event: 'joinRoom', data: groupId});
   }
 
-  leaveRoom(roomName: string, sender: string) {
-    this.messages.next({event: 'leaveRoom', data: roomName});
+  leaveRoom(groupId: string, sender: string) {
+    this.messages.next({event: 'leaveRoom', data: groupId});
   }
 }

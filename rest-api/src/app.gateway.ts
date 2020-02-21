@@ -18,7 +18,7 @@ export class AppGateway
 
     @SubscribeMessage('msgToServer')
     handleMessage(client: Socket, payload: { sender: string, room: string, message: string }): void {
-        this.logger.debug(`Message: ${JSON.stringify(payload)}`);
+        this.logger.debug(`Message: ${payload.message} from: ${payload.sender} to room: ${payload.room}`);
         this.server.to(payload.room).emit('msgToClient', payload);
     }
 
@@ -26,14 +26,14 @@ export class AppGateway
     handleJoinRoom(client: Socket, room: string) {
       client.join(room);
       this.logger.log(`Client joined room:: ${room}`);
-      client.emit('joinedRoom');
+      client.emit('joinedRoom', room);
     }
 
     @SubscribeMessage('leaveRoom')
     handleLeaveRoom(client: Socket, room: string) {
       client.leave(room);
       this.logger.log(`Client left room:: ${room}`);
-      client.emit('leftRoom');
+      client.emit('leftRoom', room);
     }
 
     afterInit(server: Server) {

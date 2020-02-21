@@ -17,7 +17,7 @@ export const chatRoutes: Routes = [
     component: ChatComponent,
   },
   {
-    path: ':groupName',
+    path: ':groupId',
     component: GroupChatComponent
   }
 ];

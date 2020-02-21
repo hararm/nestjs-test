@@ -42,12 +42,22 @@ export class GroupsController {
     }
 
     @Get(':groupName')
-    async findCourseByUrl(@Param('groupName') groupName: string) {
+    async findGroupByUrl(@Param('groupName') groupName: string) {
         const course = await this.groupsRepository.findGroupByName(groupName);
         if (!course) {
-            throw new NotFoundException('Could not find course for url ' + groupName);
+            throw new NotFoundException('Could not find group for url ' + groupName);
         }
         this.logger.verbose(`Retrieving the course ${course.groupName}`);
+        return course;
+    }
+
+    @Get('findGroupById/:id')
+    async findGroupById(@Param('id') id: string) {
+        const course = await this.groupsRepository.findGroupById(id);
+        if (!course) {
+            throw new NotFoundException('Could not find group for url ' + id);
+        }
+        this.logger.verbose(`Retrieving the group ${course.groupName}`);
         return course;
     }
 

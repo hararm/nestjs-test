@@ -27,6 +27,10 @@ export class GroupRepository {
         return this.groupModel.findOne({name: groupName});
     }
 
+    async findGroupById(id: string): Promise<Group> {
+        return this.groupModel.findOne({_id: id});
+    }
+
     async findGroupByClinicName(clinicName: string) {
         return this.groupModel.find({clinicName});
     }

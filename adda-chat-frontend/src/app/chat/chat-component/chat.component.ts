@@ -5,6 +5,7 @@ import {AddGroupComponent} from '../add-group/add-group.component';
 import {Group} from '../models/group.model';
 import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
+import {ChatIOService} from "../services/chat-io.service";
 
 @Component({
   selector: 'chat-component',
@@ -50,8 +51,13 @@ export class ChatComponent implements OnInit {
 
   dataModel: string = null;
 
-  constructor(private fb: FormBuilder, public modalFormRef: BsModalRef, private ref: ChangeDetectorRef,
-              private chatHttpService: ChatHttpService, private modalService: BsModalService) {
+  constructor(private fb: FormBuilder,
+              public modalFormRef: BsModalRef,
+              private ref: ChangeDetectorRef,
+              private chatHttpService: ChatHttpService,
+              private modalService: BsModalService,
+              private chatIOService: ChatIOService,
+  ) {
     this.subscription = new Subscription();
   }
 

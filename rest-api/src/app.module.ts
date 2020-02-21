@@ -6,7 +6,6 @@ import {AuthModule} from './auth/auth.module';
 import {GetUserMiddleware} from './middleware/get-user.middleware';
 import {CoursesController} from './courses/controllers/courses.controller';
 import {LessonsController} from './courses/controllers/lessons.controller';
-import {GroupsController} from './chat/controllers/groups.controller';
 import {ChatModule} from './chat/chat.module';
 import { MulterModule } from '@nestjs/platform-express';
 import {AppGateway} from './app.gateway';
