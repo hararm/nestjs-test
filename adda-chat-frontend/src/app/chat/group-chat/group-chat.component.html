@@ -91,16 +91,13 @@
             </div>
 
             <div class="chat_area">
-              <div class="message-container message flex-start">
-                <img src="https://placehold.it/100x100" class="img-circle" alt="" style="width:100%;">
-                <p>Hello. How are you today?</p>
-                <span class="time-right">11:00</span>
-              </div>
-
-              <div class="message-container my-message flex-end">
-                <img src="https://placehold.it/100x100" class="img-circle" alt="" class="right" style="width:100%;">
-                <p>Hey! I'm fine. Thanks for asking!</p>
-                <span class="time-left">11:01</span>
+              <div *ngIf="messages && messages.length > 0">
+                <div class="message-container flex-start" [ngClass]="{'chat-message': message.senderId !== currentUserId,
+                  'chat-message-me': message.senderId === currentUserId}" *ngFor="let message of messages">
+                  <img src="https://placehold.it/100x100" class="img-circle" alt="" style="width:100%;">
+                  <p>{{message.message}}</p>
+                  <span class="time-right">11:00</span>
+                </div>
               </div>
             </div>
             <div class="message_write">

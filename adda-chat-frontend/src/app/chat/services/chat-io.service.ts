@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {ChatMessage} from '../../../../../shared/chat-message';
 
 @Injectable()
 export class ChatIOService {
@@ -15,15 +16,15 @@ export class ChatIOService {
     })) as Subject<any>)
   }
 
-  sendMessage(msg: string, groupId: string, sender: string) {
-    this.messages.next({event: 'msgToServer', data: {sender, room: groupId, message: msg}});
+  sendMessage(msg: ChatMessage) {
+    this.messages.next({event: 'msgToServer', data: msg});
   }
 
-  joinRoom(groupId: string, sender: string) {
-    this.messages.next({event: 'joinRoom', data: groupId});
+  joinRoom(channelId: string) {
+    this.messages.next({event: 'joinRoom', data: channelId});
   }
 
-  leaveRoom(groupId: string, sender: string) {
-    this.messages.next({event: 'leaveRoom', data: groupId});
+  leaveRoom(channelId: string) {
+    this.messages.next({event: 'leaveRoom', data: channelId});
   }
 }

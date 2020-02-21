@@ -131,26 +131,21 @@ h3 {
   margin: 10px 0;
   width: 50%;
 }
-.flex-start {
+
+.chat-message {
+  border-color: #aaaaaa;
+  background-color: #aaaaaa;
+  align-items: flex-end;
   -webkit-align-self: flex-start;
   align-self: flex-start;
 }
 
-.flex-end {
-  -webkit-align-self: flex-end;
-  align-self: flex-end;
-}
-
-.message {
-  border-color: #aaaaaa;
-  background-color: #aaaaaa;
-  align-items: flex-end;
-}
-
-.my-message {
+.chat-message-me {
   border-color: #4aa1f3;
   background-color: #4aa1f3;
   align-items: flex-end;
+  -webkit-align-self: flex-end;
+  align-self: flex-end;
 }
 
 .message-container::after {

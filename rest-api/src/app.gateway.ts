@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
+import {ChatMessage} from '../../shared/chat-message';
 
 @WebSocketGateway()
 export class AppGateway
@@ -17,9 +18,9 @@ export class AppGateway
     private logger: Logger = new Logger('AppGateway');
 
     @SubscribeMessage('msgToServer')
-    handleMessage(client: Socket, payload: { sender: string, room: string, message: string }): void {
-        this.logger.debug(`Message: ${payload.message} from: ${payload.sender} to room: ${payload.room}`);
-        this.server.to(payload.room).emit('msgToClient', payload);
+    handleMessage(client: Socket, payload: ChatMessage): void {
+        this.logger.debug(`Message: ${payload.message} from: ${payload.senderId} to room: ${payload.channelId}`);
+        this.server.to(payload.channelId).emit('msgToClient', payload);
     }
 
     @SubscribeMessage('joinRoom')
