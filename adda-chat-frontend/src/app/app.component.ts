@@ -13,6 +13,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.router.navigateByUrl('/chat').then();
+    this.router.navigateByUrl('/login').then();
   }
 }

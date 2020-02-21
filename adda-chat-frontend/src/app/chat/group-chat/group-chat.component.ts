@@ -5,6 +5,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import {ChatMessage} from '../../../../../shared/chat-message';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-group-chat',
@@ -15,6 +16,7 @@ import {ChatMessage} from '../../../../../shared/chat-message';
 export class GroupChatComponent implements OnInit, OnDestroy {
   currentUserId: string;
   groupName: string;
+  currentUserName: string;
   groupId: string;
   messages: ChatMessage[];
   subscription: Subscription;
@@ -32,7 +34,8 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.messages = [];
-    this.currentUserId = 'Armen';
+    this.currentUserName = localStorage.getItem('email');
+    this.currentUserId = localStorage.getItem('userId');
     this.route.params
       .subscribe(params => {
         console.log(params);
@@ -59,7 +62,12 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
   onSendToGroup() {
     console.log('Message to server', this.msgForm.value);
-    this.chatIOService.sendMessage(new ChatMessage(this.currentUserId, this.groupId,this.msgForm.get('message').value, this.currentUserId));
+    this.chatIOService.sendMessage(
+      new ChatMessage(this.currentUserId,
+      this.groupId,
+      this.msgForm.get('message').value,
+      moment().format('LLL'),
+      this.currentUserName));
   }
 
   onLeftRoom() {

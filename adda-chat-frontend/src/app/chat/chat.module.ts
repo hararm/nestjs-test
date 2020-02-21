@@ -24,11 +24,11 @@ export const chatRoutes: Routes = [
 
 @NgModule({
   imports: [
+    CommonModule,
     AppBootstrapModule,
     RouterModule.forChild(chatRoutes),
     FormsModule,
     ReactiveFormsModule,
-    CommonModule,
     SelectDropDownModule
   ],
   declarations: [

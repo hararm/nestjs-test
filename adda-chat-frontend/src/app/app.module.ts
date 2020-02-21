@@ -6,7 +6,13 @@ import { Routes, RouterModule } from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AuthModule} from './auth/auth.module';
+
 const routes: Routes = [
+  {
+    path: 'login',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
   {
     path: 'chat',
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule)
@@ -26,6 +32,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
+    AuthModule.forRoot(),
     HttpClientModule
   ],
   providers: [],

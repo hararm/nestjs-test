@@ -106,23 +106,6 @@ h3 {
   hyphens: auto;
 }
 
-.chat_area li {
-  padding: 14px 14px 0;
-}
-
-.chat_area li .chat-img1 img {
-  height: 40px;
-  width: 40px;
-}
-
-.chat_area .chat-body1 {
-  margin-left: 50px;
-}
-
-.chat_area li:last-child {
-  padding-bottom: 10px;
-}
-
 .message-container {
   border: 2px solid #dedede;
   background-color: #f1f1f1;
@@ -135,7 +118,6 @@ h3 {
 .chat-message {
   border-color: #aaaaaa;
   background-color: #aaaaaa;
-  align-items: flex-end;
   -webkit-align-self: flex-start;
   align-self: flex-start;
 }
@@ -143,7 +125,6 @@ h3 {
 .chat-message-me {
   border-color: #4aa1f3;
   background-color: #4aa1f3;
-  align-items: flex-end;
   -webkit-align-self: flex-end;
   align-self: flex-end;
 }
@@ -157,6 +138,7 @@ h3 {
 .message-container img {
   float: left;
   max-width: 60px;
+  max-height: 60px;
   width: 100%;
   margin-right: 20px;
   border-radius: 50%;
@@ -170,12 +152,12 @@ h3 {
 
 .time-right {
   float: right;
-  color: #aaa;
+  color: #000000;
 }
 
 .time-left {
   float: left;
-  color: #999;
+  color: #ffffff;
 }
 
 .message_write {
@@ -242,23 +224,25 @@ member_list li:hover {
   border-radius: 4px 4px 0 0;
 }
 
+.card .user {
+  display: block;
+  height: 200px;
+  width: 200px;
+  margin: -55px auto 0;
+  overflow: hidden;
+
+}
+
 .card .cover img {
   width: 100%;
 }
 
-.card .user {
-  border-radius: 50%;
-  display: block;
-  height: 200px;
-  margin: -55px auto 0;
-  overflow: hidden;
-  width: 200px;
-}
-
 .card .user img {
+  border-radius: 50%;
   background: none repeat scroll 0 0 #FFFFFF;
   border: 4px solid #FFFFFF;
-  width: 100%;
+  max-height: 200px;
+  max-width: 200px;
 }
 
 .card .content {

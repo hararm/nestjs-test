@@ -6,6 +6,7 @@ import {Group} from '../models/group.model';
 import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import {ChatIOService} from "../services/chat-io.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'chat-component',
@@ -52,6 +53,7 @@ export class ChatComponent implements OnInit {
   dataModel: string = null;
 
   constructor(private fb: FormBuilder,
+              private router: Router,
               public modalFormRef: BsModalRef,
               private ref: ChangeDetectorRef,
               private chatHttpService: ChatHttpService,
@@ -92,6 +94,11 @@ export class ChatComponent implements OnInit {
 
   clinicsDropDownSelectionChanged(event) {
     this.dataModel = event.value;
+  }
+
+  onLogOut() {
+    localStorage.removeItem('authJwtToken');
+    this.router.navigateByUrl('/login').then();
   }
 
 }
