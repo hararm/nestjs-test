@@ -45,7 +45,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
     this.subscription.add(this.chatIOService.messages.subscribe((msg: ChatMessage) => {
       console.log('Message from server', msg);
-      if(msg.senderId) {
+      if (msg.senderId) {
         this.messages.push(msg);
         this.ref.markForCheck();
       }
@@ -64,10 +64,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     console.log('Message to server', this.msgForm.value);
     this.chatIOService.sendMessage(
       new ChatMessage(this.currentUserId,
-      this.groupId,
-      this.msgForm.get('message').value,
-      moment().format('LLL'),
-      this.currentUserName));
+        this.groupId,
+        this.msgForm.get('message').value,
+        moment().format('LLL'),
+        this.currentUserName));
+    this.msgForm.get('message').patchValue(null);
   }
 
   onLeftRoom() {

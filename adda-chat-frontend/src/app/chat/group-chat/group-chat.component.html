@@ -10,7 +10,7 @@
     </li>
   </ul>
 </nav>
-<div class="col-md-12">
+<div class="col-md-12" style="margin-top: 20px;">
   <div class="col-md-12">
     <div class="chat_container">
       <div class="row">
@@ -82,8 +82,7 @@
               </div>
             </div>
 
-            <div class="chat_area">
-              <div *ngIf="messages && messages.length > 0">
+            <div *ngIf="messages && messages.length > 0" class="chat_area">
                 <div class="message-container" [ngClass]="{'chat-message': message.senderId !== currentUserId,
                   'chat-message-me': message.senderId === currentUserId}" *ngFor="let message of messages">
                   <img src="assets/images/placeholder.png" alt="" style="width:100%;">
@@ -91,7 +90,6 @@
                   <span class="time-left">{{message.senderNicName}}</span>
                   <span class="time-right">{{message.timeStamp}}</span>
                 </div>
-              </div>
             </div>
             <div class="message_write">
               <form [formGroup]="msgForm" id="message-form">

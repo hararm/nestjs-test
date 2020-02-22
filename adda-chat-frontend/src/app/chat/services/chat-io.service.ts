@@ -3,6 +3,7 @@ import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ChatMessage} from '../../../../../shared/chat-message';
+import * as io from 'socket.io-client';
 
 @Injectable()
 export class ChatIOService {
@@ -26,5 +27,8 @@ export class ChatIOService {
 
   leaveRoom(channelId: string) {
     this.messages.next({event: 'leaveRoom', data: channelId});
+  }
+
+  getChannelMembers() {
   }
 }

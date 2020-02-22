@@ -18,7 +18,7 @@ export class WebsocketService {
     if (this.socket && this.socket.connected) {
       this.socket.disconnect();
     }
-    this.socket = io.connect(environment.ws_url, {autoConnect: true, rejectUnauthorized: true});
+    this.socket = io(environment.ws_url, {autoConnect: true, rejectUnauthorized: true});
   }
 
   disconnect() {
