@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {WebsocketService} from './websocket.service';
-import {Subject} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ChatMessage} from '../../../../../shared/chat-message';
 import * as io from 'socket.io-client';
@@ -10,12 +10,19 @@ import {ChatUser} from '../../../../../shared/chat-user';
 export class ChatIOService {
 
   messages: Subject<any>;
+  disconnectEvent$: Observable<any>;
+  joinToRoomEvent$: Observable<any>;
+  leftRoomEvent$: Observable<any>;
 
   constructor(private wsService: WebsocketService) {
     this.wsService.connect();
-    this.messages = (wsService.subscribeToEvents().pipe(map((response: any): any => {
+    this.messages = (wsService.subscribeToClientMessagesEvents().pipe(map((response: any): any => {
       return response;
-    })) as Subject<any>)
+    })) as Subject<any>);
+
+    this.disconnectEvent$ = wsService.subscribeToDisconnectEvent();
+    this.joinToRoomEvent$ = wsService.joinedToRoomEvent();
+    this.leftRoomEvent$ = wsService.leftRoomEvent();
   }
 
   sendMessage(msg: ChatMessage) {

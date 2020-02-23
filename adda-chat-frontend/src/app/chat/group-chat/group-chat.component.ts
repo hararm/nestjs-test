@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ChatIOService} from '../services/chat-io.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
@@ -30,6 +30,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     private ref: ChangeDetectorRef,
     private chatIOService: ChatIOService,
     private chatHttpService: ChatHttpService,
+    private router: Router,
     private route: ActivatedRoute) {
     this.subscription = new Subscription();
   }
@@ -55,6 +56,19 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         this.ref.markForCheck();
         console.log('Active users from server', JSON.stringify(this.users));
       }
+    }));
+
+    this.subscription.add(this.chatIOService.disconnectEvent$.subscribe(() => {
+      console.log('Disconnected from server');
+      this.router.navigate(['/chat']).then();
+    }));
+
+    this.subscription.add(this.chatIOService.joinToRoomEvent$.subscribe((data) => {
+      console.log('Client joined room', JSON.stringify(data));
+    }));
+
+    this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
+      console.log('Client left room', JSON.stringify(data));
     }));
     if (this.groupId) {
       this.subscription.add(this.chatHttpService.findGroupById(this.groupId).subscribe(group => {

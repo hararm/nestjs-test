@@ -27,18 +27,34 @@ export class WebsocketService {
     }
   }
 
-  subscribeToEvents(): Subject<MessageEvent> {
+  subscribeToDisconnectEvent(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('disconnect', () => {
+        obs.next();
+      });
+    });
+  }
+
+  joinedToRoomEvent(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('joinedRoom', (data) => {
+        obs.next(data);
+      });
+    });
+  }
+
+  leftRoomEvent(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('leftRoom', (data) => {
+        obs.next(data);
+      });
+    });
+  }
+
+  subscribeToClientMessagesEvents(): Subject<MessageEvent> {
     const observable = new Observable(obs => {
       this.socket.on('msgToClient', (data) => {
         console.log('Received message from Websocket Server');
-        obs.next(data);
-      });
-      this.socket.on('joinedRoom', (data) => {
-        console.log('Client joined room', JSON.stringify(data));
-        obs.next(data);
-      });
-      this.socket.on('leftRoom', (data) => {
-        console.log('Client left room', JSON.stringify(data));
         obs.next(data);
       });
     });
