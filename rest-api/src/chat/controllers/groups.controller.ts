@@ -1,9 +1,10 @@
 import {
+    BadRequestException,
     Body,
     Controller, Get,
     Logger, NotFoundException,
     Param,
-    Post, Res,
+    Post, Put, Res,
     UploadedFile,
     UseFilters,
     UseGuards,
@@ -14,6 +15,7 @@ import {GroupRepository} from '../repositories/group.repository';
 import {Group} from '../models/group.model';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {ImageFileFilter} from '../filters/imageFileFilter';
+import {ChatUser} from '../../../../shared/chat-user';
 
 @Controller('groups')
 export class GroupsController {

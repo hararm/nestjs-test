@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Group} from '../models/group.model';
+import {ChatUser} from '../../../../shared/chat-user';
 
 @Injectable()
 export class GroupRepository {
@@ -38,6 +39,15 @@ export class GroupRepository {
     async updateGroup(groupId: string, changes: Partial<Group>): Promise<Group> {
         return this.groupModel.findOneAndUpdate({_id: groupId}, changes, {new: true});
     }
+
+    async updateGroupUsers(groupId: string, members: ChatUser[]): Promise<Group> {
+        const group = await this.findGroupById(groupId);
+        if (group) {
+            group.members = members;
+        }
+        return await this.updateGroup(groupId, group);
+    }
+
 
     deleteGroup(groupId: string) {
         return this.groupModel.deleteOne({_id: groupId});

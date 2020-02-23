@@ -18,7 +18,9 @@ import {ClinicsController} from './controllers/clinics.controller';
     providers: [
        GroupRepository
     ],
+    exports: [
+        GroupRepository
+    ]
 })
 export class ChatModule {
-
 }

@@ -34,11 +34,11 @@ export class WebsocketService {
         obs.next(data);
       });
       this.socket.on('joinedRoom', (data) => {
-        console.log('Client joined room', data);
+        console.log('Client joined room', JSON.stringify(data));
         obs.next(data);
       });
       this.socket.on('leftRoom', (data) => {
-        console.log('Client left room', data);
+        console.log('Client left room', JSON.stringify(data));
         obs.next(data);
       });
     });

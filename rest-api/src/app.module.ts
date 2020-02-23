@@ -7,7 +7,7 @@ import {GetUserMiddleware} from './middleware/get-user.middleware';
 import {CoursesController} from './courses/controllers/courses.controller';
 import {LessonsController} from './courses/controllers/lessons.controller';
 import {ChatModule} from './chat/chat.module';
-import { MulterModule } from '@nestjs/platform-express';
+import {MulterModule} from '@nestjs/platform-express';
 import {AppGateway} from './app.gateway';
 
 @Module({
