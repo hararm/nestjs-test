@@ -50,11 +50,6 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         console.log('New Message from server', msg);
         this.messages.push(msg);
         this.ref.markForCheck();
-      } else {
-        // System message
-        this.users = msg as ChatUser[];
-        this.ref.markForCheck();
-        console.log('Active users from server', JSON.stringify(this.users));
       }
     }));
 
@@ -64,11 +59,17 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.joinToRoomEvent$.subscribe((data) => {
+      this.users = data as ChatUser[];
+      this.ref.markForCheck();
       console.log('Client joined room', JSON.stringify(data));
+      console.log('Active users from server', JSON.stringify(this.users));
     }));
 
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
+      this.users = data as ChatUser[];
+      this.ref.markForCheck();
       console.log('Client left room', JSON.stringify(data));
+      console.log('Active users from server', JSON.stringify(this.users));
     }));
     if (this.groupId) {
       this.subscription.add(this.chatHttpService.findGroupById(this.groupId).subscribe(group => {
