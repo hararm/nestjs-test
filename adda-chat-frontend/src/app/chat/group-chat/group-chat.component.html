@@ -110,7 +110,7 @@
             <div class="pull-left">
               <button class="club_fans">
                 <i class="fa fa-users" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
-                Group Users <span id="numValue"></span>
+                Online Group Users <span id="numValue"></span>
               </button>
             </div>
           </div>
@@ -141,7 +141,10 @@
             </div>-->
 
             <div *ngFor="let user of users"  class="col-md-12"  id="main">
-              <div id="users">{{user.userName}}</div>
+              <h4 class="profession-online">
+                <i class="fa fa-circle online" aria-hidden="true"></i>
+                {{user.userName}}
+              </h4>
             </div>
         </div>
       </div>
