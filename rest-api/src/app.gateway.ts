@@ -14,7 +14,7 @@ import {GroupRepository} from './chat/repositories/group.repository';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    users = {};
+    users: { [key: string]: ChatUser; } = {};
 
     constructor(private groupRepository: GroupRepository) {
     }
@@ -33,16 +33,23 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     handleJoinRoom(client: Socket, chatUser: ChatUser) {
         client.join(chatUser.channelId);
         this.users[client.id] = chatUser;
-        this.logger.log(`Client: ${JSON.stringify(Object.values(this.users))} in room: ${chatUser.channelId}`);
-        this.server.to(chatUser.channelId).emit('joinedRoom', Object.values(this.users));
+        const users = Object.values(this.users);
+        const usersInRoom = users.filter( u => u.channelId === chatUser.channelId);
+        this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
+        this.server.to(chatUser.channelId).emit('joinedRoom', Object.values(usersInRoom));
     }
 
     @SubscribeMessage('leaveRoom')
     handleLeaveRoom(client: Socket, chatUser: ChatUser) {
         client.leave(chatUser.channelId);
         delete this.users[client.id];
-        this.logger.log(`Client: ${JSON.stringify(Object.values(this.users))} in room: ${chatUser.channelId}`);
-        this.server.to(chatUser.channelId).emit('leftRoom', Object.values(this.users));
+        const users = Object.values(this.users);
+        if (users) {
+            const usersInRoom = users.filter( u => u.channelId === chatUser.channelId);
+            this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
+            this.server.to(chatUser.channelId).emit('leftRoom', Object.values(usersInRoom));
+        }
+
     }
 
     afterInit(server: Server) {

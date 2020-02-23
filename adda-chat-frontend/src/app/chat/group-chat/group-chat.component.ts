@@ -78,6 +78,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onLeftRoom() {
+    delete this.users;
     this.chatIOService.leaveRoom(new ChatUser(this.currentUserId, this.currentUserName, this.groupId));
   }
 
