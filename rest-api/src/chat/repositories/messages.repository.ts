@@ -15,8 +15,8 @@ export class MessagesRepository {
         return newMessage.toObject({versionKey: false});
     }
 
-    async findMessagesByGroupId(id: string): Promise<ChatMessage> {
-        return this.messageModel.findOne({_id: id});
+    async findMessagesByGroupId(groupId: string): Promise<ChatMessage> {
+        return this.messageModel.find({channelId: groupId});
     }
 
     async deleteMessage(id: string) {

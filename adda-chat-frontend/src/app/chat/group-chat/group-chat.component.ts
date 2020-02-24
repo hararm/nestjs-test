@@ -32,11 +32,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     private chatHttpService: ChatHttpService,
     private router: Router,
     private route: ActivatedRoute) {
+    this.messages = [];
     this.subscription = new Subscription();
   }
 
   ngOnInit(): void {
-    this.messages = [];
     this.currentUserName = localStorage.getItem('email');
     this.currentUserId = localStorage.getItem('userId');
     this.route.params
@@ -74,6 +74,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     if (this.groupId) {
       this.subscription.add(this.chatHttpService.findGroupById(this.groupId).subscribe(group => {
         this.groupName = group.groupName;
+        this.ref.markForCheck();
+      }));
+      this.subscription.add(this.chatHttpService.findMessagesGroupById(this.groupId).subscribe(messages => {
+        console.log('Saved Messages', JSON.stringify(messages));
+        this.messages = [...messages];
         this.ref.markForCheck();
       }));
     }

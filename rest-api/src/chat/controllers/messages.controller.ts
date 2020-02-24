@@ -7,13 +7,13 @@ export class MessagesController {
     constructor(private groupsRepository: MessagesRepository) {
     }
 
-    @Get(':id')
-    async findMessagesByGroupId(@Param('id') id: string) {
-        const messages = await this.groupsRepository.findMessagesByGroupId(id);
+    @Get(':groupId')
+    async findMessagesByGroupId(@Param('groupId') groupId: string) {
+        this.logger.verbose(`Retrieving all Messages for the group ${groupId}`);
+        const messages = await this.groupsRepository.findMessagesByGroupId(groupId);
         if (!messages) {
-            throw new NotFoundException('Could not find group for url ' + id);
+            throw new NotFoundException('Could not find group for url ' + groupId);
         }
-        this.logger.verbose(`Retrieving all Messages for the group ${id}`);
         return messages;
     }
 
