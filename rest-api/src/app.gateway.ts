@@ -8,9 +8,9 @@ import {
 } from '@nestjs/websockets';
 import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
-import {ChatUser} from '../../shared/chat-user';
 import {MessagesRepository} from './chat/repositories/messages.repository';
 import {ChatMessage} from './chat/models/chat.message.model';
+import {ChatUser} from './chat/models/chat-user.model';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {

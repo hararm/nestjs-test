@@ -5,8 +5,8 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import * as moment from 'moment';
-import {ChatUser} from '../../../../../shared/chat-user';
 import {ChatMessage} from '../models/chat-message.model';
+import {ChatUser} from '../models/chat-user.model';
 
 @Component({
   selector: 'app-group-chat',
@@ -20,7 +20,8 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   currentUserName: string;
   activeGroupId: string;
   messages: ChatMessage[];
-  users: ChatUser[];
+  onlineGroupUsers: ChatUser[];
+  groupUsers: ChatUser[];
   subscription: Subscription;
   msgForm = new FormGroup({
     message: new FormControl(''),
@@ -59,17 +60,17 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.joinToRoomEvent$.subscribe((data) => {
-      this.users = data as ChatUser[];
+      this.onlineGroupUsers = data as ChatUser[];
       this.ref.markForCheck();
       console.log('Client joined room', JSON.stringify(data));
-      console.log('Active users from server', JSON.stringify(this.users));
+      console.log('Active users from server', JSON.stringify(this.groupUsers));
     }));
 
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
-      this.users = data as ChatUser[];
+      this.onlineGroupUsers = data as ChatUser[];
       this.ref.markForCheck();
       console.log('Client left room', JSON.stringify(data));
-      console.log('Active users from server', JSON.stringify(this.users));
+      console.log('Active users from server', JSON.stringify(this.groupUsers));
     }));
     if (this.activeGroupId) {
       this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
@@ -81,8 +82,18 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         this.messages = [...messages];
         this.ref.markForCheck();
       }));
+
+      this.subscription.add(this.chatHttpService.findUsersByGroupById(this.activeGroupId).subscribe(users => {
+        console.log('Group Users', JSON.stringify(users));
+        this.groupUsers = [...users];
+        this.groupUsers = this.groupUsers.map(user => {
+          const user2 = this.onlineGroupUsers.find( u => u._id === user._id);
+          return user2 ? {...user, ...user2} : user;
+        });
+        this.ref.markForCheck();
+      }));
     }
-    this.chatIOService.joinRoom(new ChatUser(this.currentUserId, this.currentUserName, this.activeGroupId));
+    this.chatIOService.joinRoom(new ChatUser(this.currentUserId, this.currentUserName, this.activeGroupId, true));
   }
 
   onSendToGroup() {
@@ -100,8 +111,8 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onLeftRoom() {
-    delete this.users;
-    this.chatIOService.leaveRoom(new ChatUser(this.currentUserId, this.currentUserName, this.activeGroupId));
+    delete this.onlineGroupUsers;
+    this.chatIOService.leaveRoom(new ChatUser(this.currentUserId, this.currentUserName, this.activeGroupId, false));
   }
 
   ngOnDestroy(): void {

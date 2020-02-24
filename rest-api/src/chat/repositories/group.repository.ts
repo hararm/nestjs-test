@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Group} from '../models/group.model';
-import {ChatUser} from '../../../../shared/chat-user';
+import {ChatUser} from '../models/chat-user.model';
 
 @Injectable()
 export class GroupRepository {
@@ -40,7 +40,7 @@ export class GroupRepository {
         return this.groupModel.findOneAndUpdate({_id: groupId}, changes, {new: true});
     }
 
-    async updateGroupUsers(groupId: string, members: ChatUser[]): Promise<Group> {
+    async addMembersToGroup(groupId: string, members: ChatUser[]): Promise<Group> {
         const group = await this.findGroupById(groupId);
         if (group) {
             group.members = members;

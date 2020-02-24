@@ -4,7 +4,7 @@ import {Observable, Subject, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {IChatMessage} from '../../../../../shared/chat-message';
 import * as io from 'socket.io-client';
-import {ChatUser} from '../../../../../shared/chat-user';
+import {ChatUser} from '../models/chat-user.model';
 
 @Injectable()
 export class ChatIOService {

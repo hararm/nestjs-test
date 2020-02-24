@@ -1,4 +1,5 @@
-export class ChatUser {
-    constructor(public userId: string, public userName: string, public channelId: string) {
-    }
+export interface IChatUser {
+    userName: string;
+    email;
+    channelId: string;
 }

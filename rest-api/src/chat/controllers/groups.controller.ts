@@ -15,7 +15,7 @@ import {GroupRepository} from '../repositories/group.repository';
 import {Group} from '../models/group.model';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {ImageFileFilter} from '../filters/imageFileFilter';
-import {ChatUser} from '../../../../shared/chat-user';
+import {ChatUser} from "../models/chat-user.model";
 
 @Controller('groups')
 export class GroupsController {
@@ -37,9 +37,15 @@ export class GroupsController {
         return this.groupsRepository.addGroup(file.filename, name, clinicName);
     }
 
+    @Put('addMembersToGroup/:id')
+    async addMembersToGroup(@Param('id') id: string, @Body() members: ChatUser[]) {
+        this.logger.verbose(`Add member ${members} group ${id}`);
+        return this.groupsRepository.addMembersToGroup(id, members);
+    }
+
     @Get()
-    async findAllCourses(): Promise<Group[]> {
-        this.logger.verbose(`Retrieving all courses`);
+    async findAllGroups(): Promise<Group[]> {
+        this.logger.verbose(`Retrieving all groups`);
         return this.groupsRepository.findAll();
     }
 
