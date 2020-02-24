@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import * as moment from 'moment';
 import {ChatUser} from '../../../../../shared/chat-user';
-import {ChatMessage} from "../models/chat-message.model";
+import {ChatMessage} from '../models/chat-message.model';
 
 @Component({
   selector: 'app-group-chat',
@@ -16,9 +16,9 @@ import {ChatMessage} from "../models/chat-message.model";
 })
 export class GroupChatComponent implements OnInit, OnDestroy {
   currentUserId: string;
-  groupName: string;
+  activeGroupName: string;
   currentUserName: string;
-  groupId: string;
+  activeGroupId: string;
   messages: ChatMessage[];
   users: ChatUser[];
   subscription: Subscription;
@@ -42,7 +42,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         console.log(params);
-        this.groupId = params.groupId;
+        this.activeGroupId = params.groupId;
       });
 
     this.subscription.add(this.chatIOService.messages.subscribe((msg: any) => {
@@ -71,24 +71,24 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Client left room', JSON.stringify(data));
       console.log('Active users from server', JSON.stringify(this.users));
     }));
-    if (this.groupId) {
-      this.subscription.add(this.chatHttpService.findGroupById(this.groupId).subscribe(group => {
-        this.groupName = group.groupName;
+    if (this.activeGroupId) {
+      this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
+        this.activeGroupName = group.groupName;
         this.ref.markForCheck();
       }));
-      this.subscription.add(this.chatHttpService.findMessagesGroupById(this.groupId).subscribe(messages => {
+      this.subscription.add(this.chatHttpService.findMessagesGroupById(this.activeGroupId).subscribe(messages => {
         console.log('Saved Messages', JSON.stringify(messages));
         this.messages = [...messages];
         this.ref.markForCheck();
       }));
     }
-    this.chatIOService.joinRoom(new ChatUser(this.currentUserId, this.currentUserName, this.groupId));
+    this.chatIOService.joinRoom(new ChatUser(this.currentUserId, this.currentUserName, this.activeGroupId));
   }
 
   onSendToGroup() {
     this.chatIOService.sendMessage(
       new ChatMessage(
-        this.groupId,
+        this.activeGroupId,
         this.currentUserId,
         this.msgForm.get('message').value,
         null,
@@ -101,7 +101,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
   onLeftRoom() {
     delete this.users;
-    this.chatIOService.leaveRoom(new ChatUser(this.currentUserId, this.currentUserName, this.groupId));
+    this.chatIOService.leaveRoom(new ChatUser(this.currentUserId, this.currentUserName, this.activeGroupId));
   }
 
   ngOnDestroy(): void {
