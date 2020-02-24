@@ -1,10 +1,8 @@
-export class ChatMessage {
-        constructor(
-            public senderId: string,
-            public recepientId: string = null,
-            public channelId: string,
-            public message: string,
-            public timeStamp: string,
-            public senderNicName: string) {
-    }
+export interface IChatMessage {
+    senderId: string;
+    recipientId: string;
+    channelId: string;
+    message: string;
+    timeStamp: string;
+    senderNicName: string;
 }

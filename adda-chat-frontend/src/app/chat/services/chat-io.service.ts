@@ -2,7 +2,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {WebsocketService} from './websocket.service';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {ChatMessage} from '../../../../../shared/chat-message';
+import {IChatMessage} from '../../../../../shared/chat-message';
 import * as io from 'socket.io-client';
 import {ChatUser} from '../../../../../shared/chat-user';
 
@@ -25,7 +25,7 @@ export class ChatIOService {
     this.leftRoomEvent$ = wsService.leftRoomEvent();
   }
 
-  sendMessage(msg: ChatMessage) {
+  sendMessage(msg: IChatMessage) {
     this.messages.next({event: 'msgToServer', data: msg});
   }
 

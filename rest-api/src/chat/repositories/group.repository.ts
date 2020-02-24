@@ -48,7 +48,6 @@ export class GroupRepository {
         return await this.updateGroup(groupId, group);
     }
 
-
     deleteGroup(groupId: string) {
         return this.groupModel.deleteOne({_id: groupId});
     }

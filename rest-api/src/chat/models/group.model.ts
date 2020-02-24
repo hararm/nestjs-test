@@ -1,6 +1,6 @@
-import {IGroup} from '../../../../shared/iGroup';
+import {IGroup} from '../../../../shared/chat-group';
 import {IsMongoId, IsString} from 'class-validator';
-import {ChatUser} from "../../../../shared/chat-user";
+import {ChatUser} from '../../../../shared/chat-user';
 
 export class  Group implements IGroup {
     @IsString()

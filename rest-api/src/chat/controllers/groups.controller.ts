@@ -1,7 +1,7 @@
 import {
     BadRequestException,
     Body,
-    Controller, Get,
+    Controller, Delete, Get,
     Logger, NotFoundException,
     Param,
     Post, Put, Res,
@@ -26,7 +26,7 @@ export class GroupsController {
 
     @Post()
     @UseInterceptors(
-        FileInterceptor('file', { dest: './files', fileFilter: ImageFileFilter})
+        FileInterceptor('file', {dest: './files', fileFilter: ImageFileFilter})
     )
     // @UseGuards(AdminGuard)
     async createGroup(@UploadedFile() file: any, @Body('name') name, @Body('clinicName') clinicName): Promise<Group> {
@@ -55,16 +55,21 @@ export class GroupsController {
 
     @Get('findGroupById/:id')
     async findGroupById(@Param('id') id: string) {
-        const course = await this.groupsRepository.findGroupById(id);
-        if (!course) {
+        const group = await this.groupsRepository.findGroupById(id);
+        if (!group) {
             throw new NotFoundException('Could not find group for url ' + id);
         }
-        this.logger.verbose(`Retrieving the group ${course.groupName}`);
-        return course;
+        this.logger.verbose(`Retrieving the group ${group.groupName}`);
+        return group;
     }
 
     @Get(':imgpath')
     seeUploadedFile(@Param('imgpath') image, @Res() res) {
-        return res.sendFile(image, { root: './files' });
+        return res.sendFile(image, {root: './files'});
+    }
+
+    @Delete(':groupId')
+    deleteGroup(@Param('groupId') groupId: string) {
+        return this.groupsRepository.deleteGroup(groupId);
     }
 }

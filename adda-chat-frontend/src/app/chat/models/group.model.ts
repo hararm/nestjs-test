@@ -1,4 +1,4 @@
-import {IGroup} from '../../../../../shared/iGroup';
+import {IGroup} from '../../../../../shared/chat-group';
 export class  Group implements IGroup {
   _id: string;
   image: any;

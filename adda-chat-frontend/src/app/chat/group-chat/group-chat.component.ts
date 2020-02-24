@@ -4,9 +4,9 @@ import {ChatIOService} from '../services/chat-io.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
-import {ChatMessage} from '../../../../../shared/chat-message';
 import * as moment from 'moment';
 import {ChatUser} from '../../../../../shared/chat-user';
+import {ChatMessage} from "../models/chat-message.model";
 
 @Component({
   selector: 'app-group-chat',
@@ -81,14 +81,16 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onSendToGroup() {
-    console.log('Message to server', this.msgForm.value);
     this.chatIOService.sendMessage(
-      new ChatMessage(this.currentUserId,
-        null,
+      new ChatMessage(
         this.groupId,
+        this.currentUserId,
         this.msgForm.get('message').value,
-        moment().format('LLL'),
-        this.currentUserName));
+        null,
+        this.currentUserName,
+        moment().format('LLL')
+      ));
+    console.log('Message to server', this.msgForm.value);
     this.msgForm.get('message').patchValue(null);
   }
 

@@ -8,15 +8,16 @@ import {
 } from '@nestjs/websockets';
 import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
-import {ChatMessage} from '../../shared/chat-message';
+import {IChatMessage} from '../../shared/chat-message';
 import {ChatUser} from '../../shared/chat-user';
-import {GroupRepository} from './chat/repositories/group.repository';
+import {MessagesRepository} from './chat/repositories/messages.repository';
+import {ChatMessage} from "./chat/models/chat.message.model";
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     users: { [key: string]: ChatUser; } = {};
 
-    constructor(private groupRepository: GroupRepository) {
+    constructor(private messagesRepository: MessagesRepository) {
     }
 
     @WebSocketServer() server: Server;
@@ -24,9 +25,11 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     private logger: Logger = new Logger('AppGateway');
 
     @SubscribeMessage('msgToServer')
-    handleMessage(client: Socket, payload: ChatMessage): void {
-        this.logger.debug(`Message: ${payload.message} from: ${payload.senderId} to room: ${payload.channelId}`);
-        this.server.to(payload.channelId).emit('msgToClient', payload);
+    handleMessage(client: Socket, message: ChatMessage): void {
+        this.logger.debug(`Message: ${message.message} from: ${message.senderId} to room: ${message.channelId}`);
+        this.messagesRepository.addMessage(message).then(() => {
+            this.server.to(message.channelId).emit('msgToClient', message);
+        });
     }
 
     @SubscribeMessage('joinRoom')
@@ -34,7 +37,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         client.join(chatUser.channelId);
         this.users[client.id] = chatUser;
         const users = Object.values(this.users);
-        const usersInRoom = users.filter( u => u.channelId === chatUser.channelId);
+        const usersInRoom = users.filter(u => u.channelId === chatUser.channelId);
         this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
         this.server.to(chatUser.channelId).emit('joinedRoom', Object.values(usersInRoom));
     }
@@ -45,7 +48,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         delete this.users[client.id];
         const users = Object.values(this.users);
         if (users) {
-            const usersInRoom = users.filter( u => u.channelId === chatUser.channelId);
+            const usersInRoom = users.filter(u => u.channelId === chatUser.channelId);
             this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
             this.server.to(chatUser.channelId).emit('leftRoom', Object.values(usersInRoom));
         }

@@ -9,6 +9,7 @@ import {LessonsController} from './courses/controllers/lessons.controller';
 import {ChatModule} from './chat/chat.module';
 import {MulterModule} from '@nestjs/platform-express';
 import {AppGateway} from './app.gateway';
+import {MessagesController} from './chat/controllers/messages.controller';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ export class AppModule implements NestModule {
         consumer
             .apply(GetUserMiddleware)
             .forRoutes(
+                MessagesController,
                 CoursesController,
                 LessonsController
             );
