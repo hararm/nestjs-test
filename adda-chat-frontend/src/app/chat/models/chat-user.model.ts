@@ -1,5 +1,6 @@
 import {IChatUser} from '../../../../../shared/chat-user';
 
+
 export class ChatUser implements IChatUser {
   public _id: string;
   constructor(

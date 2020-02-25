@@ -8,8 +8,8 @@ import {MessagesController} from './controllers/messages.controller';
 import {MessagesRepository} from './repositories/messages.repository';
 import {ChatMessageSchema} from './schemas/chat.message.schema';
 import {ChatUserSchema} from './schemas/chat-user.schema';
-import {ChatUserRepository} from "./repositories/chat-user.repository";
-import {ChatUserController} from "./controllers/chat-user.controller";
+import {ChatUserRepository} from './repositories/chat-user.repository';
+import {ChatUserController} from './controllers/chat-user.controller';
 
 @Module({
     imports: [

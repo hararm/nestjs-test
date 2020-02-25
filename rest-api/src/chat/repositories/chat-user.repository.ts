@@ -17,7 +17,7 @@ export class ChatUserRepository {
     }
 
     async findUsersByGroupId(groupId: string): Promise<ChatUser[]> {
-        const query =  this.groupModel.findOne({_id: groupId});
-        return query.select('memebers');
+        const query =  this.groupModel.findOne({_id: groupId}, 'memebers');
+        return query.exec();
     }
 }
