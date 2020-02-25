@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {ChatMessage} from '../models/chat-message.model';
-import {ChatUser} from '../models/chat-user.model';
+import {GroupMember} from '../models/member.model';
 
 
 @Injectable()
@@ -38,7 +38,7 @@ export class ChatHttpService {
     return this.http.get<Group[]>(`${this.apiPath}clinics/${clinicName}`);
   }
 
-  findUsersByGroupById(id: string): Observable<ChatUser[]> {
-    return this.http.get<ChatUser[]>(`${this.apiPath}users/${id}`);
+  findUsersByGroupById(id: string): Observable<GroupMember[]> {
+    return this.http.get<GroupMember[]>(`${this.apiPath}users/${id}`);
   }
 }

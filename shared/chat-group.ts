@@ -1,4 +1,4 @@
-import {IChatUser} from "./chat-user";
+import {IGroupMember} from "./member";
 
 
 export interface IGroup {
@@ -6,5 +6,5 @@ export interface IGroup {
     clinicName: string;
     groupName: string;
     image: any;
-    members: IChatUser[];
+    members: IGroupMember[];
 }

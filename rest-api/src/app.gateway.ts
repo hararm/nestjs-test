@@ -10,11 +10,11 @@ import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
 import {MessagesRepository} from './chat/repositories/messages.repository';
 import {ChatMessage} from './chat/models/chat.message.model';
-import {ChatUser} from './chat/models/chat-user.model';
+import {GroupMember} from './chat/models/member.model';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    users: { [key: string]: ChatUser; } = {};
+    users: { [key: string]: GroupMember; } = {};
 
     constructor(private messagesRepository: MessagesRepository) {
     }
@@ -32,7 +32,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     @SubscribeMessage('joinRoom')
-    handleJoinRoom(client: Socket, chatUser: ChatUser) {
+    handleJoinRoom(client: Socket, chatUser: GroupMember) {
         client.join(chatUser.channelId);
         this.users[client.id] = chatUser;
         const users = Object.values(this.users);
@@ -42,7 +42,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     @SubscribeMessage('leaveRoom')
-    handleLeaveRoom(client: Socket, chatUser: ChatUser) {
+    handleLeaveRoom(client: Socket, chatUser: GroupMember) {
         client.leave(chatUser.channelId);
         delete this.users[client.id];
         const users = Object.values(this.users);
@@ -51,7 +51,6 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
             this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
             this.server.to(chatUser.channelId).emit('leftRoom', Object.values(usersInRoom));
         }
-
     }
 
     afterInit(server: Server) {

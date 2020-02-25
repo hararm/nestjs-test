@@ -286,6 +286,13 @@ member_list li:hover {
   top: -2px;
 }
 
+.offline {
+  font-size: 10px;
+  color: rgba(95, 95, 95, 0.69);
+  position: relative;
+  top: -2px;
+}
+
 .card .footer {
   border-top: 1px solid #EEEEEE;
   color: #999999;

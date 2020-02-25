@@ -1,9 +1,9 @@
-import {IChatUser} from '../../../../../shared/chat-user';
+import {IGroupMember} from '../../../../../shared/member';
 
 
-export class ChatUser implements IChatUser {
+export class GroupMember implements IGroupMember {
   public _id: string;
-  constructor(
+    constructor(
     public userName: string,
     public email,
     public channelId: string,

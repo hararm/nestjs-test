@@ -7,33 +7,33 @@ import {ClinicsController} from './controllers/clinics.controller';
 import {MessagesController} from './controllers/messages.controller';
 import {MessagesRepository} from './repositories/messages.repository';
 import {ChatMessageSchema} from './schemas/chat.message.schema';
-import {ChatUserSchema} from './schemas/chat-user.schema';
-import {ChatUserRepository} from './repositories/chat-user.repository';
-import {ChatUserController} from './controllers/chat-user.controller';
+import {MemberSchema} from './schemas/member.schema';
+import {MemberRepository} from './repositories/member.repository';
+import {MembersController} from './controllers/members.controller';
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             {name: 'Group', schema: GroupSchema},
             {name: 'ChatMessage', schema: ChatMessageSchema},
-            {name: 'ChatUser', schema: ChatUserSchema}
+            {name: 'ChatUser', schema: MemberSchema}
         ]),
     ],
     controllers: [
         MessagesController,
         GroupsController,
         ClinicsController,
-        ChatUserController
+        MembersController
     ],
     providers: [
         GroupRepository,
         MessagesRepository,
-        ChatUserRepository
+        MemberRepository
     ],
     exports: [
         GroupRepository,
         MessagesRepository,
-        ChatUserRepository
+        MemberRepository
     ]
 })
 export class ChatModule {

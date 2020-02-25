@@ -49,7 +49,7 @@ export class ChatComponent implements OnInit {
     'CBI Group Clinic1',
     'CBI Group Clinic2',
   ];
-
+  currUserEmail: string;
   dataModel: string = null;
 
   constructor(private fb: FormBuilder,
@@ -61,6 +61,7 @@ export class ChatComponent implements OnInit {
               private chatIOService: ChatIOService,
   ) {
     this.subscription = new Subscription();
+    this.currUserEmail =  localStorage.getItem('email');
   }
 
   ngOnInit() {

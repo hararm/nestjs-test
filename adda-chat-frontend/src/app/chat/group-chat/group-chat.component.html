@@ -6,7 +6,7 @@
   </button>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item active">
-      <button class="btn" [routerLink]="['/chat']" (click)="onLeftRoom()"><i class="fa fa-home"  style="color: white"></i></button>
+      <button class="btn" [routerLink]="['/chat']" (click)="onLeftRoom()"><i class="fa fa-sign-out"  style="color: white; font-size: larger"></i></button>
     </li>
   </ul>
 </nav>
@@ -142,8 +142,9 @@
 
             <div *ngFor="let user of groupUsers" class="col-md-12" id="main">
               <h4 class="profession-online">
-                <i class="fa fa-circle online" aria-hidden="true"></i>
-                {{user.userName}}
+                <i *ngIf="user.isOnline" class="fa fa-circle online" aria-hidden="true"></i>
+                <i *ngIf="!user.isOnline" class="fa fa-circle offline" aria-hidden="true"></i>
+                {{getMemberName(user)}}
               </h4>
             </div>
         </div>

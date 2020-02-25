@@ -15,7 +15,7 @@ import {GroupRepository} from '../repositories/group.repository';
 import {Group} from '../models/group.model';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {ImageFileFilter} from '../filters/imageFileFilter';
-import {ChatUser} from "../models/chat-user.model";
+import {GroupMember} from '../models/member.model';
 
 @Controller('groups')
 export class GroupsController {
@@ -38,7 +38,7 @@ export class GroupsController {
     }
 
     @Put('addMembersToGroup/:id')
-    async addMembersToGroup(@Param('id') id: string, @Body() members: ChatUser[]) {
+    async addMembersToGroup(@Param('id') id: string, @Body() members: GroupMember[]) {
         this.logger.verbose(`Add member ${members} group ${id}`);
         return this.groupsRepository.addMembersToGroup(id, members);
     }

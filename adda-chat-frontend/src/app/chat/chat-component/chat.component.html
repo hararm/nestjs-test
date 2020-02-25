@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+<nav class="navbar navbar-expand-lg navbar-light bg-primary" style="width: 100%">
   <a class="navbar-brand mx-auto" href="#">AddaTech-Chat</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,20 +6,16 @@
   </button>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item active">
-      <button class="btn" (click)="onLogOut()"><i class="fa fa-sign-out" style="color: white"></i></button>
+      <button class="btn" (click)="onLogOut()"><i class="fa fa-sign-out" style="white; font-size: larger"></i></button>
     </li>
-    <li class="nav-item dropdown" dropdown>
-      <button id="button-animated" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <button id="button-animated" dropdownToggle type="button" class="btn dropdown-toggle"
               aria-controls="dropdown-animated">
-        Dropdown <span class="caret"></span>
+        <i class="fa fa-cogs" style="color: white; font-size: larger"> </i><span class="caret"></span>
       </button>
-      <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu"
+      <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu  dropdown-menu-right"
           role="menu" aria-labelledby="button-animated">
-        <li role="menuitem"><a class="dropdown-item" (click)="onAddGroup()">Add Group</a></li>
-        <li role="menuitem"><a class="dropdown-item" href="#">Another action</a>
-        </li>
-        <li role="menuitem"><a class="dropdown-item" href="#">Something else
-          here</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click)="onAddGroup()">New Group</a></li>
       </ul>
     </li>
   </ul>

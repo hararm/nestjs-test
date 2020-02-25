@@ -4,7 +4,7 @@ import {Observable, Subject, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {IChatMessage} from '../../../../../shared/chat-message';
 import * as io from 'socket.io-client';
-import {ChatUser} from '../models/chat-user.model';
+import {GroupMember} from '../models/member.model';
 
 @Injectable()
 export class ChatIOService {
@@ -29,11 +29,11 @@ export class ChatIOService {
     this.messages.next({event: 'msgToServer', data: msg});
   }
 
-  joinRoom(chatUser: ChatUser) {
+  joinRoom(chatUser: GroupMember) {
     this.messages.next({event: 'joinRoom', data: chatUser});
   }
 
-  leaveRoom(chatUser: ChatUser) {
+  leaveRoom(chatUser: GroupMember) {
     this.messages.next({event: 'leaveRoom', data: chatUser});
   }
 }
