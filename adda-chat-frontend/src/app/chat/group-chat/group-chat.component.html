@@ -157,6 +157,9 @@
               <h4 class="profession-online">
                 <i *ngIf="user.isOnline" class="fa fa-circle online" aria-hidden="true"></i>
                 <i *ngIf="!user.isOnline" class="fa fa-circle offline" aria-hidden="true"></i>
+                <button *ngIf="!isMyUser(user._id)" class="btn" (click)="onRemoveGroupMember(user)">
+                  <i class="fa fa-thumbs-down" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
+                </button>
                 {{getMemberName(user)}}
               </h4>
             </div>

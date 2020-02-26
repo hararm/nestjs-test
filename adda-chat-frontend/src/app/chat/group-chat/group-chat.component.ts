@@ -91,8 +91,8 @@ export class GroupChatComponent implements OnInit, OnDestroy {
           this.activeGroupName = group.groupName;
           this.groupMembers = [...members];
           this.messages = [...messages];
-          this.sortGroupMembers();
           this.updateUserStatus();
+          this.sortGroupMembers();
           this.ref.markForCheck();
         }
       ));
@@ -157,6 +157,15 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       this.ref.markForCheck();
     });
 
+  }
+
+  onRemoveGroupMember(member: GroupMember) {
+    const index = this.groupMembers.findIndex( m => m._id === member._id);
+    this.groupMembers.splice(index, 1);
+    this.activeGroup.members = this.groupMembers;
+    this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
+      this.ref.markForCheck();
+    });
   }
 
   ngOnDestroy(): void {
