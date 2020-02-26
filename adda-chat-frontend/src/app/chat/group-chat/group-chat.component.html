@@ -29,7 +29,7 @@
                     </div>
                     <div class="content">
                       <div class="main">
-                        <h3 class="name">{{currentUserName}}</h3>
+                        <h3 class="name">{{myUserName}}</h3>
                         <p class="profession-online">
                           <i class="fa fa-circle online" aria-hidden="true"></i>
                           Online
@@ -94,8 +94,8 @@
             </div>
 
             <div *ngIf="messages && messages.length > 0" class="chat_area">
-              <div class="message-container" [ngClass]="{'chat-message': message.senderId !== currentUserId,
-                  'chat-message-me': message.senderId === currentUserId}" *ngFor="let message of messages">
+              <div class="message-container" [ngClass]="{'chat-message': message.senderId !== myUserId,
+                  'chat-message-me': message.senderId === myUserId}" *ngFor="let message of messages">
                 <img src="assets/images/placeholder.png" alt="" style="width:100%;">
                 <p>{{message.message}}</p>
                 <span class="time-left">{{message.senderNicName}}</span>
