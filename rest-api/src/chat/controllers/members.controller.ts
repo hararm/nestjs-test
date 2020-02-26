@@ -3,18 +3,19 @@ import {MemberRepository} from '../repositories/member.repository';
 import {GroupMember} from '../models/member.model';
 import {GroupRepository} from '../repositories/group.repository';
 import {Group} from '../models/group.model';
+import {User} from '../models/user.model';
 
-@Controller('users')
+@Controller('members')
 export class MembersController {
-    private logger = new Logger('ChatUserController');
+    private logger = new Logger('MembersController');
 
-    constructor(private usersRepository: MemberRepository, private groupsRepository: GroupRepository) {
+    constructor(private memberRepository: MemberRepository, private groupsRepository: GroupRepository) {
     }
 
     @Get()
-    async findAllCourses(): Promise<GroupMember[]> {
+    async findAllCourses(): Promise<User[]> {
         this.logger.verbose(`Retrieving all users`);
-        return this.usersRepository.findAll();
+        return this.memberRepository.findAll();
     }
 
     @Get(':id')

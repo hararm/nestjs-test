@@ -5,8 +5,8 @@ import {AddGroupComponent} from '../add-group/add-group.component';
 import {Group} from '../models/group.model';
 import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
-import {ChatIOService} from "../services/chat-io.service";
-import {Router} from "@angular/router";
+import {ChatIOService} from '../services/chat-io.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'chat-component',
@@ -66,6 +66,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
+      const memberGroups: Group[] = [];
       this.chatGroups = groups;
       this.ref.markForCheck();
     }));

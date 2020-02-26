@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {ChatMessage} from '../models/chat-message.model';
 import {GroupMember} from '../models/member.model';
+import {User} from '../models/user.model';
 
 
 @Injectable()
@@ -16,6 +17,10 @@ export class ChatHttpService {
 
   addGroup(data: FormData) {
     return this.http.post(`${this.apiPath}groups`, data);
+  }
+
+  findAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiPath}members`)
   }
 
   findAllGroups(): Observable<Group[]> {
@@ -38,7 +43,7 @@ export class ChatHttpService {
     return this.http.get<Group[]>(`${this.apiPath}clinics/${clinicName}`);
   }
 
-  findUsersByGroupById(id: string): Observable<GroupMember[]> {
-    return this.http.get<GroupMember[]>(`${this.apiPath}users/${id}`);
+  findMembersByGroupById(id: string): Observable<GroupMember[]> {
+    return this.http.get<GroupMember[]>(`${this.apiPath}members/${id}`);
   }
 }

@@ -7,6 +7,7 @@ import {ChatHttpService} from '../services/chat-http.service';
 import * as moment from 'moment';
 import {ChatMessage} from '../models/chat-message.model';
 import {GroupMember} from '../models/member.model';
+import {User} from '../models/user.model';
 
 @Component({
   selector: 'app-group-chat',
@@ -20,8 +21,9 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   currentUserName: string;
   activeGroupId: string;
   messages: ChatMessage[];
-  onlineGroupUsers: GroupMember[];
-  groupUsers: GroupMember[];
+  onlineGroupMembers: GroupMember[];
+  groupMembers: GroupMember[];
+  users: User[];
   subscription: Subscription;
   msgForm = new FormGroup({
     message: new FormControl(''),
@@ -60,19 +62,23 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.joinToRoomEvent$.subscribe((data) => {
-      this.onlineGroupUsers = data as GroupMember[];
+      this.onlineGroupMembers = data as GroupMember[];
       this.updateUserStatus();
       this.ref.markForCheck();
       console.log('Client joined room', JSON.stringify(data));
-      console.log('Active users from server', JSON.stringify(this.groupUsers));
+      console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
 
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
-      this.onlineGroupUsers = data as GroupMember[];
+      this.onlineGroupMembers = data as GroupMember[];
       this.updateUserStatus();
       this.ref.markForCheck();
       console.log('Client left room', JSON.stringify(data));
-      console.log('Active users from server', JSON.stringify(this.groupUsers));
+      console.log('Active users from server', JSON.stringify(this.groupMembers));
+    }));
+    this.subscription.add(this.chatHttpService.findAllUsers().subscribe(users => {
+      this.users = users;
+      this.ref.markForCheck();
     }));
     if (this.activeGroupId) {
       this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
@@ -85,12 +91,12 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         this.ref.markForCheck();
       }));
 
-      this.subscription.add(this.chatHttpService.findUsersByGroupById(this.activeGroupId).subscribe(users => {
-        console.log('Group Users', JSON.stringify(users));
-        this.groupUsers = [...users];
-        this.groupUsers = this.groupUsers.map(user => {
-          const user2 = this.onlineGroupUsers.find(u => u.userName === user.userName);
-          return user2 ? {...user, ...user2} : user;
+      this.subscription.add(this.chatHttpService.findMembersByGroupById(this.activeGroupId).subscribe(members => {
+        console.log('Group Members', JSON.stringify(members));
+        this.groupMembers = [...members];
+        this.groupMembers = this.groupMembers.map(member => {
+          const user2 = this.onlineGroupMembers.find(u => u.userName === member.userName);
+          return user2 ? {...member, ...user2} : member;
         });
         this.ref.markForCheck();
       }));
@@ -99,10 +105,10 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   private updateUserStatus() {
-    if (this.groupUsers && this.groupUsers.length > 0) {
-      this.groupUsers.forEach(u => u.isOnline = false);
-      this.groupUsers = this.groupUsers.map(user => {
-        const user2 = this.onlineGroupUsers.find(u => u.userName === user.userName);
+    if (this.groupMembers && this.groupMembers.length > 0) {
+      this.groupMembers.forEach(u => u.isOnline = false);
+      this.groupMembers = this.groupMembers.map(user => {
+        const user2 = this.onlineGroupMembers.find(u => u.userName === user.userName);
         return user2 ? {...user, ...user2} : user;
       });
     }
@@ -125,8 +131,12 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     this.msgForm.get('message').patchValue(null);
   }
 
+  isMemberOfCurrentGroup(user: User) {
+    return this.groupMembers.find(u => u._id === user._id);
+  }
+
   onLeftRoom() {
-    delete this.onlineGroupUsers;
+    delete this.onlineGroupMembers;
     this.chatIOService.leaveRoom(new GroupMember(this.currentUserName, this.currentUserName, this.activeGroupId, false));
   }
 

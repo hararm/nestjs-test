@@ -48,8 +48,8 @@ export class GroupRepository {
         return await this.updateGroup(groupId, group);
     }
 
-    deleteGroup(groupId: string) {
-        return this.groupModel.deleteOne({_id: groupId});
+    async deleteGroup(groupId: string) {
+        return await this.groupModel.deleteOne({_id: groupId});
     }
 
 }
