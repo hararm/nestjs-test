@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {ActivatedRoute, Router} from '@angular/router';
 import {ChatIOService} from '../services/chat-io.service';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import * as moment from 'moment';
 import {ChatMessage} from '../models/chat-message.model';
@@ -78,34 +78,25 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Client left room', JSON.stringify(data));
       console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
-    this.subscription.add(this.chatHttpService.findAllUsers().subscribe(users => {
-      this.users = users;
-      this.ref.markForCheck();
-    }));
-    this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
-      this.activeGroup = group;
-      this.ref.markForCheck();
-    }));
     if (this.activeGroupId) {
-      this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
-        this.activeGroupName = group.groupName;
-        this.ref.markForCheck();
-      }));
-      this.subscription.add(this.chatHttpService.findMessagesGroupById(this.activeGroupId).subscribe(messages => {
-        console.log('Saved Messages', JSON.stringify(messages));
-        this.messages = [...messages];
-        this.ref.markForCheck();
-      }));
-
-      this.subscription.add(this.chatHttpService.findMembersByGroupById(this.activeGroupId).subscribe(members => {
-        console.log('Group Members', JSON.stringify(members));
-        this.groupMembers = [...members];
-        this.groupMembers = this.groupMembers.map(member => {
-          const user2 = this.onlineGroupMembers.find(u => u.userName === member.userName);
-          return user2 ? {...member, ...user2} : member;
-        });
-        this.ref.markForCheck();
-      }));
+      const users$ = this.chatHttpService.findAllUsers();
+      const activeGroup$ = this.chatHttpService.findGroupById(this.activeGroupId);
+      const activeMembersGroup$ = this.chatHttpService.findMembersByGroupById(this.activeGroupId);
+      const activeGroupMessages$ = this.chatHttpService.findMessagesGroupById(this.activeGroupId);
+      this.subscription.add(combineLatest(users$, activeGroup$, activeMembersGroup$ , activeGroupMessages$).subscribe(
+        ([users, group, members, messages]) => {
+          this.users = users;
+          this.activeGroup = group;
+          this.activeGroupName = group.groupName;
+          this.groupMembers = [...members];
+          this.groupMembers = this.groupMembers.map(member => {
+            const user2 = this.onlineGroupMembers.find(u => u.userName === member.userName);
+            return user2 ? {...member, ...user2} : member;
+          });
+          this.messages = [...messages];
+          this.ref.markForCheck();
+      }
+      ));
     }
     this.chatIOService.joinRoom(new GroupMember(this.currentUserName, this.currentUserName, this.activeGroupId, true));
   }
