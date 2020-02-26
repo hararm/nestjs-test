@@ -37,6 +37,12 @@ export class GroupsController {
         return this.groupsRepository.addGroup(file.filename, name, clinicName);
     }
 
+    @Put(':id')
+    async updateGroup(@Param('id') id: string, @Body() group: Group) {
+        this.logger.verbose(`Update group ${id}`);
+        return this.groupsRepository.updateGroup(id, group);
+    }
+
     @Put('addMembersToGroup/:id')
     async addMembersToGroup(@Param('id') id: string, @Body() members: GroupMember[]) {
         this.logger.verbose(`Add member ${members} group ${id}`);
@@ -51,12 +57,12 @@ export class GroupsController {
 
     @Get(':groupName')
     async findGroupByUrl(@Param('groupName') groupName: string) {
-        const course = await this.groupsRepository.findGroupByName(groupName);
-        if (!course) {
+        const group = await this.groupsRepository.findGroupByName(groupName);
+        if (!group) {
             throw new NotFoundException('Could not find group for url ' + groupName);
         }
-        this.logger.verbose(`Retrieving the course ${course.groupName}`);
-        return course;
+        this.logger.verbose(`Retrieving the course ${group.groupName}`);
+        return group;
     }
 
     @Get('findGroupById/:id')

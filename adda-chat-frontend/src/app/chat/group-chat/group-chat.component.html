@@ -65,7 +65,7 @@
                         <div class="onlineFriends">
                           <div *ngFor="let user of users" class="col-md-12">
                             <div *ngIf="!isMemberOfCurrentGroup(user)" class="profession-online">
-                              <button class="btn">
+                              <button class="btn" (click)="onAddGroupMember(user)">
                                 <i class="fa fa-user-plus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
                               </button>
                               {{user.email}}

@@ -1,4 +1,4 @@
-import {Controller, Get, Logger, Param} from '@nestjs/common';
+import {Body, Controller, Get, Logger, Param, Post} from '@nestjs/common';
 import {MemberRepository} from '../repositories/member.repository';
 import {GroupMember} from '../models/member.model';
 import {GroupRepository} from '../repositories/group.repository';
@@ -13,13 +13,13 @@ export class MembersController {
     }
 
     @Get()
-    async findAllCourses(): Promise<User[]> {
+    async findAllUsers(): Promise<User[]> {
         this.logger.verbose(`Retrieving all users`);
         return this.memberRepository.findAll();
     }
 
     @Get(':id')
-    async findUsersByGroupId(@Param('id') id: string): Promise<GroupMember[]> {
+    async findMembersByGroupId(@Param('id') id: string): Promise<GroupMember[]> {
         this.logger.verbose(`Retrieving all users for the group: ${id}`);
         const group: Group = await this.groupsRepository.findGroupById(id);
         if (group) {

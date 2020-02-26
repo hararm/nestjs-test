@@ -10,11 +10,7 @@ export class MessagesController {
     @Get(':groupId')
     async findMessagesByGroupId(@Param('groupId') groupId: string) {
         this.logger.verbose(`Retrieving all Messages for the group ${groupId}`);
-        const messages = await this.groupsRepository.findMessagesByGroupId(groupId);
-        if (!messages) {
-            throw new NotFoundException('Could not find group for url ' + groupId);
-        }
-        return messages;
+        return await this.groupsRepository.findMessagesByGroupId(groupId);
     }
 
     @Delete(':id')

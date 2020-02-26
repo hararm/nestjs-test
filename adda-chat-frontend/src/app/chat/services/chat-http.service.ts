@@ -19,6 +19,10 @@ export class ChatHttpService {
     return this.http.post(`${this.apiPath}groups`, data);
   }
 
+  updateGroup(groupId: string, group: Group) {
+    return this.http.put(`${this.apiPath}groups/${groupId}`, group);
+  }
+
   findAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiPath}members`)
   }

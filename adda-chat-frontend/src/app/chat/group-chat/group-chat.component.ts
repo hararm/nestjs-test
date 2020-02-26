@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import {ChatMessage} from '../models/chat-message.model';
 import {GroupMember} from '../models/member.model';
 import {User} from '../models/user.model';
+import {Group} from "../models/group.model";
 
 @Component({
   selector: 'app-group-chat',
@@ -21,8 +22,9 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   currentUserName: string;
   activeGroupId: string;
   messages: ChatMessage[];
+  activeGroup: Group;
   onlineGroupMembers: GroupMember[];
-  groupMembers: GroupMember[];
+  groupMembers: GroupMember[] = [];
   users: User[];
   subscription: Subscription;
   msgForm = new FormGroup({
@@ -80,6 +82,10 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       this.users = users;
       this.ref.markForCheck();
     }));
+    this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
+      this.activeGroup = group;
+      this.ref.markForCheck();
+    }));
     if (this.activeGroupId) {
       this.subscription.add(this.chatHttpService.findGroupById(this.activeGroupId).subscribe(group => {
         this.activeGroupName = group.groupName;
@@ -132,12 +138,24 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   isMemberOfCurrentGroup(user: User) {
+    if(!this.groupMembers || this.groupMembers.length === 0) {
+      return undefined;
+    }
     return this.groupMembers.find(u => u._id === user._id);
   }
 
   onLeftRoom() {
     delete this.onlineGroupMembers;
     this.chatIOService.leaveRoom(new GroupMember(this.currentUserName, this.currentUserName, this.activeGroupId, false));
+  }
+
+  onAddGroupMember(user: User) {
+    this.groupMembers.push(new GroupMember(user.email, user.email, this.activeGroupId, false, user._id));
+    this.activeGroup.members = this.groupMembers;
+    this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe( group => {
+      this.ref.markForCheck();
+    });
+
   }
 
   ngOnDestroy(): void {
