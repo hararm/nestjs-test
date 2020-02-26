@@ -91,7 +91,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
           this.groupMembers = [...members];
           this.groupMembers = this.groupMembers.map(member => {
             const user2 = this.onlineGroupMembers.find(u => u.userName === member.userName);
-            return user2 ? {...member, ...user2} : member;
+            return user2 ? {...member, isOnline: user2.isOnline} : member;
           });
           this.messages = [...messages];
           this.ref.markForCheck();
@@ -106,7 +106,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       this.groupMembers.forEach(u => u.isOnline = false);
       this.groupMembers = this.groupMembers.map(user => {
         const user2 = this.onlineGroupMembers.find(u => u.userName === user.userName);
-        return user2 ? {...user, ...user2} : user;
+        return user2 ? {...user, isOnline: user2.isOnline} : user;
       });
     }
   }
