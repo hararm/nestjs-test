@@ -27,8 +27,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @SubscribeMessage('msgToServer')
     handleMessage(client: Socket, message: ChatMessage): void {
         this.logger.debug(`Message: ${message.message} from: ${message.senderId} to room: ${message.channelId}`);
-        this.messagesRepository.addMessage(message).then(() => {
-            this.server.to(message.channelId).emit('msgToClient', message);
+        this.messagesRepository.addMessage(message).then((msg) => {
+            this.server.to(message.channelId).emit('msgToClient', msg);
         });
     }
 
