@@ -107,12 +107,32 @@ h3 {
 }
 
 .message-container {
+  display: flex;
+  justify-content: space-between;
   border: 2px solid #dedede;
   background-color: #f1f1f1;
   border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
   width: 50%;
+}
+
+.btn {
+  border: none; /* Remove borders */
+  padding: 12px 16px; /* Some padding */
+  font-size: 18px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+.btn-close {
+  height: 36px;
+  width: 36px;
+  background-color: #555555;
+  border: 2px solid white !important;
+  border-radius: 50%;
+  font-size: 18px; /* Set a font size */
+  color: white !important; /* White text */
+  cursor: pointer; /* Mouse pointer on hover */
 }
 
 .chat-message {
@@ -129,14 +149,7 @@ h3 {
   align-self: flex-end;
 }
 
-.message-container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
 .message-container img {
-  float: left;
   max-width: 60px;
   max-height: 60px;
   width: 100%;
@@ -144,19 +157,23 @@ h3 {
   border-radius: 50%;
 }
 
-.message-container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
+.text-area {
+  display: flex;
+  flex-direction: column;
 }
 
-.time-right {
-  float: right;
+.text-bottom-area {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-container .top {
+  align-self: flex-start;
   color: #000000;
 }
 
-.time-left {
-  float: left;
+.message-container .bottom {
+  align-self: flex-end;
   color: #ffffff;
 }
 

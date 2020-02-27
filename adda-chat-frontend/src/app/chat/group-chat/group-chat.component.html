@@ -97,9 +97,16 @@
               <div class="message-container" [ngClass]="{'chat-message': message.senderId !== myUserId,
                   'chat-message-me': message.senderId === myUserId}" *ngFor="let message of messages">
                 <img src="assets/images/placeholder.png" alt="" style="width:100%;">
-                <p>{{message.message}}</p>
-                <span class="time-left">{{message.senderNicName}}</span>
-                <span class="time-right">{{message.timeStamp}}</span>
+                <div class="text-area">
+                  <span class="top">{{message.message}}</span>
+                  <div class="text-bottom-area">
+                    <span class="bottom">{{message.senderNicName}}</span>
+                    <span class="bottom">{{message.timeStamp}}</span>
+                  </div>
+                </div>
+                <button class="btn-close" (click)="onDeleteMessage(message)">
+                <i class="fa fa-close"></i>
+                </button>
               </div>
             </div>
             <div class="message_write">

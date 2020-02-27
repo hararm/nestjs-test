@@ -35,7 +35,7 @@ export class WebsocketService {
     });
   }
 
-  joinedToRoomEvent(): Observable<any> {
+  subscribeToJoinedToRoomEvent(): Observable<any> {
     return new Observable(obs => {
       this.socket.on('joinedRoom', (data) => {
         obs.next(data);
@@ -43,7 +43,7 @@ export class WebsocketService {
     });
   }
 
-  leftRoomEvent(): Observable<any> {
+  subscribeToLeftRoomEvent(): Observable<any> {
     return new Observable(obs => {
       this.socket.on('leftRoom', (data) => {
         obs.next(data);
@@ -51,7 +51,7 @@ export class WebsocketService {
     });
   }
 
-  inviteMember(): Observable<any> {
+  subscribeToInviteMember(): Observable<any> {
     return new Observable(obs => {
       this.socket.on('inviteMember', (data) => {
         obs.next(data);
@@ -59,7 +59,7 @@ export class WebsocketService {
     });
   }
 
-  unInviteMember(): Observable<any> {
+  subscribeToUnInviteMember(): Observable<any> {
     return new Observable(obs => {
       this.socket.on('unInviteMember', (data) => {
         obs.next(data);
@@ -81,5 +81,13 @@ export class WebsocketService {
       },
     };
     return Subject.create(observer, observable);
+  }
+
+  subscribeToDeleteMessageEvent(): Observable<MessageEvent> {
+    return new Observable(obs => {
+      this.socket.on('deleteMessage', (data) => {
+        obs.next(data);
+      });
+    });
   }
 }

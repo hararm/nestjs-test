@@ -66,6 +66,14 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         this.server.to(data.id).emit('unInviteMember', data);
     }
 
+    @SubscribeMessage('deleteMessage')
+    handleDeleteMessage(client: Socket, message: ChatMessage) {
+        this.messagesRepository.deleteMessage(message._id).then( () => {
+            this.logger.log(`Message ${JSON.stringify(message)} deleted`);
+            this.server.to(message.channelId).emit('deleteMessage', message);
+        });
+    }
+
     afterInit(server: Server) {
         this.logger.log('Init');
     }

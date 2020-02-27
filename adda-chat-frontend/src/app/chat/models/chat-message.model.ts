@@ -1,5 +1,6 @@
 import {IChatMessage} from '../../../../../shared/chat-message';
 export class  ChatMessage implements IChatMessage {
+  _id: string;
   constructor(
     public channelId: string,
     public senderId: string,

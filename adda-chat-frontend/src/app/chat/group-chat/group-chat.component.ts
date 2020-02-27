@@ -72,7 +72,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
 
-    this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: {id: string, user: User}) => {
+    this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: { id: string, user: User }) => {
       this.groupMembers.push(new GroupMember(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
       this.activeGroup.members = this.groupMembers;
       this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
@@ -80,8 +80,8 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       });
     }));
 
-    this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: {id: string, user: User}) => {
-      const index = this.groupMembers.findIndex( m => m._id === data.user._id);
+    this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: { id: string, user: User }) => {
+      const index = this.groupMembers.findIndex(m => m._id === data.user._id);
       this.groupMembers.splice(index, 1);
       this.activeGroup.members = this.groupMembers;
       this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
@@ -96,6 +96,14 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Client left room', JSON.stringify(data));
       console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
+
+    this.subscription.add(this.chatIOService.deleteMessage$.subscribe((message: ChatMessage) => {
+      console.log(`Delete message ${message}`);
+      const index = this.messages.findIndex(m => m._id === message._id);
+      this.messages.splice(index, 1);
+      this.ref.markForCheck();
+    }));
+
     if (this.activeGroupId) {
       const users$ = this.chatHttpService.findAllUsers();
       const activeGroup$ = this.chatHttpService.findGroupById(this.activeGroupId);
@@ -173,6 +181,10 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
   onRemoveGroupMember(member: GroupMember) {
     this.chatIOService.unInviteMember(this.activeGroupId, new User(member._id, member.email));
+  }
+
+  onDeleteMessage(message: ChatMessage) {
+    this.chatIOService.deleteMessage(message);
   }
 
   ngOnDestroy(): void {
