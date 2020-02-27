@@ -184,6 +184,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onDeleteMessage(message: ChatMessage) {
+    console.log('Delete message', message);
     this.chatIOService.deleteMessage(message);
   }
 
