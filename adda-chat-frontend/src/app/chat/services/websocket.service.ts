@@ -51,6 +51,22 @@ export class WebsocketService {
     });
   }
 
+  inviteMember(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('inviteMember', (data) => {
+        obs.next(data);
+      });
+    });
+  }
+
+  unInviteMember(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('unInviteMember', (data) => {
+        obs.next(data);
+      });
+    });
+  }
+
   subscribeToClientMessagesEvents(): Subject<MessageEvent> {
     const observable = new Observable(obs => {
       this.socket.on('msgToClient', (data) => {

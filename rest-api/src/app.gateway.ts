@@ -11,6 +11,7 @@ import {Socket, Server} from 'socket.io';
 import {MessagesRepository} from './chat/repositories/messages.repository';
 import {ChatMessage} from './chat/models/chat.message.model';
 import {GroupMember} from './chat/models/member.model';
+import {User} from "./chat/models/user.model";
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -48,9 +49,21 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         const users = Object.values(this.users);
         if (users) {
             const usersInRoom = users.filter(u => u.channelId === chatUser.channelId);
-            this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
+            this.logger.log(`Member: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
             this.server.to(chatUser.channelId).emit('leftRoom', Object.values(usersInRoom));
         }
+    }
+
+    @SubscribeMessage('inviteMember')
+    handleInviteMember(client: Socket, data: {id: string, user: User}) {
+        this.logger.log(`User ${JSON.stringify(data.user)} invited`);
+        this.server.to(data.id).emit('inviteMember', data);
+    }
+
+    @SubscribeMessage('unInviteMember')
+    handleUnInviteMember(client: Socket, data: {id: string, user: User}) {
+        this.logger.log(`User ${JSON.stringify(data.user)} uninvited`);
+        this.server.to(data.id).emit('unInviteMember', data);
     }
 
     afterInit(server: Server) {

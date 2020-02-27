@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {IChatMessage} from '../../../../../shared/chat-message';
 import * as io from 'socket.io-client';
 import {GroupMember} from '../models/member.model';
+import {User} from "../models/user.model";
 
 @Injectable()
 export class ChatIOService {
@@ -13,6 +14,8 @@ export class ChatIOService {
   disconnectEvent$: Observable<any>;
   joinToRoomEvent$: Observable<any>;
   leftRoomEvent$: Observable<any>;
+  inviteMember$: Observable<any>;
+  unInviteMember$: Observable<any>;
 
   constructor(private wsService: WebsocketService) {
     this.wsService.connect();
@@ -23,17 +26,27 @@ export class ChatIOService {
     this.disconnectEvent$ = wsService.subscribeToDisconnectEvent();
     this.joinToRoomEvent$ = wsService.joinedToRoomEvent();
     this.leftRoomEvent$ = wsService.leftRoomEvent();
+    this.inviteMember$ = wsService.inviteMember();
+    this.unInviteMember$ = wsService.unInviteMember();
   }
 
   sendMessage(msg: IChatMessage) {
     this.messages.next({event: 'msgToServer', data: msg});
   }
 
-  joinRoom(chatUser: GroupMember) {
-    this.messages.next({event: 'joinRoom', data: chatUser});
+  joinRoom(groupMember: GroupMember) {
+    this.messages.next({event: 'joinRoom', data: groupMember});
   }
 
-  leaveRoom(chatUser: GroupMember) {
-    this.messages.next({event: 'leaveRoom', data: chatUser});
+  leaveRoom(groupMember: GroupMember) {
+    this.messages.next({event: 'leaveRoom', data: groupMember});
+  }
+
+  inviteMember(id: string, user: User) {
+    this.messages.next({event: 'inviteMember', data: { id, user}});
+  }
+
+  unInviteMember(id: string, user: User) {
+    this.messages.next({event: 'unInviteMember', data: { id, user}});
   }
 }

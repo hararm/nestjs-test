@@ -72,6 +72,23 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
 
+    this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: {id: string, user: User}) => {
+      this.groupMembers.push(new GroupMember(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
+      this.activeGroup.members = this.groupMembers;
+      this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
+        this.ref.markForCheck();
+      });
+    }));
+
+    this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: {id: string, user: User}) => {
+      const index = this.groupMembers.findIndex( m => m._id === data.user._id);
+      this.groupMembers.splice(index, 1);
+      this.activeGroup.members = this.groupMembers;
+      this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
+        this.ref.markForCheck();
+      });
+    }));
+
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
       this.onlineGroupMembers = data as GroupMember[];
       this.updateUserStatus();
@@ -151,21 +168,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onAddGroupMember(user: User) {
-    this.groupMembers.push(new GroupMember(user.email, user.email, this.activeGroupId, false, user._id));
-    this.activeGroup.members = this.groupMembers;
-    this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
-      this.ref.markForCheck();
-    });
-
+    this.chatIOService.inviteMember(this.activeGroupId, new User(user._id, user.email));
   }
 
   onRemoveGroupMember(member: GroupMember) {
-    const index = this.groupMembers.findIndex( m => m._id === member._id);
-    this.groupMembers.splice(index, 1);
-    this.activeGroup.members = this.groupMembers;
-    this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
-      this.ref.markForCheck();
-    });
+    this.chatIOService.unInviteMember(this.activeGroupId, new User(member._id, member.email));
   }
 
   ngOnDestroy(): void {
