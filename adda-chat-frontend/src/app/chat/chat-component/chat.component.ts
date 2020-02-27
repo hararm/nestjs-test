@@ -49,8 +49,9 @@ export class ChatComponent implements OnInit {
     'CBI Group Clinic1',
     'CBI Group Clinic2',
   ];
-  currUserEmail: string;
+  myUserEmail: string;
   dataModel: string = null;
+  myUserId: string;
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -61,7 +62,8 @@ export class ChatComponent implements OnInit {
               private chatIOService: ChatIOService,
   ) {
     this.subscription = new Subscription();
-    this.currUserEmail =  localStorage.getItem('email');
+    this.myUserEmail = localStorage.getItem('email');
+    this.myUserId = localStorage.getItem('userId');
   }
 
   ngOnInit() {
@@ -80,7 +82,7 @@ export class ChatComponent implements OnInit {
   }
 
   onSelectByClinic() {
-    if(this.dataModel === 'All') {
+    if (this.dataModel === 'All') {
       this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
         this.chatGroups = groups;
         this.ref.markForCheck();
@@ -96,6 +98,15 @@ export class ChatComponent implements OnInit {
 
   clinicsDropDownSelectionChanged(event) {
     this.dataModel = event.value;
+  }
+
+  isMyGroup(group: Group) {
+    for (const m of group.members) {
+      if (m._id === this.myUserId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onLogOut() {

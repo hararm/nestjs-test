@@ -56,9 +56,9 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="category-list">
-        <div *ngFor="let group of chatGroups" class="item col-md-4">
-          <div class="thumbnail">
+      <div *ngFor="let group of chatGroups" class="category-list">
+        <div  class="item col-md-4">
+          <div  class="thumbnail">
             <img alt="">
             <div class="caption">
               <h4>{{group.groupName}}</h4>
@@ -69,7 +69,7 @@
                   </p>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                  <button class="btn add-fav" [routerLink]="['/chat', group._id]">
+                  <button *ngIf="isMyGroup(group)" class="btn add-fav" [routerLink]="['/chat', group._id]">
                     Connect
                   </button>
                 </div>
