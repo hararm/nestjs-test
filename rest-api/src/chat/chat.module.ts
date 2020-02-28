@@ -2,10 +2,10 @@ import {Module} from '@nestjs/common';
 import {MongooseModule} from '@nestjs/mongoose';
 import {GroupSchema} from './schemas/group.schema';
 import {GroupsController} from './controllers/groups.controller';
-import {GroupRepository} from './repositories/group.repository';
+import {GroupRepositoryService} from './repositories/group.repository.service';
 import {ClinicsController} from './controllers/clinics.controller';
 import {MessagesController} from './controllers/messages.controller';
-import {MessagesRepository} from './repositories/messages.repository';
+import {MessagesRepositoryService} from './repositories/messages.repository.service';
 import {ChatMessageSchema} from './schemas/chat.message.schema';
 import {UserRepository} from './repositories/user-repository.service';
 import {MembersController} from './controllers/members.controller';
@@ -26,13 +26,13 @@ import {UsersSchema} from '../auth/schemas/users.schema';
         MembersController
     ],
     providers: [
-        GroupRepository,
-        MessagesRepository,
+        GroupRepositoryService,
+        MessagesRepositoryService,
         UserRepository
     ],
     exports: [
-        GroupRepository,
-        MessagesRepository,
+        GroupRepositoryService,
+        MessagesRepositoryService,
         UserRepository
     ]
 })

@@ -1,11 +1,11 @@
 import {Controller, Get, Logger, Param} from '@nestjs/common';
-import {GroupRepository} from '../repositories/group.repository';
+import {GroupRepositoryService} from '../repositories/group.repository.service';
 
 @Controller('clinics')
 export class ClinicsController {
     private logger = new Logger('ClinicsController');
 
-    constructor(private groupsRepository: GroupRepository) {
+    constructor(private groupsRepository: GroupRepositoryService) {
     }
 
     @Get(':clinicName')

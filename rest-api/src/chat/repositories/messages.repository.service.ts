@@ -4,7 +4,7 @@ import {InjectModel} from '@nestjs/mongoose';
 import {ChatMessage} from '../models/chat.message.model';
 
 @Injectable()
-export class MessagesRepository {
+export class MessagesRepositoryService {
     constructor(@InjectModel('ChatMessage') private messageModel: Model<ChatMessage>) {
 
     }

@@ -1,6 +1,6 @@
 import {Body, Controller, Get, Logger, Param, Post, UseInterceptors} from '@nestjs/common';
 import {UserRepository} from '../repositories/user-repository.service';
-import {GroupRepository} from '../repositories/group.repository';
+import {GroupRepositoryService} from '../repositories/group.repository.service';
 import {Group} from '../models/group.model';
 import {User} from '../models/user.model';
 import {PasswordInterceptor} from '../../interceptors/password-interceptor';
@@ -9,7 +9,7 @@ import {PasswordInterceptor} from '../../interceptors/password-interceptor';
 export class MembersController {
     private logger = new Logger('MembersController');
 
-    constructor(private memberRepository: UserRepository, private groupsRepository: GroupRepository) {
+    constructor(private memberRepository: UserRepository, private groupsRepository: GroupRepositoryService) {
     }
 
     @UseInterceptors(PasswordInterceptor)

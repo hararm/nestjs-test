@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
-import {MessagesRepository} from './chat/repositories/messages.repository';
+import {MessagesRepositoryService} from './chat/repositories/messages.repository.service';
 import {ChatMessage} from './chat/models/chat.message.model';
 import {User} from './chat/models/user.model';
 import {GroupMember} from './chat/models/member.model';
@@ -17,7 +17,7 @@ import {GroupMember} from './chat/models/member.model';
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     usersDict: { [key: string]: GroupMember; } = {};
 
-    constructor(private messagesRepository: MessagesRepository) {
+    constructor(private messagesRepository: MessagesRepositoryService) {
     }
 
     @WebSocketServer() server: Server;

@@ -5,7 +5,7 @@ import {Group} from '../models/group.model';
 import {User} from "../models/user.model";
 
 @Injectable()
-export class GroupRepository {
+export class GroupRepositoryService {
     constructor(@InjectModel('Group') private groupModel: Model<Group>) {
 
     }

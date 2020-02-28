@@ -11,7 +11,7 @@ import {
     UseInterceptors
 } from '@nestjs/common';
 import {AdminGuard} from '../../guards/admin.guard';
-import {GroupRepository} from '../repositories/group.repository';
+import {GroupRepositoryService} from '../repositories/group.repository.service';
 import {Group} from '../models/group.model';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {ImageFileFilter} from '../filters/imageFileFilter';
@@ -21,7 +21,7 @@ import {User} from '../models/user.model';
 export class GroupsController {
     private logger = new Logger('GroupsController');
 
-    constructor(private groupsRepository: GroupRepository) {
+    constructor(private groupsRepository: GroupRepositoryService) {
     }
 
     @Post()

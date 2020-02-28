@@ -1,11 +1,11 @@
 import {Controller, Delete, Get, Logger, NotFoundException, Param} from '@nestjs/common';
-import {MessagesRepository} from '../repositories/messages.repository';
+import {MessagesRepositoryService} from '../repositories/messages.repository.service';
 
 @Controller('messages')
 export class MessagesController {
     private logger = new Logger('MessagesController');
 
-    constructor(private groupsRepository: MessagesRepository) {
+    constructor(private groupsRepository: MessagesRepositoryService) {
     }
 
     @Get(':groupId')

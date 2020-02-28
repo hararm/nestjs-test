@@ -5,13 +5,16 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <ul class="navbar-nav ml-auto">
+    <li class="nav-item" style="text-align: center;  color: yellow; font-size: larger">
+      <div style="text-align: center; margin-top: 5px">{{myUserEmail}}</div>
+    </li>
     <li class="nav-item active">
-      <button class="btn" (click)="onLogOut()"><i class="fa fa-sign-out" style="white; font-size: larger"></i></button>
+      <button class="btn" (click)="onLogOut()"><i class="fa fa-sign-out" style="color: white; font-size: xx-large"></i></button>
     </li>
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <button id="button-animated" dropdownToggle type="button" class="btn dropdown-toggle"
               aria-controls="dropdown-animated">
-        <i class="fa fa-cogs" style="color: white; font-size: larger"> </i><span class="caret"></span>
+        <i class="fa fa-cogs" style="color: white; font-size: xx-large"> </i><span class="caret"></span>
       </button>
       <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu  dropdown-menu-right"
           role="menu" aria-labelledby="button-animated">
