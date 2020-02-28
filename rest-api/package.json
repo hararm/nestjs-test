@@ -22,8 +22,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^6.5.3",
-    "@nestjs/core": "^6.5.3",
+    "@nestjs/common": "^6.11.8",
+    "@nestjs/core": "^6.11.8",
     "@nestjs/microservices": "^6.5.3",
     "@nestjs/mongoose": "^6.1.2",
     "@nestjs/platform-express": "^6.11.7",
@@ -38,7 +38,7 @@
     "multer-gridfs-storage": "^4.0.2",
     "npm-run-all": "^4.1.5",
     "password-hash-and-salt": "^0.1.4",
-    "reflect-metadata": "0.1.13",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "3.0.0",
     "rxjs": "6.5.2"
   },
