@@ -1,14 +1,10 @@
-import {IGroupMember} from '../../../../shared/member';
-import {IsMongoId, IsString} from 'class-validator';
+import {IUser} from '../../../../shared/user';
 
-export class GroupMember implements IGroupMember {
-        @IsString()
-        @IsMongoId()
-            _id: string;
-        @IsString()
-        public userName: string;
-        @IsString()
-        public email;
-        @IsString()
-        public channelId: string;
+export class GroupMember implements IUser {
+    constructor(
+        public nickName: string,
+        public email,
+        public channelId: string,
+        public isOnline: boolean, public _id: string = null) {
+    }
 }

@@ -10,12 +10,12 @@ import {Logger} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
 import {MessagesRepository} from './chat/repositories/messages.repository';
 import {ChatMessage} from './chat/models/chat.message.model';
+import {User} from './chat/models/user.model';
 import {GroupMember} from './chat/models/member.model';
-import {User} from "./chat/models/user.model";
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    users: { [key: string]: GroupMember; } = {};
+    usersDict: { [key: string]: GroupMember; } = {};
 
     constructor(private messagesRepository: MessagesRepository) {
     }
@@ -33,24 +33,24 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     @SubscribeMessage('joinRoom')
-    handleJoinRoom(client: Socket, chatUser: GroupMember) {
-        client.join(chatUser.channelId);
-        this.users[client.id] = chatUser;
-        const users = Object.values(this.users);
-        const usersInRoom = users.filter(u => u.channelId === chatUser.channelId);
-        this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
-        this.server.to(chatUser.channelId).emit('joinedRoom', Object.values(usersInRoom));
+    handleJoinRoom(client: Socket, member: GroupMember) {
+        client.join(client.id);
+        this.usersDict[client.id] = member;
+        const members = Object.values(this.usersDict);
+        const usersInRoom = members.filter(u => u.channelId === member.channelId);
+        this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${member.channelId}`);
+        this.server.to(member.channelId).emit('joinedRoom', Object.values(usersInRoom));
     }
 
     @SubscribeMessage('leaveRoom')
-    handleLeaveRoom(client: Socket, chatUser: GroupMember) {
-        client.leave(chatUser.channelId);
-        delete this.users[client.id];
-        const users = Object.values(this.users);
-        if (users) {
-            const usersInRoom = users.filter(u => u.channelId === chatUser.channelId);
-            this.logger.log(`Member: ${JSON.stringify(usersInRoom)} in room: ${chatUser.channelId}`);
-            this.server.to(chatUser.channelId).emit('leftRoom', Object.values(usersInRoom));
+    handleLeaveRoom(client: Socket, member: GroupMember) {
+        client.leave(member.channelId);
+        delete this.usersDict[client.id];
+        const members = Object.values(this.usersDict);
+        if (members) {
+            const membersInRoom = members.filter(u => u.channelId === member.channelId);
+            this.logger.log(`Member: ${JSON.stringify(membersInRoom)} in room: ${member.channelId}`);
+            this.server.to(member.channelId).emit('leftRoom', Object.values(membersInRoom));
         }
     }
 
@@ -79,7 +79,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     handleDisconnect(client: Socket) {
-        delete this.users[client.id];
+        delete this.usersDict[client.id];
         this.logger.log(`Client disconnected: ${client.id}`);
     }
 

@@ -2,7 +2,7 @@ import {Body, Injectable, Param, Post} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Group} from '../models/group.model';
-import {GroupMember} from '../models/member.model';
+import {User} from "../models/user.model";
 
 @Injectable()
 export class GroupRepository {
@@ -40,7 +40,7 @@ export class GroupRepository {
         return this.groupModel.findOneAndUpdate({_id: groupId}, changes, {new: true});
     }
 
-    async addMembersToGroup(groupId: string, members: GroupMember[]): Promise<Group> {
+    async addMembersToGroup(groupId: string, members: User[]): Promise<Group> {
         const group = await this.findGroupById(groupId);
         if (group) {
             group.members = members;
@@ -50,6 +50,15 @@ export class GroupRepository {
 
     async deleteGroup(groupId: string) {
         return await this.groupModel.deleteOne({_id: groupId});
+    }
+
+    async findGroupWithMembers(groupId: string): Promise<Group> {
+        // Find the group members
+         return this.groupModel.findOne({_id: groupId})
+             // This is just chaining with mongoose
+             // Here, we select the 'members' field
+             // to be populated
+             .populate('members').exec();
     }
 
 }

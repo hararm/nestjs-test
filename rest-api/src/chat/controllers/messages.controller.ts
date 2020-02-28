@@ -4,6 +4,7 @@ import {MessagesRepository} from '../repositories/messages.repository';
 @Controller('messages')
 export class MessagesController {
     private logger = new Logger('MessagesController');
+
     constructor(private groupsRepository: MessagesRepository) {
     }
 
@@ -14,7 +15,7 @@ export class MessagesController {
     }
 
     @Delete(':id')
-    deleteGroup(@Param('id') id: string) {
-        return this.groupsRepository.deleteMessage(id);
+    async deleteGroup(@Param('id') id: string) {
+        return await this.groupsRepository.deleteMessage(id);
     }
 }

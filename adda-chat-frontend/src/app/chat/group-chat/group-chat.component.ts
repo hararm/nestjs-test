@@ -126,12 +126,14 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   private updateUserStatus() {
-    if (this.groupMembers && this.groupMembers.length > 0) {
-      this.groupMembers.forEach(u => u.isOnline = false);
-      this.groupMembers = this.groupMembers.map(user => {
-        const user2 = this.onlineGroupMembers.find(u => u.userName === user.userName);
-        return user2 ? {...user, isOnline: user2.isOnline} : user;
-      });
+    if(this.onlineGroupMembers && this.onlineGroupMembers.length > 0) {
+      if (this.groupMembers && this.groupMembers.length > 0) {
+        this.groupMembers.forEach(u => u.isOnline = false);
+        this.groupMembers = this.groupMembers.map(user => {
+          const user2 = this.onlineGroupMembers.find(u => u._id === user._id);
+          return user2 ? {...user, isOnline: user2.isOnline} : user;
+        });
+      }
     }
   }
 

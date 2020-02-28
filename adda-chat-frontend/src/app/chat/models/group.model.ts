@@ -3,7 +3,7 @@ import {GroupMember} from './member.model';
 export class  Group implements IGroup {
   _id: string;
   image: any;
-  members: GroupMember[];
+  members: any[];
   groupName: string;
   clinicName: string;
 }

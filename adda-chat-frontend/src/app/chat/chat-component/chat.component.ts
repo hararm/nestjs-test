@@ -102,7 +102,7 @@ export class ChatComponent implements OnInit {
 
   isMyGroup(group: Group) {
     for (const m of group.members) {
-      if (m._id === this.myUserId) {
+      if (m === this.myUserId) {
         return true;
       }
     }

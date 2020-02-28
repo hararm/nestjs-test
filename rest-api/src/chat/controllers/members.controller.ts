@@ -1,6 +1,5 @@
 import {Body, Controller, Get, Logger, Param, Post} from '@nestjs/common';
-import {MemberRepository} from '../repositories/member.repository';
-import {GroupMember} from '../models/member.model';
+import {UserRepository} from '../repositories/user-repository.service';
 import {GroupRepository} from '../repositories/group.repository';
 import {Group} from '../models/group.model';
 import {User} from '../models/user.model';
@@ -9,7 +8,7 @@ import {User} from '../models/user.model';
 export class MembersController {
     private logger = new Logger('MembersController');
 
-    constructor(private memberRepository: MemberRepository, private groupsRepository: GroupRepository) {
+    constructor(private memberRepository: UserRepository, private groupsRepository: GroupRepository) {
     }
 
     @Get()
@@ -19,10 +18,11 @@ export class MembersController {
     }
 
     @Get(':id')
-    async findMembersByGroupId(@Param('id') id: string): Promise<GroupMember[]> {
-        this.logger.verbose(`Retrieving all users for the group: ${id}`);
-        const group: Group = await this.groupsRepository.findGroupById(id);
+    async findMembersByGroupId(@Param('id') id: string): Promise<User[]> {
+        this.logger.verbose(`Retrieving all members for the group: ${id}`);
+        const group: Group = await this.groupsRepository.findGroupWithMembers(id);
         if (group) {
+            this.logger.verbose(`Retrieved all members ${group.members} for the group: ${id}`);
             return group.members;
         }
         return null;

@@ -1,9 +1,8 @@
-import {IGroupMember} from '../../../../../shared/member';
+import {IUser} from '../../../../../shared/user';
 
-
-export class GroupMember implements IGroupMember {
+export class GroupMember implements IUser {
     constructor(
-    public userName: string,
+    public nickName: string,
     public email,
     public channelId: string,
     public isOnline: boolean, public _id: string = null,) {

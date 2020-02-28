@@ -34,6 +34,7 @@
     "cors": "^2.8.5",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
+    "mongoose-hidden": "^1.8.1",
     "multer-gridfs-storage": "^4.0.2",
     "npm-run-all": "^4.1.5",
     "password-hash-and-salt": "^0.1.4",
