@@ -84,6 +84,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     handleConnection(client: Socket, ...args: any[]) {
-        this.logger.log(`Client connected: ${client.id}`);
+        const userId = client.handshake.query['userId'];
+        this.logger.log(`Client Data args: ${userId}`);
+        this.server.emit('userOnline', userId);
     }
 }

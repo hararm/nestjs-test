@@ -10,7 +10,7 @@ import {ChatModule} from './chat/chat.module';
 import {MulterModule} from '@nestjs/platform-express';
 import {AppGateway} from './app.gateway';
 import {MessagesController} from './chat/controllers/messages.controller';
-import {MembersController} from './chat/controllers/members.controller';
+import {UsersController} from './chat/controllers/users.controller';
 
 @Module({
     imports: [
@@ -31,7 +31,7 @@ export class AppModule implements NestModule {
                 MessagesController,
                 CoursesController,
                 LessonsController,
-                MembersController
+                UsersController
             );
 
     }

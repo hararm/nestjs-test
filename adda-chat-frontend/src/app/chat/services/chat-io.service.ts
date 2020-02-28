@@ -17,19 +17,26 @@ export class ChatIOService {
   inviteMember$: Observable<any>;
   unInviteMember$: Observable<any>;
   deleteMessage$: Observable<any>;
+  userOnline$: Observable<any>;
 
   constructor(private wsService: WebsocketService) {
-    this.wsService.connect();
-    this.messages = (wsService.subscribeToClientMessagesEvents().pipe(map((response: any): any => {
-      return response;
-    })) as Subject<any>);
-
     this.disconnectEvent$ = wsService.subscribeToDisconnectEvent();
     this.joinToRoomEvent$ = wsService.subscribeToJoinedToRoomEvent();
     this.leftRoomEvent$ = wsService.subscribeToLeftRoomEvent();
     this.inviteMember$ = wsService.subscribeToInviteMember();
     this.unInviteMember$ = wsService.subscribeToUnInviteMember();
     this.deleteMessage$ = wsService.subscribeToDeleteMessageEvent();
+    this.userOnline$ = wsService.subscribeToUserOnlineEvent();
+  }
+
+  connect(userId: string) {
+    this.wsService.connect(userId);
+    this.messages = (this.wsService.subscribeToClientMessagesEvents().pipe(map((response: any): any => {
+      return response;
+    })) as Subject<any>);
+  }
+  disconnect() {
+    this.wsService.disconnect();
   }
 
   sendMessage(msg: IChatMessage) {
@@ -49,10 +56,10 @@ export class ChatIOService {
   }
 
   inviteMember(id: string, user: User) {
-    this.messages.next({event: 'inviteMember', data: { id, user}});
+    this.messages.next({event: 'inviteMember', data: {id, user}});
   }
 
   unInviteMember(id: string, user: User) {
-    this.messages.next({event: 'unInviteMember', data: { id, user}});
+    this.messages.next({event: 'unInviteMember', data: {id, user}});
   }
 }

@@ -5,9 +5,9 @@ import {Group} from '../models/group.model';
 import {User} from '../models/user.model';
 import {PasswordInterceptor} from '../../interceptors/password-interceptor';
 
-@Controller('members')
-export class MembersController {
-    private logger = new Logger('MembersController');
+@Controller('users')
+export class UsersController {
+    private logger = new Logger('UsersController');
 
     constructor(private memberRepository: UserRepository, private groupsRepository: GroupRepositoryService) {
     }
@@ -20,10 +20,16 @@ export class MembersController {
     }
 
     @UseInterceptors(PasswordInterceptor)
-    @Get(':id')
-    async findMembersByGroupId(@Param('id') id: string): Promise<User[]> {
-        this.logger.verbose(`Retrieving all members for the group: ${id}`);
-        const group: Group = await this.groupsRepository.findGroupWithMembers(id);
+    @Get('findById/:id')
+    async findById(@Param('id') id: string): Promise<User> {
+        return this.memberRepository.findById(id);
+    }
+
+    @UseInterceptors(PasswordInterceptor)
+    @Get(':groupId')
+    async findMembersByGroupId(@Param('groupId') groupId: string): Promise<User[]> {
+        this.logger.verbose(`Retrieving all members for the group: ${groupId}`);
+        const group: Group = await this.groupsRepository.findGroupWithMembers(groupId);
         if (group) {
             return group.members;
         }

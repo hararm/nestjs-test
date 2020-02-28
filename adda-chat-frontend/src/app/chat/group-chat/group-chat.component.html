@@ -70,6 +70,7 @@
                             <div *ngIf="!isMemberOfCurrentGroup(user)" class="profession-online">
                               <button class="btn" (click)="onAddGroupMember(user)">
                                 <i class="fa fa-user-plus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
+                                <i *ngIf="isUserOnline(user)" class="fa fa-circle online" aria-hidden="true"></i>
                               </button>
                               {{user.email}}
                             </div>

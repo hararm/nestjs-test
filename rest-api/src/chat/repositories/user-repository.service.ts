@@ -16,4 +16,9 @@ export class UserRepository {
         this.logger.debug('Find All Users');
         return this.userModel.find();
     }
+
+    async findById(id: string): Promise<User> {
+        this.logger.debug(`Find user: ${id}`);
+        return this.userModel.findById(id);
+    }
 }

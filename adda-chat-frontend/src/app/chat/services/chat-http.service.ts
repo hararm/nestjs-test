@@ -24,7 +24,11 @@ export class ChatHttpService {
   }
 
   findAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiPath}members`)
+    return this.http.get<User[]>(`${this.apiPath}users`)
+  }
+
+  findUser(id): Observable<User> {
+    return this.http.get<User>(`${this.apiPath}users/findById/${id}`)
   }
 
   findAllGroups(): Observable<Group[]> {
@@ -48,6 +52,6 @@ export class ChatHttpService {
   }
 
   findMembersByGroupById(id: string): Observable<GroupMember[]> {
-    return this.http.get<GroupMember[]>(`${this.apiPath}members/${id}`);
+    return this.http.get<GroupMember[]>(`${this.apiPath}users/${id}`);
   }
 }

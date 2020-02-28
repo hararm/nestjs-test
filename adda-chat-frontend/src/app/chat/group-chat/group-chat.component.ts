@@ -23,7 +23,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   activeGroupId: string;
   messages: ChatMessage[];
   activeGroup: Group;
-  onlineGroupMembers: GroupMember[];
+  onlineMembers: GroupMember[];
   groupMembers: GroupMember[] = [];
   groupChannelId: string;
   users: User[];
@@ -65,7 +65,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.joinToRoomEvent$.subscribe((data) => {
-      this.onlineGroupMembers = data as GroupMember[];
+      this.onlineMembers = data as GroupMember[];
       this.updateUserStatus();
       this.sortGroupMembers();
       this.ref.markForCheck();
@@ -73,25 +73,33 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
 
+    this.subscription.add(this.chatIOService.userOnline$.subscribe(id => {
+      this.subscription.add(this.chatHttpService.findUser(id).subscribe((user => {
+        this.onlineMembers.push(new GroupMember(user.email, user.email, null, true, user._id));
+        this.ref.markForCheck();
+      })));
+      this.ref.markForCheck();
+    }));
+
     this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: { id: string, user: User }) => {
       this.groupMembers.push(new GroupMember(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
       this.activeGroup.members = this.groupMembers.map(m => m._id);
-      this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
+      this.subscription.add(this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
         this.ref.markForCheck();
-      });
+      }));
     }));
 
     this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: { id: string, user: User }) => {
       const index = this.groupMembers.findIndex(m => m._id === data.user._id);
       this.groupMembers.splice(index, 1);
       this.activeGroup.members = this.groupMembers.map(m => m._id);
-      this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
+      this.subscription.add(this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
         this.ref.markForCheck();
-      });
+      }));
     }));
 
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
-      this.onlineGroupMembers = data as GroupMember[];
+      this.onlineMembers = data as GroupMember[];
       this.updateUserStatus();
       this.ref.markForCheck();
       console.log('Client left room', JSON.stringify(data));
@@ -123,15 +131,15 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         }
       ));
     }
-    this.chatIOService.joinRoom(new GroupMember(this.myUserName, this.myUserName, this.activeGroupId, true,  this.myUserId));
+    this.chatIOService.joinRoom(new GroupMember(this.myUserName, this.myUserName, this.activeGroupId, true, this.myUserId));
   }
 
   private updateUserStatus() {
-    if(this.onlineGroupMembers && this.onlineGroupMembers.length > 0) {
+    if (this.onlineMembers && this.onlineMembers.length > 0) {
       if (this.groupMembers && this.groupMembers.length > 0) {
         this.groupMembers.forEach(u => u.isOnline = false);
         this.groupMembers = this.groupMembers.map(user => {
-          const user2 = this.onlineGroupMembers.find(u => u._id === user._id);
+          const user2 = this.onlineMembers.find(u => u._id === user._id);
           return user2 ? {...user, isOnline: user2.isOnline} : user;
         });
       }
@@ -174,7 +182,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onLeftRoom() {
-    delete this.onlineGroupMembers;
+    delete this.onlineMembers;
     this.chatIOService.leaveRoom(new GroupMember(this.myUserName, this.myUserName, this.activeGroupId, false));
   }
 
@@ -189,6 +197,13 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   onDeleteMessage(message: ChatMessage) {
     console.log('Delete message', message);
     this.chatIOService.deleteMessage(message);
+  }
+
+  isUserOnline(user: User): boolean {
+    const member = this.onlineMembers.find(m => m._id === user._id);
+    if (member) {
+      return member.isOnline;
+    }
   }
 
   ngOnDestroy(): void {

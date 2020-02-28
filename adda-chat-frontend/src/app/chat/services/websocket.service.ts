@@ -14,11 +14,10 @@ export class WebsocketService {
   constructor() {
   }
 
-  connect() {
-    if (this.socket && this.socket.connected) {
-      this.socket.disconnect();
+  connect(userId: string) {
+    if (!this.socket || !this.socket.connected) {
+      this.socket = io.connect(environment.ws_url, {autoConnect: true, rejectUnauthorized: true, query: {userId}});
     }
-    this.socket = io(environment.ws_url, {autoConnect: true, rejectUnauthorized: true});
   }
 
   disconnect() {
@@ -86,6 +85,14 @@ export class WebsocketService {
   subscribeToDeleteMessageEvent(): Observable<MessageEvent> {
     return new Observable(obs => {
       this.socket.on('deleteMessage', (data) => {
+        obs.next(data);
+      });
+    });
+  }
+
+  subscribeToUserOnlineEvent(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('userOnline', (data) => {
         obs.next(data);
       });
     });

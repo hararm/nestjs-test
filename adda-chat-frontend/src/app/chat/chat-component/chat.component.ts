@@ -67,6 +67,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.chatIOService.connect(this.myUserId);
     this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
       const memberGroups: Group[] = [];
       this.chatGroups = groups;
@@ -110,6 +111,7 @@ export class ChatComponent implements OnInit {
   }
 
   onLogOut() {
+    this.chatIOService.disconnect();
     localStorage.removeItem('authJwtToken');
     this.router.navigateByUrl('/login').then();
   }

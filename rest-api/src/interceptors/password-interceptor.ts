@@ -10,10 +10,14 @@ export class PasswordInterceptor implements NestInterceptor {
         return next
             .handle()
             .pipe(
-                map((data: User[]) => {
-                    data.forEach( (element, index, array) => {
-                        array[index].passwordHash = undefined;
-                    });
+                map((data: any) => {
+                    if (!Array.isArray(data)) {
+                        data.passwordHash = undefined;
+                    } else {
+                        data.forEach((element, index, array) => {
+                            array[index].passwordHash = undefined;
+                        });
+                    }
                     this.logger.debug(`PasswordInterceptor ${JSON.stringify(data)}`);
                     return data;
                 })

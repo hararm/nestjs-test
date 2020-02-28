@@ -8,7 +8,7 @@ import {MessagesController} from './controllers/messages.controller';
 import {MessagesRepositoryService} from './repositories/messages.repository.service';
 import {ChatMessageSchema} from './schemas/chat.message.schema';
 import {UserRepository} from './repositories/user-repository.service';
-import {MembersController} from './controllers/members.controller';
+import {UsersController} from './controllers/users.controller';
 import {UsersSchema} from '../auth/schemas/users.schema';
 
 @Module({
@@ -23,7 +23,7 @@ import {UsersSchema} from '../auth/schemas/users.schema';
         MessagesController,
         GroupsController,
         ClinicsController,
-        MembersController
+        UsersController
     ],
     providers: [
         GroupRepositoryService,
