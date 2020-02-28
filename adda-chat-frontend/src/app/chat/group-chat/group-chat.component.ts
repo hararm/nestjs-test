@@ -25,6 +25,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   activeGroup: Group;
   onlineGroupMembers: GroupMember[];
   groupMembers: GroupMember[] = [];
+  groupChannelId: string;
   users: User[];
   subscription: Subscription;
   msgForm = new FormGroup({
@@ -74,7 +75,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
     this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: { id: string, user: User }) => {
       this.groupMembers.push(new GroupMember(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
-      this.activeGroup.members = this.groupMembers;
+      this.activeGroup.members = this.groupMembers.map(m => m._id);
       this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
         this.ref.markForCheck();
       });
@@ -83,7 +84,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: { id: string, user: User }) => {
       const index = this.groupMembers.findIndex(m => m._id === data.user._id);
       this.groupMembers.splice(index, 1);
-      this.activeGroup.members = this.groupMembers;
+      this.activeGroup.members = this.groupMembers.map(m => m._id);
       this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
         this.ref.markForCheck();
       });
@@ -122,7 +123,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
         }
       ));
     }
-    this.chatIOService.joinRoom(new GroupMember(this.myUserName, this.myUserName, this.activeGroupId, true));
+    this.chatIOService.joinRoom(new GroupMember(this.myUserName, this.myUserName, this.activeGroupId, true,  this.myUserId));
   }
 
   private updateUserStatus() {

@@ -43,12 +43,6 @@ export class GroupsController {
         return this.groupsRepository.updateGroup(id, group);
     }
 
-    @Put('addMembersToGroup/:id')
-    async addMembersToGroup(@Param('id') id: string, @Body() members: User[]) {
-        this.logger.verbose(`Add member ${members} group ${id}`);
-        return this.groupsRepository.addMembersToGroup(id, members);
-    }
-
     @Get()
     async findAllGroups(): Promise<Group[]> {
         this.logger.verbose(`Retrieving all groups`);

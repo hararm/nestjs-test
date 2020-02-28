@@ -40,7 +40,7 @@ export class GroupRepository {
         return this.groupModel.findOneAndUpdate({_id: groupId}, changes, {new: true});
     }
 
-    async addMembersToGroup(groupId: string, members: User[]): Promise<Group> {
+    async addMembersToGroup(groupId: string, members: string[]): Promise<Group> {
         const group = await this.findGroupById(groupId);
         if (group) {
             group.members = members;

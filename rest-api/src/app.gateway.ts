@@ -34,7 +34,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
     @SubscribeMessage('joinRoom')
     handleJoinRoom(client: Socket, member: GroupMember) {
-        client.join(client.id);
+        client.join(member.channelId);
         this.usersDict[client.id] = member;
         const members = Object.values(this.usersDict);
         const usersInRoom = members.filter(u => u.channelId === member.channelId);
@@ -56,7 +56,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
     @SubscribeMessage('inviteMember')
     handleInviteMember(client: Socket, data: {id: string, user: User}) {
-        this.logger.log(`User ${JSON.stringify(data.user)} invited`);
+        this.logger.log(`User ${JSON.stringify(data.user)} invited to the room: ${data.id}`);
         this.server.to(data.id).emit('inviteMember', data);
     }
 

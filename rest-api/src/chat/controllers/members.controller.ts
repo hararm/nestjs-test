@@ -5,7 +5,6 @@ import {Group} from '../models/group.model';
 import {User} from '../models/user.model';
 import {PasswordInterceptor} from '../../interceptors/password-interceptor';
 
-
 @Controller('members')
 export class MembersController {
     private logger = new Logger('MembersController');
@@ -26,7 +25,6 @@ export class MembersController {
         this.logger.verbose(`Retrieving all members for the group: ${id}`);
         const group: Group = await this.groupsRepository.findGroupWithMembers(id);
         if (group) {
-            this.logger.verbose(`Retrieved all members ${group.members} for the group: ${id}`);
             return group.members;
         }
         return null;
