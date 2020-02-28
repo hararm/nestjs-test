@@ -5,4 +5,4 @@ export const UsersSchema = new mongoose.Schema({
     email: {type: String, Required: true},
     roles: { type: Array, Required: true},
     passwordHash: {type: String, hide: true}
-}).plugin(mongooseHidden,  { hidden: {passwordHash: true }});
+}).plugin(mongooseHidden);
