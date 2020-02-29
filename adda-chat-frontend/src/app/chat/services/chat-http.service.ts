@@ -51,7 +51,7 @@ export class ChatHttpService {
     return this.http.get<Group[]>(`${this.apiPath}clinics/${clinicName}`);
   }
 
-  findMembersByGroupById(id: string): Observable<GroupMember[]> {
-    return this.http.get<GroupMember[]>(`${this.apiPath}users/${id}`);
+  findMembersByGroupById(id: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiPath}users/${id}`);
   }
 }

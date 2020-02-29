@@ -131,7 +131,10 @@ export class GroupChatComponent implements OnInit, OnDestroy {
           this.users = users;
           this.activeGroup = group;
           this.activeGroupName = group.groupName;
-          this.groupMembers = [...members];
+          for(const u of members) {
+            const member = new GroupMember(u.email, u.email, this.activeGroupId, true, u._id);
+            this.groupMembers.push(member);
+          }
           this.messages = [...messages];
           this.updateUserStatus();
           this.sortGroupMembers();
