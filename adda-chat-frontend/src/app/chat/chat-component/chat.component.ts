@@ -7,6 +7,8 @@ import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import {ChatIOService} from '../services/chat-io.service';
 import {Router} from '@angular/router';
+import {EditGroupMemberComponent} from "../add-group-member/edit-group-member.component";
+import {User} from "../models/user.model";
 
 @Component({
   selector: 'chat-component',
@@ -26,6 +28,7 @@ export class ChatComponent implements OnInit {
   };
 
   chatGroups: Group[];
+  chatUsers: User[];
   subscription: Subscription;
 
   config = {
@@ -73,6 +76,9 @@ export class ChatComponent implements OnInit {
       this.chatGroups = groups;
       this.ref.markForCheck();
     }));
+    this.subscription.add(this.chatHttpService.findAllUsers().subscribe(users => {
+      this.chatUsers = users;
+    }));
   }
 
   onAddGroup() {
@@ -80,6 +86,21 @@ export class ChatComponent implements OnInit {
       data: {}
     };
     this.modalFormRef = this.modalService.show(AddGroupComponent, Object.assign({}, this.modalConfig));
+  }
+
+  onEditGroupMembers() {
+    this.modalConfig.initialState = {
+      data: {
+        groups: this.chatGroups,
+        users: this.chatUsers
+      }
+    };
+    this.modalFormRef = this.modalService.show(EditGroupMemberComponent, Object.assign({}, this.modalConfig));
+    this.modalFormRef.content.onClose.subscribe((result: Group) => {
+      this.chatHttpService.updateGroup(result._id, result).subscribe();
+      this.ref.markForCheck();
+      console.log('results', result);
+    })
   }
 
   onSelectByClinic() {

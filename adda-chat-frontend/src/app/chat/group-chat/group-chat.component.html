@@ -20,40 +20,6 @@
     <div class="chat_container">
       <div class="row">
         <div class="col-sm-4 col-md-3 mob-clearfix">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card-container">
-                <div class="card">
-                  <div class="front">
-                    <div class="cover">
-                    </div>
-                    <div class="user cover-img">
-                      <img src="assets/images/placeholder.png" alt="" style="width:100%;">
-                    </div>
-                    <div class="content">
-                      <div class="main">
-                        <h3 class="name">{{myUserName}}</h3>
-                        <p class="profession-online">
-                          <i class="fa fa-circle online" aria-hidden="true"></i>
-                          Online
-                        </p>
-                        <p class="text-center">
-                          Mantra
-                        </p>
-                      </div>
-                      <div class="footer">
-                        <i class="fa fa-mail-forward"></i>
-                        <a href="#">
-                          View My Profile
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div class="row" style="margin-top:10px;">
             <div class="col-md-12">
               <div class="card-container">
@@ -62,17 +28,18 @@
                     <div class="content main-scroll">
                       <div class="main" id="main_scroll">
                         <p class="friends" style="margin-bottom:0px;">
-                          Add Member<span id="numOfFriends"></span>
+                          Invite Member<span id="numOfFriends"></span>
                         </p>
                         <hr style="margin-top:10px"/>
                         <div class="onlineFriends">
                           <div *ngFor="let user of users" class="col-md-12">
-                            <div *ngIf="!isMemberOfCurrentGroup(user)" class="profession-online">
+                            <div *ngIf="!isMemberOfCurrentGroup(user)" class="user-online">
                               <button class="btn" (click)="onAddGroupMember(user)">
                                 <i class="fa fa-user-plus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
                                 <i *ngIf="isUserOnline(user)" class="fa fa-circle online" aria-hidden="true"></i>
                               </button>
-                              {{user.email}}
+                              <div style="align-self: center">{{user.email}}</div>
+                              <button class="btn btn-outline-primary">Private Chat</button>
                             </div>
                           </div>
                         </div>
@@ -166,10 +133,10 @@
 
             <div *ngFor="let user of groupMembers" class="col-md-12" id="main">
               <h4 class="profession-online">
-                <i *ngIf="user.isOnline" class="fa fa-circle online" aria-hidden="true"></i>
-                <i *ngIf="!user.isOnline" class="fa fa-circle offline" aria-hidden="true"></i>
+                <i *ngIf="user.isOnline" class="fa fa-group online" aria-hidden="true"></i>
+                <i *ngIf="!user.isOnline" class="fa fa-group offline" aria-hidden="true"></i>
                 <button *ngIf="!isMyUser(user._id)" class="btn" (click)="onRemoveGroupMember(user)">
-                  <i class="fa fa-thumbs-down" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
+                  <i class="fa fa-minus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
                 </button>
                 {{getMemberName(user)}}
               </h4>

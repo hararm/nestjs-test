@@ -1,0 +1,60 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Edit Group Members</h5>
+    <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="form-group">
+        <div class="content">
+          <p class="filter">
+            Select Group
+          </p>
+          <hr/>
+          <ngx-select-dropdown [config]="config1" [options]="data?.groups"
+                               (change)="groupsDropDownSelectionChanged($event)"
+                               [multiple]="false">
+          </ngx-select-dropdown>
+        </div>
+      </div>
+    <div id="list-demo" style="margin-top: 30px">
+      <div class="widget-container">
+        <dx-list
+          [items]="this.diffusers"
+          [repaintChangesOnly]="true"
+          displayExpr="email"
+          keyExpr="_id">
+          <dxo-item-dragging
+            group="users"
+            [data]="this.diffusers"
+            [allowReordering]="true"
+            [onDragStart]="onDragStart"
+            [onAdd]="onAdd"
+            [onRemove]="onRemove">
+          </dxo-item-dragging>
+        </dx-list>
+        <dx-list
+          [items]="groupUsers"
+          [repaintChangesOnly]="true"
+          displayExpr="email"
+          keyExpr="_id">
+          <dxo-item-dragging
+            group="users"
+            [data]="groupUsers"
+            [allowReordering]="true"
+            [onDragStart]="onDragStart"
+            [onAdd]="onAdd"
+            [onRemove]="onRemove">
+          </dxo-item-dragging>
+        </dx-list>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit"
+            (click)="submitClick()">
+      Submit
+    </button>
+  </div>
+</div>

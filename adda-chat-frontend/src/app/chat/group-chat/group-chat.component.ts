@@ -131,7 +131,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
           this.users = users;
           this.activeGroup = group;
           this.activeGroupName = group.groupName;
-          // convert to group members
+          // convert to accounts
           for(const u of members) {
             const member = new Account(u.email, u.email, this.activeGroupId, true, u._id);
             this.groupMembers.push(member);

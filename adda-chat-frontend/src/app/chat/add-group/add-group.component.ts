@@ -2,7 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
 import {Group} from '../../../../../rest-api/src/chat/models/group.model';
-import {ChatHttpService} from "../services/chat-http.service";
+import {ChatHttpService} from '../services/chat-http.service';
 
 @Component({
   selector: 'app-add-group',
@@ -11,7 +11,6 @@ import {ChatHttpService} from "../services/chat-http.service";
   encapsulation: ViewEncapsulation.None
 })
 export class AddGroupComponent implements OnInit {
-
   addGroupForm: FormGroup;
   group: Group;
   isNew: boolean;

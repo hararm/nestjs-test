@@ -10,6 +10,8 @@ import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {GroupChatComponent} from './group-chat/group-chat.component';
 import {ChatIOService} from './services/chat-io.service';
 import {WebsocketService} from './services/websocket.service';
+import { EditGroupMemberComponent } from './add-group-member/edit-group-member.component';
+import {DxModule} from "../dx.module";
 
 export const chatRoutes: Routes = [
   {
@@ -26,6 +28,7 @@ export const chatRoutes: Routes = [
   imports: [
     CommonModule,
     AppBootstrapModule,
+    DxModule,
     RouterModule.forChild(chatRoutes),
     FormsModule,
     ReactiveFormsModule,
@@ -34,7 +37,8 @@ export const chatRoutes: Routes = [
   declarations: [
     ChatComponent,
     AddGroupComponent,
-    GroupChatComponent
+    GroupChatComponent,
+    EditGroupMemberComponent
   ],
   exports: [
     ChatComponent
@@ -45,7 +49,8 @@ export const chatRoutes: Routes = [
     ChatIOService
   ],
   entryComponents: [
-    AddGroupComponent
+    AddGroupComponent,
+    EditGroupMemberComponent
   ]
 })
 export class ChatModule {
