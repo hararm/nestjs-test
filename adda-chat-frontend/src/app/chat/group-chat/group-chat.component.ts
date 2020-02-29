@@ -9,7 +9,7 @@ import {ChatMessage} from '../models/chat-message.model';
 import {GroupMember} from '../models/member.model';
 import {User} from '../models/user.model';
 import {Group} from '../models/group.model';
-import {switchMap} from "rxjs/operators";
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-chat',
