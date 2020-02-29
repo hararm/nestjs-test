@@ -6,48 +6,54 @@
     </button>
   </div>
   <div class="modal-body">
-      <div class="form-group">
-        <div class="content">
-          <p class="filter">
-            Select Group
-          </p>
-          <hr/>
-          <ngx-select-dropdown [config]="config1" [options]="data?.groups"
-                               (change)="groupsDropDownSelectionChanged($event)"
-                               [multiple]="false">
-          </ngx-select-dropdown>
-        </div>
+    <div class="form-group">
+      <div class="content">
+        <p class="filter">
+          Select Group
+        </p>
+        <hr/>
+        <ngx-select-dropdown [config]="config1" [options]="data?.groups"
+                             (change)="groupsDropDownSelectionChanged($event)"
+                             [multiple]="false">
+        </ngx-select-dropdown>
       </div>
+    </div>
     <div id="list-demo" style="margin-top: 30px">
       <div class="widget-container">
-        <dx-list
-          [items]="this.diffusers"
-          [repaintChangesOnly]="true"
-          displayExpr="email"
-          keyExpr="_id">
-          <dxo-item-dragging
-            group="users"
-            [data]="this.diffusers"
-            [allowReordering]="true"
-            [onDragStart]="onDragStart"
-            [onAdd]="onAdd"
-            [onRemove]="onRemove">
-          </dxo-item-dragging>
-        </dx-list>
-        <dx-list
-          [items]="groupUsers"
-          [repaintChangesOnly]="true"
-          displayExpr="email"
-          keyExpr="_id">
-          <dxo-item-dragging
-            group="users"
-            [data]="groupUsers"
-            [allowReordering]="true"
-            [onDragStart]="onDragStart"
-            [onAdd]="onAdd"
-            [onRemove]="onRemove">
-          </dxo-item-dragging>
-        </dx-list>
+        <div style="display: flex; flex-direction: column">
+          <span>All users</span>
+          <dx-list
+            [items]="this.diffusers"
+            [repaintChangesOnly]="true"
+            displayExpr="email"
+            keyExpr="_id">
+            <dxo-item-dragging
+              group="users"
+              [data]="this.diffusers"
+              [allowReordering]="true"
+              [onDragStart]="onDragStart"
+              [onAdd]="onAdd"
+              [onRemove]="onRemove">
+            </dxo-item-dragging>
+          </dx-list>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <span>Group users</span>
+          <dx-list
+            [items]="groupUsers"
+            [repaintChangesOnly]="true"
+            displayExpr="email"
+            keyExpr="_id">
+            <dxo-item-dragging
+              group="users"
+              [data]="groupUsers"
+              [allowReordering]="true"
+              [onDragStart]="onDragStart"
+              [onAdd]="onAdd"
+              [onRemove]="onRemove">
+            </dxo-item-dragging>
+          </dx-list>
+        </div>
       </div>
     </div>
   </div>
