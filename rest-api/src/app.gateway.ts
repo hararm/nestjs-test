@@ -6,12 +6,13 @@ import {
     OnGatewayConnection,
     OnGatewayDisconnect, MessageBody, ConnectedSocket,
 } from '@nestjs/websockets';
-import {Logger} from '@nestjs/common';
+import {Logger, UseGuards} from '@nestjs/common';
 import {Socket, Server} from 'socket.io';
 import {MessagesRepositoryService} from './chat/repositories/messages.repository.service';
 import {ChatMessage} from './chat/models/chat.message.model';
 import {User} from './chat/models/user.model';
 import {GroupMember} from './chat/models/member.model';
+import {WsJwtGuard} from "./guards/ws-jwt.guard";
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -24,6 +25,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
     private logger: Logger = new Logger('AppGateway');
 
+    @UseGuards(WsJwtGuard)
     @SubscribeMessage('msgToServer')
     handleMessage(@ConnectedSocket() client: Socket, @MessageBody() message: ChatMessage): void {
         this.logger.debug(`Message: ${message.message} from: ${message.senderId} to room: ${message.channelId}`);
@@ -32,6 +34,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         });
     }
 
+    @UseGuards(WsJwtGuard)
     @SubscribeMessage('joinRoom')
     handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody()member: GroupMember) {
         client.join(member.channelId);
@@ -41,6 +44,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         this.server.to(member.channelId).emit('joinedRoom', Object.values(members));
     }
 
+    @UseGuards(WsJwtGuard)
     @SubscribeMessage('leaveRoom')
     handleLeaveRoom(@ConnectedSocket() client: Socket, @MessageBody() member: GroupMember) {
         client.leave(member.channelId);
@@ -53,18 +57,21 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         }
     }
 
+    @UseGuards(WsJwtGuard)
     @SubscribeMessage('inviteMember')
     handleInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} invited to the room: ${data.id}`);
         this.server.to(data.id).emit('inviteMember', data);
     }
 
+    @UseGuards(WsJwtGuard)
     @SubscribeMessage('unInviteMember')
     handleUnInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} uninvited`);
         this.server.to(data.id).emit('unInviteMember', data);
     }
 
+    @UseGuards(WsJwtGuard)
     @SubscribeMessage('deleteMessage')
     handleDeleteMessage(@ConnectedSocket() client: Socket, @MessageBody() message: ChatMessage) {
         this.messagesRepository.deleteMessage(message._id).then( () => {

@@ -10,13 +10,14 @@ export class WebsocketService {
 
   // Our socket connection
   private socket: Socket;
-
+  private jwt = localStorage.getItem('authJwtToken');
   constructor() {
   }
 
   connect(userId: string, userLogin: string) {
     if (!this.socket || !this.socket.connected) {
-      this.socket = io.connect(environment.ws_url, {autoConnect: true, rejectUnauthorized: true, query: {userId, userLogin}});
+      this.socket = io.connect(environment.ws_url,
+        {autoConnect: true, rejectUnauthorized: true, query: {userId, userLogin, authJwtToken: this.jwt}});
     }
   }
 
