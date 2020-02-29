@@ -2,7 +2,6 @@ import {Body, Injectable, Param, Post} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Group} from '../models/group.model';
-import {User} from "../models/user.model";
 
 @Injectable()
 export class GroupRepositoryService {

@@ -1,6 +1,6 @@
 import {IUser} from '../../../../shared/user';
 
-export class GroupMember implements IUser {
+export class Account implements IUser {
     constructor(
         public nickName: string,
         public email,

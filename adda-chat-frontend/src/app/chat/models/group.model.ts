@@ -1,5 +1,5 @@
 import {IGroup} from '../../../../../shared/chat-group';
-import {GroupMember} from './member.model';
+import {Account} from './account.model';
 export class  Group implements IGroup {
   _id: string;
   image: any;

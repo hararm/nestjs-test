@@ -11,12 +11,12 @@ import {Socket, Server} from 'socket.io';
 import {MessagesRepositoryService} from './chat/repositories/messages.repository.service';
 import {ChatMessage} from './chat/models/chat.message.model';
 import {User} from './chat/models/user.model';
-import {GroupMember} from './chat/models/member.model';
-import {WsJwtGuard} from "./guards/ws-jwt.guard";
+import {Account} from './chat/models/account.model';
+import {WsJwtGuard} from './guards/ws-jwt.guard';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    usersDict: { [key: string]: GroupMember; } = {};
+    usersDict: { [key: string]: Account; } = {};
 
     constructor(private messagesRepository: MessagesRepositoryService) {
     }
@@ -36,7 +36,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
     @UseGuards(WsJwtGuard)
     @SubscribeMessage('joinRoom')
-    handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody()member: GroupMember) {
+    handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody()member: Account) {
         client.join(member.channelId);
         this.usersDict[client.id] = member;
         const members = Object.values(this.usersDict);
@@ -46,7 +46,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
     @UseGuards(WsJwtGuard)
     @SubscribeMessage('leaveRoom')
-    handleLeaveRoom(@ConnectedSocket() client: Socket, @MessageBody() member: GroupMember) {
+    handleLeaveRoom(@ConnectedSocket() client: Socket, @MessageBody() member: Account) {
         client.leave(member.channelId);
         delete this.usersDict[client.id];
         const members = Object.values(this.usersDict);
@@ -96,7 +96,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     handleConnection(client: Socket, ...args: any[]) {
         const userId = client.handshake.query['userId'];
         const userLogin = client.handshake.query['userLogin'];
-        this.usersDict[client.id] = new GroupMember(userLogin, userLogin, null, true, userId);
+        this.usersDict[client.id] = new Account(userLogin, userLogin, null, true, userId);
         this.logger.log(`Client Data args: ${userId}, ${userLogin}`);
         this.server.emit('userOnline', userId);
     }
