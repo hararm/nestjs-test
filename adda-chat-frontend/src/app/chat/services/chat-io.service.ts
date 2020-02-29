@@ -18,6 +18,7 @@ export class ChatIOService {
   unInviteMember$: Observable<any>;
   deleteMessage$: Observable<any>;
   userOnline$: Observable<any>;
+  userOffline$: Observable<any>;
 
   constructor(private wsService: WebsocketService) {
     this.disconnectEvent$ = wsService.subscribeToDisconnectEvent();
@@ -27,10 +28,11 @@ export class ChatIOService {
     this.unInviteMember$ = wsService.subscribeToUnInviteMember();
     this.deleteMessage$ = wsService.subscribeToDeleteMessageEvent();
     this.userOnline$ = wsService.subscribeToUserOnlineEvent();
+    this.userOffline$ = wsService.subscribeToUserOfflineEvent();
   }
 
-  connect(userId: string) {
-    this.wsService.connect(userId);
+  connect(userId: string, userLogin: string) {
+    this.wsService.connect(userId, userLogin);
     this.messages = (this.wsService.subscribeToClientMessagesEvents().pipe(map((response: any): any => {
       return response;
     })) as Subject<any>);

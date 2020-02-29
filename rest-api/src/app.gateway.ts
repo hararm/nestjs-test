@@ -37,9 +37,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         client.join(member.channelId);
         this.usersDict[client.id] = member;
         const members = Object.values(this.usersDict);
-        const usersInRoom = members.filter(u => u.channelId === member.channelId);
-        this.logger.log(`Client: ${JSON.stringify(usersInRoom)} in room: ${member.channelId}`);
-        this.server.to(member.channelId).emit('joinedRoom', Object.values(usersInRoom));
+        this.logger.log(`Client: ${JSON.stringify(members)} in room: ${member.channelId}`);
+        this.server.to(member.channelId).emit('joinedRoom', Object.values(members));
     }
 
     @SubscribeMessage('leaveRoom')
@@ -79,13 +78,19 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     handleDisconnect(client: Socket) {
-        delete this.usersDict[client.id];
-        this.logger.log(`Client disconnected: ${client.id}`);
+        const user = this.usersDict[client.id];
+        if (user) {
+            this.server.emit('userOffline', user._id);
+            delete this.usersDict[client.id];
+            this.logger.log(`Client disconnected: ${client.id}`);
+        }
     }
 
     handleConnection(client: Socket, ...args: any[]) {
         const userId = client.handshake.query['userId'];
-        this.logger.log(`Client Data args: ${userId}`);
+        const userLogin = client.handshake.query['userLogin'];
+        this.usersDict[client.id] = new GroupMember(userLogin, userLogin, null, true, userId);
+        this.logger.log(`Client Data args: ${userId}, ${userLogin}`);
         this.server.emit('userOnline', userId);
     }
 }

@@ -14,9 +14,9 @@ export class WebsocketService {
   constructor() {
   }
 
-  connect(userId: string) {
+  connect(userId: string, userLogin: string) {
     if (!this.socket || !this.socket.connected) {
-      this.socket = io.connect(environment.ws_url, {autoConnect: true, rejectUnauthorized: true, query: {userId}});
+      this.socket = io.connect(environment.ws_url, {autoConnect: true, rejectUnauthorized: true, query: {userId, userLogin}});
     }
   }
 
@@ -93,6 +93,14 @@ export class WebsocketService {
   subscribeToUserOnlineEvent(): Observable<any> {
     return new Observable(obs => {
       this.socket.on('userOnline', (data) => {
+        obs.next(data);
+      });
+    });
+  }
+
+  subscribeToUserOfflineEvent(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('userOffline', (data) => {
         obs.next(data);
       });
     });

@@ -67,7 +67,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.chatIOService.connect(this.myUserId);
+    this.chatIOService.connect(this.myUserId, this.myUserEmail);
     this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
       const memberGroups: Group[] = [];
       this.chatGroups = groups;

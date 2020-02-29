@@ -9,6 +9,7 @@ import {ChatMessage} from '../models/chat-message.model';
 import {GroupMember} from '../models/member.model';
 import {User} from '../models/user.model';
 import {Group} from '../models/group.model';
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-group-chat',
@@ -73,29 +74,36 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       console.log('Active users from server', JSON.stringify(this.groupMembers));
     }));
 
-    this.subscription.add(this.chatIOService.userOnline$.subscribe(id => {
-      this.subscription.add(this.chatHttpService.findUser(id).subscribe((user => {
-        this.onlineMembers.push(new GroupMember(user.email, user.email, null, true, user._id));
-        this.ref.markForCheck();
-      })));
+    this.subscription.add(this.chatIOService.userOnline$.pipe(switchMap( id => {
+      return this.chatHttpService.findUser(id);
+    })).subscribe(user => {
+      this.onlineMembers.push(new GroupMember(user.email, user.email, null, true, user._id));
+      this.ref.markForCheck();
       this.ref.markForCheck();
     }));
 
-    this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: { id: string, user: User }) => {
-      this.groupMembers.push(new GroupMember(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
-      this.activeGroup.members = this.groupMembers.map(m => m._id);
-      this.subscription.add(this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
-        this.ref.markForCheck();
-      }));
+    this.subscription.add(this.chatIOService.userOffline$.subscribe(userId => {
+      const index = this.onlineMembers.findIndex(m => m._id === userId);
+      this.onlineMembers.splice(index, 1);
+      this.ref.markForCheck();
+      this.ref.markForCheck();
     }));
 
-    this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: { id: string, user: User }) => {
+    this.subscription.add(this.chatIOService.inviteMember$.pipe(switchMap((data: { id: string, user: User }) => {
+      this.groupMembers.push(new GroupMember(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
+      this.activeGroup.members = this.groupMembers.map(m => m._id);
+      return this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup);
+    })).subscribe( group => {
+      this.ref.markForCheck();
+    }));
+
+    this.subscription.add(this.chatIOService.unInviteMember$.pipe(switchMap((data: { id: string, user: User }) => {
       const index = this.groupMembers.findIndex(m => m._id === data.user._id);
       this.groupMembers.splice(index, 1);
       this.activeGroup.members = this.groupMembers.map(m => m._id);
-      this.subscription.add(this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup).subscribe(group => {
-        this.ref.markForCheck();
-      }));
+      return this.chatHttpService.updateGroup(this.activeGroupId, this.activeGroup);
+    })).subscribe( group => {
+      this.ref.markForCheck();
     }));
 
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
@@ -139,7 +147,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       if (this.groupMembers && this.groupMembers.length > 0) {
         this.groupMembers.forEach(u => u.isOnline = false);
         this.groupMembers = this.groupMembers.map(user => {
-          const user2 = this.onlineMembers.find(u => u._id === user._id);
+          const user2 = this.onlineMembers.find(u => u._id === user._id && u.channelId === user.channelId);
           return user2 ? {...user, isOnline: user2.isOnline} : user;
         });
       }
