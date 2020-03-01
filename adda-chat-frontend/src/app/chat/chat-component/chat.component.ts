@@ -9,6 +9,8 @@ import {ChatIOService} from '../services/chat-io.service';
 import {Router} from '@angular/router';
 import {EditGroupMemberComponent} from "../add-group-member/edit-group-member.component";
 import {User} from "../models/user.model";
+import {switchMap} from "rxjs/operators";
+import {Account} from "../models/account.model";
 
 @Component({
   selector: 'chat-component',
