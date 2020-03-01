@@ -22,7 +22,7 @@
       <div class="widget-container">
         <div style="display: flex; flex-direction: column">
           <span>All users</span>
-          <dx-list
+          <dx-list id="all-users"
             [items]="this.diffusers"
             [repaintChangesOnly]="true"
             displayExpr="email"
@@ -39,7 +39,7 @@
         </div>
         <div style="display: flex; flex-direction: column">
           <span>Group users</span>
-          <dx-list
+          <dx-list id="group-users"
             [items]="groupUsers"
             [repaintChangesOnly]="true"
             displayExpr="email"

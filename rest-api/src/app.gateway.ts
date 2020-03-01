@@ -13,12 +13,13 @@ import {ChatMessage} from './chat/models/chat.message.model';
 import {User} from './chat/models/user.model';
 import {Account} from './chat/models/account.model';
 import {WsJwtGuard} from './guards/ws-jwt.guard';
+import {GroupRepositoryService} from './chat/repositories/group.repository.service';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     usersDict: { [key: string]: Account; } = {};
 
-    constructor(private messagesRepository: MessagesRepositoryService) {
+    constructor(private messagesRepository: MessagesRepositoryService, private groupRepository: GroupRepositoryService) {
     }
 
     @WebSocketServer() server: Server;
@@ -61,14 +62,19 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @SubscribeMessage('inviteMember')
     handleInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} invited to the room: ${data.id}`);
-        this.server.emit('inviteMember', data);
+        this.groupRepository.addMembersToGroup(data.id, data.id).then(() => {
+            this.server.emit('inviteMember', data);
+        });
+
     }
 
     @UseGuards(WsJwtGuard)
     @SubscribeMessage('unInviteMember')
     handleUnInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} uninvited`);
-        this.server.emit('unInviteMember', data);
+        this.groupRepository.removeMembersToGroup(data.id, data.id).then(() => {
+            this.server.emit('unInviteMember', data);
+        });
     }
 
     @UseGuards(WsJwtGuard)

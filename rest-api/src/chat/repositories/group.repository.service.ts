@@ -39,10 +39,19 @@ export class GroupRepositoryService {
         return this.groupModel.findOneAndUpdate({_id: groupId}, changes, {new: true});
     }
 
-    async addMembersToGroup(groupId: string, members: string[]): Promise<Group> {
+    async addMembersToGroup(groupId: string, memberId: string): Promise<Group> {
         const group = await this.findGroupById(groupId);
         if (group) {
-            group.members = members;
+            group.members .push(memberId);
+        }
+        return await this.updateGroup(groupId, group);
+    }
+
+    async removeMembersToGroup(groupId: string, memberId: string): Promise<Group> {
+        const group = await this.findGroupById(groupId);
+        const index = group.members.findIndex(m => m._id === memberId);
+        if (index !== -1) {
+            group.members.splice(index, 1);
         }
         return await this.updateGroup(groupId, group);
     }

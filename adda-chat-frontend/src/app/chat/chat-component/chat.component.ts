@@ -9,6 +9,7 @@ import {ChatIOService} from '../services/chat-io.service';
 import {Router} from '@angular/router';
 import {EditGroupMemberComponent} from '../add-group-member/edit-group-member.component';
 import {User} from '../models/user.model';
+import * as _ from 'lodash';
 import {switchMap} from 'rxjs/operators';
 import {Account} from '../models/account.model';
 
@@ -112,7 +113,7 @@ export class ChatComponent implements OnInit {
   onEditGroupMembers() {
     this.modalConfig.initialState = {
       data: {
-        groups: this.chatGroups,
+        groups: _.cloneDeep(this.chatGroups),
         users: this.chatUsers
       }
     };

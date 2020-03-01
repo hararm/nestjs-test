@@ -37,12 +37,12 @@ export class EditGroupMemberComponent implements OnInit {
 
   groupUsers: User[] = [];
   diffusers: User[];
-  constructor( private ref: ChangeDetectorRef,
-               public modalFormRef: BsModalRef,
+
+  constructor(private ref: ChangeDetectorRef,
+              public modalFormRef: BsModalRef,
               private chatHttpService: ChatHttpService) {
     this.subscription = new Subscription();
   }
-
   ngOnInit(): void {
     this.onClose = new Subject();
     this.diffusers = this.groupUsers;
@@ -53,7 +53,7 @@ export class EditGroupMemberComponent implements OnInit {
   }
 
   submitClick() {
-    if(this.selectedGroup) {
+    if (this.selectedGroup) {
       this.selectedGroup.members = this.groupUsers;
       this.onClose.next(this.selectedGroup);
       this.hideModal();
@@ -74,10 +74,12 @@ export class EditGroupMemberComponent implements OnInit {
   }
 
   onAdd(e) {
+    console.log('Add to', e.element.id, this);
     e.toData.splice(e.toIndex, 0, e.itemData);
   }
 
   onRemove(e) {
+    console.log('Remove from', e.element.id);
     e.fromData.splice(e.fromIndex, 1);
   }
 }
