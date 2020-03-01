@@ -62,7 +62,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @SubscribeMessage('inviteMember')
     handleInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} invited to the room: ${data.id}`);
-        this.groupRepository.addMembersToGroup(data.id, data.id).then(() => {
+        this.groupRepository.addMembersToGroup(data.id, data.user._id).then(() => {
             this.server.emit('inviteMember', data);
         });
 
@@ -72,7 +72,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @SubscribeMessage('unInviteMember')
     handleUnInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} uninvited`);
-        this.groupRepository.removeMembersToGroup(data.id, data.id).then(() => {
+        this.groupRepository.removeMembersToGroup(data.id, data.user._id).then(() => {
             this.server.emit('unInviteMember', data);
         });
     }

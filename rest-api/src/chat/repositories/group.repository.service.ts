@@ -1,10 +1,11 @@
-import {Body, Injectable, Param, Post} from '@nestjs/common';
+import {Body, Injectable, Logger, Param, Post} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Group} from '../models/group.model';
 
 @Injectable()
 export class GroupRepositoryService {
+    private logger = new Logger('GroupRepositoryService');
     constructor(@InjectModel('Group') private groupModel: Model<Group>) {
 
     }
@@ -43,13 +44,16 @@ export class GroupRepositoryService {
         const group = await this.findGroupById(groupId);
         if (group) {
             group.members .push(memberId);
+            this.logger.debug(`Member adding: ${JSON.stringify(group)}`);
         }
         return await this.updateGroup(groupId, group);
     }
 
     async removeMembersToGroup(groupId: string, memberId: string): Promise<Group> {
         const group = await this.findGroupById(groupId);
-        const index = group.members.findIndex(m => m._id === memberId);
+        this.logger.debug(`Member: ${memberId} removing from: ${JSON.stringify(group)}`);
+        const index = group.members.findIndex(m => m == memberId);
+        this.logger.debug(`Found Index: ${index}`);
         if (index !== -1) {
             group.members.splice(index, 1);
         }

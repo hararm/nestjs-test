@@ -96,10 +96,14 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.unInviteMember$.subscribe( (data: { id: string, user: User }) => {
-      const index = this.groupMembers.findIndex(m => m._id === data.user._id);
-      this.groupMembers.splice(index, 1);
-      this.activeGroup.members = this.groupMembers.map(m => m._id);
-      this.ref.markForCheck();
+      if(data.user._id === this.myUserId) {
+        this.router.navigateByUrl('/ChatComponent').then();
+      } else {
+        const index = this.groupMembers.findIndex(m => m._id === data.user._id);
+        this.groupMembers.splice(index, 1);
+        this.activeGroup.members = this.groupMembers.map(m => m._id);
+        this.ref.markForCheck();
+      }
     }));
 
     this.subscription.add(this.chatIOService.leftRoomEvent$.subscribe((data) => {
