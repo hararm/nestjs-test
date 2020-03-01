@@ -7,10 +7,10 @@ import {Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import {ChatIOService} from '../services/chat-io.service';
 import {Router} from '@angular/router';
-import {EditGroupMemberComponent} from "../add-group-member/edit-group-member.component";
-import {User} from "../models/user.model";
-import {switchMap} from "rxjs/operators";
-import {Account} from "../models/account.model";
+import {EditGroupMemberComponent} from '../add-group-member/edit-group-member.component';
+import {User} from '../models/user.model';
+import {switchMap} from 'rxjs/operators';
+import {Account} from '../models/account.model';
 
 @Component({
   selector: 'chat-component',
@@ -80,6 +80,25 @@ export class ChatComponent implements OnInit {
     }));
     this.subscription.add(this.chatHttpService.findAllUsers().subscribe(users => {
       this.chatUsers = users;
+    }));
+
+    this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: { id: string, user: User }) => {
+      if(data.user._id  === this.myUserId) {
+        const group = this.chatGroups.find( g => g._id === data.id);
+        if(group) {
+          group.members.push(data.user._id);
+          this.ref.markForCheck();
+        }
+      }
+    }));
+
+    this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: { id: string, user: User }) => {
+      const group = this.chatGroups.find( g => g._id === data.id);
+      if(group) {
+        const index = group.members.findIndex(m => m === data.user._id);
+        group.members.splice(index, 1);
+        this.ref.markForCheck();
+      }
     }));
   }
 

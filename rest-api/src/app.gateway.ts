@@ -61,14 +61,14 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @SubscribeMessage('inviteMember')
     handleInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} invited to the room: ${data.id}`);
-        this.server.to(data.id).emit('inviteMember', data);
+        this.server.emit('inviteMember', data);
     }
 
     @UseGuards(WsJwtGuard)
     @SubscribeMessage('unInviteMember')
     handleUnInviteMember(@ConnectedSocket() client: Socket, @MessageBody() data: {id: string, user: User}) {
         this.logger.log(`User ${JSON.stringify(data.user)} uninvited`);
-        this.server.to(data.id).emit('unInviteMember', data);
+        this.server.emit('unInviteMember', data);
     }
 
     @UseGuards(WsJwtGuard)
