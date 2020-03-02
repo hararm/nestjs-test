@@ -11,17 +11,13 @@ import {GroupChatComponent} from './group-chat/group-chat.component';
 import {ChatIOService} from './services/chat-io.service';
 import {WebsocketService} from './services/websocket.service';
 import { EditGroupMemberComponent } from './add-group-member/edit-group-member.component';
-import {DxModule} from "../dx.module";
+import {DxModule} from '../dx.module';
 
 export const chatRoutes: Routes = [
   {
     path: '',
-    component: ChatComponent,
+    component: GroupChatComponent,
   },
-  {
-    path: ':groupId',
-    component: GroupChatComponent
-  }
 ];
 
 @NgModule({

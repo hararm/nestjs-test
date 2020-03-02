@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <a class="navbar-brand mx-auto" href="#">Group Chat ({{activeGroupName}})</a>
+  <a class="navbar-brand mx-auto" href="#">Group Chat ({{this.activeGroup?.groupName}})</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -18,32 +18,24 @@
 <div class="col-md-12" style="margin-top: 20px;">
   <div class="col-md-12">
     <div class="chat_container">
-      <div class="row">
-        <div class="col-sm-4 col-md-3 mob-clearfix">
-          <div class="row" style="margin-top:10px;">
-            <div class="col-md-12">
-              <div class="card-container">
-                <div class="card">
-                  <div class="front">
-                    <div class="content main-scroll">
-                      <div class="main" id="main_scroll">
-                        <p class="friends" style="margin-bottom:0px;">
-                          Invite Member<span id="numOfFriends"></span>
-                        </p>
-                        <hr style="margin-top:10px"/>
-                        <div class="onlineFriends">
-                          <div *ngFor="let user of users" class="col-md-12">
-                            <div *ngIf="!isMemberOfCurrentGroup(user)" class="user-online">
-                              <button class="btn" (click)="onAddGroupMember(user)">
-                                <i class="fa fa-user-plus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
-                                <i *ngIf="isUserOnline(user)" class="fa fa-circle online" aria-hidden="true"></i>
-                              </button>
-                              <div style="align-self: center">{{user.email}}</div>
-                              <button class="btn btn-outline-primary">Private Chat</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+      <div style="display: flex; justify-content: space-between">
+        <div>
+          <div *ngFor="let group of publicGroups" class="category-list" [ngClass]="{'category-current': group?._id === activeGroup?._id}">
+            <div style="padding: 10px">
+              <div  class="thumbnail">
+                <img alt="">
+                <div class="caption">
+                  <h4>{{group.groupName}}</h4>
+                  <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                      <p>
+                        {{group.clinicName}}
+                      </p>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                      <button *ngIf="isMyGroup(group)" class="btn add-fav" (click)="onJoinGroup(group)">
+                        Join
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -51,19 +43,17 @@
             </div>
           </div>
         </div>
-
         <div class="col-sm-5 col-md-6 message_section">
           <div class="row">
             <div class="new_message_head">
               <div class="pull-left">
                 <button class="club_name">
-                  Group Name: {{activeGroupName}}
+                  Group Name: {{this.activeGroup?.groupName}}
                 </button>
               </div>
               <div class="pull-right">
               </div>
             </div>
-
             <div *ngIf="messages && messages.length > 0" class="chat_area">
               <div class="message-container" [ngClass]="{'chat-message': message.senderId !== myUserId,
                   'chat-message-me': message.senderId === myUserId}" *ngFor="let message of messages">
@@ -76,7 +66,7 @@
                   </div>
                 </div>
                 <button *ngIf="message.senderId === myUserId" class="btn-close" (click)="onDeleteMessage(message)">
-                <i class="fa fa-close"></i>
+                  <i class="fa fa-close"></i>
                 </button>
               </div>
             </div>
@@ -95,51 +85,56 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-3 col-md-3 mob-50 mob-clearfix">
-
-          <div class="new_message_head">
-            <div class="pull-left">
-              <button class="club_fans">
-                <i class="fa fa-users" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
-                Online Group Users <span id="numValue"></span>
-              </button>
+        <div style="display: flex; flex-direction: column; justify-content: flex-start; margin-left: 20px;">
+          <div style="width: 100%">
+            <div class="card-container">
+              <div class="card">
+                <div class="front">
+                  <div class="content main-scroll">
+                    <div class="main" id="main_scroll">
+                      <p class="friends" style="margin-bottom:0px;">
+                        Invite Member<span id="numOfFriends"></span>
+                      </p>
+                      <hr style="margin-top:10px"/>
+                      <div class="onlineFriends">
+                        <div *ngFor="let user of users" class="col-md-12">
+                          <div *ngIf="!isMemberOfCurrentGroup(user)" class="user-online">
+                            <button class="btn" (click)="onAddGroupMember(user)">
+                              <i class="fa fa-user-plus" aria-hidden="true"
+                                 style="padding-right:15px; color:#4aa1f3 !important;"></i>
+                              <i *ngIf="isUserOnline(user)" class="fa fa-circle online" aria-hidden="true"></i>
+                            </button>
+                            <div style="align-self: center">{{user.email}}</div>
+                            <button class="btn btn-outline-primary">Private Chat</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div class="gr-rightsidebar">
-            <!--<div id="myModal" class="modal fade" role="dialog">
-               <div class="modal-dialog">
-                 <div class="modal-content">
-                   <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                     <h3 class="modal-title" id="name"></h3>
-                   </div>
-                   <div class="modal-body">
-                     <form action="" method="get" id="add_friend">
-                       <input type="hidden" name="receiverName" id="receiverName" value="">
-                       <input type="hidden" name="sender-name" id="sender-name" value="">
-                       <button type="submit" id="friend-add" class="btn add"><i class="fa fa-user"></i> Add Friend</button>
-                       <a id="nameLink" class="btn ">View Profile</a>
-                       <div id="myTest">
-                       </div>
-                     </form>
-                   </div>
-                   <div class="modal-footer">
-                     <button type="button" class="btn btn_close" data-dismiss="modal">Close</button>
-                   </div>
-                 </div>
-               </div>
-             </div>-->
-
-            <div *ngFor="let user of groupMembers" class="col-md-12" id="main">
-              <h4 class="profession-online">
-                <i *ngIf="user.isOnline" class="fa fa-group online" aria-hidden="true"></i>
-                <i *ngIf="!user.isOnline" class="fa fa-group offline" aria-hidden="true"></i>
-                <button *ngIf="!isMyUser(user._id)" class="btn" (click)="onRemoveGroupMember(user)">
-                  <i class="fa fa-minus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
+          <div style="width: 100%">
+            <div class="new_message_head">
+              <div class="pull-left">
+                <button class="club_fans">
+                  <i class="fa fa-users" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
+                  Online Group Users <span id="numValue"></span>
                 </button>
-                {{getMemberName(user)}}
-              </h4>
+              </div>
+            </div>
+            <div class="gr-rightsidebar">
+              <div *ngFor="let user of groupMembers" class="col-md-12" id="main">
+                <h4 class="profession-online">
+                  <i *ngIf="user.isOnline" class="fa fa-group online" aria-hidden="true"></i>
+                  <i *ngIf="!user.isOnline" class="fa fa-group offline" aria-hidden="true"></i>
+                  <button *ngIf="!isMyUser(user._id)" class="btn" (click)="onRemoveGroupMember(user)">
+                    <i class="fa fa-minus" aria-hidden="true" style="padding-right:15px; color:#4aa1f3 !important;"></i>
+                  </button>
+                  {{getMemberName(user)}}
+                </h4>
+              </div>
             </div>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import {IGroup} from '../../../../../shared/chat-group';
 import {Account} from './account.model';
 export class  Group implements IGroup {
-  _id: string;
-  image: any;
-  members: any[];
-  groupName: string;
-  clinicName: string;
+  public _id: string;
+  public image: any;
+  public members: any[];
+  public groupName: string;
+  public clinicName: string;
+  public isPrivate: boolean;
 }

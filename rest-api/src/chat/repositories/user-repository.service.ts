@@ -9,7 +9,6 @@ export class UserRepository {
     private logger = new Logger('UserRepository');
     constructor(@InjectModel('Group') private groupModel: Model<Group>,
                 @InjectModel('User') private userModel: Model<User>) {
-
     }
 
     async findAll(): Promise<User[]> {

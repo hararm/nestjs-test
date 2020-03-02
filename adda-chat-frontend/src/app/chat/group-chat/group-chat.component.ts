@@ -20,11 +20,10 @@ import {switchMap} from 'rxjs/operators';
 export class GroupChatComponent implements OnInit, OnDestroy {
   myUserId: string;
   myUserName: string;
-  activeGroupName: string;
-  activeGroupId: string;
   messages: ChatMessage[];
+  publicGroups: Group[];
   activeGroup: Group;
-  onlineMembers: Account[];
+  onlineMembers: Account[] = [];
   groupMembers: Account[] = [];
   groupChannelId: string;
   users: User[];
@@ -39,19 +38,15 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     private chatHttpService: ChatHttpService,
     private router: Router,
     private route: ActivatedRoute) {
+    this.myUserName = localStorage.getItem('email');
+    this.myUserId = localStorage.getItem('userId');
     this.messages = [];
     this.subscription = new Subscription();
   }
 
   ngOnInit(): void {
-    this.myUserName = localStorage.getItem('email');
-    this.myUserId = localStorage.getItem('userId');
-    this.route.params
-      .subscribe(params => {
-        console.log(params);
-        this.activeGroupId = params.groupId;
-      });
 
+    this.chatIOService.connect(this.myUserId, this.myUserName);
     this.subscription.add(this.chatIOService.messages.subscribe((msg: any) => {
       if (msg.senderId) {
         console.log('New Message from server', msg);
@@ -62,7 +57,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
     this.subscription.add(this.chatIOService.disconnectEvent$.subscribe(() => {
       console.log('Disconnected from server');
-      this.router.navigate(['/chat']).then();
+      this.router.navigate(['/login']).then();
     }));
 
     this.subscription.add(this.chatIOService.joinToRoomEvent$.subscribe((data) => {
@@ -90,14 +85,19 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.inviteMember$.subscribe((data: { id: string, user: User }) => {
-      this.groupMembers.push(new Account(data.user.email, data.user.email, this.activeGroupId, false, data.user._id));
-      this.activeGroup.members = this.groupMembers.map(m => m._id);
-      this.ref.markForCheck();
+      if (data.user._id === this.myUserId) {
+        this.getPublicGroups();
+      } else {
+        this.groupMembers.push(new Account(data.user.email, data.user.email, this.activeGroup._id, false, data.user._id));
+        this.activeGroup.members = this.groupMembers.map(m => m._id);
+        this.ref.markForCheck();
+      }
     }));
 
-    this.subscription.add(this.chatIOService.unInviteMember$.subscribe( (data: { id: string, user: User }) => {
-      if(data.user._id === this.myUserId) {
-        this.router.navigateByUrl('/ChatComponent').then();
+    this.subscription.add(this.chatIOService.unInviteMember$.subscribe((data: { id: string, user: User }) => {
+      if (data.user._id === this.myUserId) {
+        this.activeGroup = null;
+        this.getPublicGroups();
       } else {
         const index = this.groupMembers.findIndex(m => m._id === data.user._id);
         this.groupMembers.splice(index, 1);
@@ -120,30 +120,61 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       this.messages.splice(index, 1);
       this.ref.markForCheck();
     }));
+    this.getPublicGroups();
+  }
 
-    if (this.activeGroupId) {
-      const users$ = this.chatHttpService.findAllUsers();
-      const activeGroup$ = this.chatHttpService.findGroupById(this.activeGroupId);
-      const activeMembersGroup$ = this.chatHttpService.findMembersByGroupById(this.activeGroupId);
-      const activeGroupMessages$ = this.chatHttpService.findMessagesGroupById(this.activeGroupId);
-      this.subscription.add(combineLatest(users$, activeGroup$, activeMembersGroup$, activeGroupMessages$).subscribe(
-        ([users, group, members, messages]) => {
-          this.users = users;
+  private getPublicGroups() {
+    const groups$ = this.chatHttpService.findAllGroups();
+    const users$ = this.chatHttpService.findAllUsers();
+
+    this.subscription.add(combineLatest(groups$, users$)
+      .subscribe(([groups, users]) => {
+        this.users = users;
+        this.publicGroups = this.findMyGroups(groups);
+        this.initGroupChat();
+      }));
+  }
+
+  private initGroupChat() {
+    if (!this.publicGroups || this.publicGroups.length === 0) {
+      return;
+    }
+    if (!this.activeGroup || !this.activeGroup._id) {
+      this.activeGroup = this.publicGroups[0];
+    }
+    this.onlineMembers = [];
+    this.groupMembers = [];
+    const activeGroup$ = this.chatHttpService.findGroupById(this.activeGroup._id);
+    const activeMembersGroup$ = this.chatHttpService.findMembersByGroupById(this.activeGroup._id);
+    const activeGroupMessages$ = this.chatHttpService.findMessagesGroupById(this.activeGroup._id);
+    this.subscription.add(combineLatest(activeGroup$, activeMembersGroup$, activeGroupMessages$)
+      .subscribe(([group, members, messages]) => {
           this.activeGroup = group;
-          this.activeGroupName = group.groupName;
+          this.activeGroup.groupName = group.groupName;
           // convert to accounts
-          for(const u of members) {
-            const member = new Account(u.email, u.email, this.activeGroupId, true, u._id);
+          for (const u of members) {
+            const member = new Account(u.email, u.email, this.activeGroup._id, true, u._id);
             this.groupMembers.push(member);
           }
           this.messages = [...messages];
           this.updateUserStatus();
           this.sortGroupMembers();
+          this.chatIOService.joinRoom(new Account(this.myUserName, this.myUserName, this.activeGroup._id, true, this.myUserId));
           this.ref.markForCheck();
         }
       ));
+  }
+
+  private findMyGroups(groups: Group[]) {
+    const myGroups: Group[] = [];
+    for (const g of groups) {
+      for (const m of g.members) {
+        if (m === this.myUserId) {
+          myGroups.push(g);
+        }
+      }
     }
-    this.chatIOService.joinRoom(new Account(this.myUserName, this.myUserName, this.activeGroupId, true, this.myUserId));
+    return myGroups;
   }
 
   private updateUserStatus() {
@@ -171,7 +202,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   onSendToGroup() {
     this.chatIOService.sendMessage(
       new ChatMessage(
-        this.activeGroupId,
+        this.activeGroup._id,
         this.myUserId,
         this.msgForm.get('message').value,
         null,
@@ -195,15 +226,15 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
   onLeftRoom() {
     delete this.onlineMembers;
-    this.chatIOService.leaveRoom(new Account(this.myUserName, this.myUserName, this.activeGroupId, false));
+    this.chatIOService.leaveRoom(new Account(this.myUserName, this.myUserName, this.activeGroup._id, false));
   }
 
   onAddGroupMember(user: User) {
-    this.chatIOService.inviteMember(this.activeGroupId, new User(user._id, user.email));
+    this.chatIOService.inviteMember(this.activeGroup._id, new User(user._id, user.email));
   }
 
   onRemoveGroupMember(member: Account) {
-    this.chatIOService.unInviteMember(this.activeGroupId, new User(member._id, member.email));
+    this.chatIOService.unInviteMember(this.activeGroup._id, new User(member._id, member.email));
   }
 
   onDeleteMessage(message: ChatMessage) {
@@ -216,6 +247,21 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     if (member) {
       return member.isOnline;
     }
+  }
+
+  onJoinGroup(group: Group) {
+    this.activeGroup = group;
+    this.initGroupChat();
+    this.ref.markForCheck();
+  }
+
+  isMyGroup(group: Group) {
+    for (const m of group.members) {
+      if (m === this.myUserId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   ngOnDestroy(): void {
