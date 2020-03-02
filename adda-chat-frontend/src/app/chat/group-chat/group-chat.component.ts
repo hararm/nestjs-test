@@ -83,7 +83,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subscription.add(this.chatIOService.userOffline$.subscribe(userId => {
-      const index = this.onlineMembers.findIndex(m => m._id === userId);
+      const index = this.onlineMembers.findIndex(m => m === userId);
       this.onlineMembers.splice(index, 1);
       this.ref.markForCheck();
       this.ref.markForCheck();
