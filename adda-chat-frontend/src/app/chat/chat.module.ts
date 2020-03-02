@@ -1,5 +1,5 @@
 import {RouterModule, Routes} from '@angular/router';
-import {ChatComponent} from './chat-component/chat.component';
+import {ChatHeaderComponent} from './chat-header-component/chat-header.component';
 import {NgModule} from '@angular/core';
 import {AppBootstrapModule} from '../bootsrap.module';
 import {AddGroupComponent} from './add-group/add-group.component';
@@ -31,18 +31,16 @@ export const chatRoutes: Routes = [
     SelectDropDownModule
   ],
   declarations: [
-    ChatComponent,
+    ChatHeaderComponent,
     AddGroupComponent,
     GroupChatComponent,
     EditGroupMemberComponent
   ],
   exports: [
-    ChatComponent
+    ChatHeaderComponent,
   ],
   providers: [
     ChatHttpService,
-    WebsocketService,
-    ChatIOService
   ],
   entryComponents: [
     AddGroupComponent,

@@ -38,15 +38,13 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     private chatHttpService: ChatHttpService,
     private router: Router,
     private route: ActivatedRoute) {
-    this.myUserName = localStorage.getItem('email');
-    this.myUserId = localStorage.getItem('userId');
     this.messages = [];
     this.subscription = new Subscription();
+    this.myUserName = localStorage.getItem('email');
+    this.myUserId = localStorage.getItem('userId');
   }
 
   ngOnInit(): void {
-
-    this.chatIOService.connect(this.myUserId, this.myUserName);
     this.subscription.add(this.chatIOService.messages.subscribe((msg: any) => {
       if (msg.senderId) {
         console.log('New Message from server', msg);
@@ -142,7 +140,6 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     if (!this.activeGroup || !this.activeGroup._id) {
       this.activeGroup = this.publicGroups[0];
     }
-    this.onlineMembers = [];
     this.groupMembers = [];
     const activeGroup$ = this.chatHttpService.findGroupById(this.activeGroup._id);
     const activeMembersGroup$ = this.chatHttpService.findMembersByGroupById(this.activeGroup._id);
@@ -224,8 +221,9 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     return id === this.myUserId;
   }
 
-  onLeftRoom() {
+  leaveRoom() {
     delete this.onlineMembers;
+    this.onlineMembers = [];
     this.chatIOService.leaveRoom(new Account(this.myUserName, this.myUserName, this.activeGroup._id, false));
   }
 
@@ -250,6 +248,9 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onJoinGroup(group: Group) {
+    if(this.activeGroup) {
+      this.leaveRoom();
+    }
     this.activeGroup = group;
     this.initGroupChat();
     this.ref.markForCheck();

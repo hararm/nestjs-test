@@ -5,6 +5,7 @@ export class Account implements IUser {
         public nickName: string,
         public email,
         public channelId: string,
-        public isOnline: boolean, public _id: string = null) {
+        public isOnline: boolean,
+        public _id: string = null) {
     }
 }
