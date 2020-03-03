@@ -17,7 +17,7 @@
                       </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                      <button *ngIf="isMyGroup(group)" class="btn add-fav" (click)="onJoinGroup(group)">
+                      <button *ngIf="isMyGroup(group)" [disabled]="activeGroup._id === group._id" class="btn add-fav" (click)="onJoinGroup(group)">
                         Join
                       </button>
                     </div>
