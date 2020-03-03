@@ -6,5 +6,6 @@ export const ChatMessageSchema = new mongoose.Schema({
     channelId: {type: String, required: true},
     message: {type: String, required: true},
     timeStamp: {type: String, required: true},
+    isRead: {type: Boolean, default: false},
     senderNicName: {type: String, required: true}
 });
