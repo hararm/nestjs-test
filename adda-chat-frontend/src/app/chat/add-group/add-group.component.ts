@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
-import {Group} from '../../../../../rest-api/src/chat/models/group.model';
 import {ChatHttpService} from '../services/chat-http.service';
+import {Group} from "../models/group.model";
 
 @Component({
   selector: 'app-add-group',

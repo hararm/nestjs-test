@@ -8,8 +8,6 @@ import {ChatHttpService} from './services/chat-http.service';
 import {CommonModule} from '@angular/common';
 import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {GroupChatComponent} from './group-chat/group-chat.component';
-import {ChatIOService} from './services/chat-io.service';
-import {WebsocketService} from './services/websocket.service';
 import { EditGroupMemberComponent } from './add-group-member/edit-group-member.component';
 import {DxModule} from '../dx.module';
 

@@ -7,8 +7,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthModule} from './auth/auth.module';
-import {WebsocketService} from "./chat/services/websocket.service";
-import {ChatIOService} from "./chat/services/chat-io.service";
+import {WebsocketService} from './chat/services/websocket.service';
+import {ChatIOService} from './chat/services/chat-io.service';
 
 const routes: Routes = [
   {

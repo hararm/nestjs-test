@@ -22,9 +22,7 @@ export class WebsocketService {
   }
 
   disconnect() {
-    if (this.socket && this.socket.connected) {
       this.socket.disconnect();
-    }
   }
 
   subscribeToDisconnectEvent(): Observable<any> {
