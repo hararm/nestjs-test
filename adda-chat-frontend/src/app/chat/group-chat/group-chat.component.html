@@ -3,22 +3,57 @@
   <div class="col-md-12">
     <div class="chat_container">
       <div style="display: flex; justify-content: space-between">
-        <div>
-          <div *ngFor="let group of publicGroups" class="category-list" [ngClass]="{'category-current': group?._id === activeGroup?._id}">
-            <div style="padding: 10px">
-              <div  class="thumbnail">
-                <img alt="">
-                <div class="caption">
-                  <h4>{{group.groupName}}</h4>
+        <dx-tab-panel
+          #tabPanel
+          [height]="100 + '%'"
+          [dataSource]="chatTypes"
+          [selectedIndex]="0"
+          [loop]="false"
+          [animationEnabled]="true"
+          [swipeEnabled]="true"
+        >
+          <div *dxTemplate="let type of 'title'">
+            <span>{{type.name}}</span>
+          </div>
+          <div *dxTemplate="let type of 'item'">
+            <div *ngIf="type.id === 1">
+              <div *ngFor="let group of publicGroups" class="category-list"
+                   [ngClass]="{'category-current': group?._id === activeGroup?._id}">
+                <div style="padding: 10px">
+                  <div class="thumbnail">
+                    <img alt="">
+                    <div class="caption">
+                      <h4>{{group?.groupName}}</h4>
+                      <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                          <p>
+                            {{group?.clinicName}}
+                          </p>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                          <button *ngIf="isMyGroup(group)" [disabled]="activeGroup._id === group._id"
+                                  class="btn add-fav" (click)="onJoinGroup(group)">
+                            Join
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="type.id=== 2">
+              <div *ngFor="let user of users" class="category-list"
+                   [ngClass]="{'category-current': user?._id === activeGroup?._id}">
+                <div *ngIf="!isMyUser(user._id)" class="caption">
+                  <h4>{{user?.email}}</h4>
                   <div class="row">
                     <div class="col-xs-12 col-md-6">
-                      <p>
-                        {{group.clinicName}}
-                      </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                      <button *ngIf="isMyGroup(group)" [disabled]="activeGroup._id === group._id" class="btn add-fav" (click)="onJoinGroup(group)">
-                        Join
+                      <button
+                              class="btn add-fav" (click)="onCreatePrivateChat(user)">
+                        Private Chat
                       </button>
                     </div>
                   </div>
@@ -26,7 +61,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </dx-tab-panel>
         <div class="col-sm-5 col-md-6 message_section">
           <div class="row">
             <div class="new_message_head">

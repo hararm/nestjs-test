@@ -2,7 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
 import {ChatHttpService} from '../services/chat-http.service';
-import {Group} from "../models/group.model";
+import {Group} from '../models/group.model';
 
 @Component({
   selector: 'app-add-group',
@@ -48,11 +48,7 @@ export class AddGroupComponent implements OnInit {
 
   submitClick() {
     const res = this.addGroupForm.controls;
-    const formData = new FormData();
-    formData.append('file', this.file);
-    formData.append('name', res.name.value);
-    formData.append('clinicName', res.clinicName.value);
-    this.chatHttpService.addGroup(formData).subscribe( () => {
+    this.chatHttpService.addGroup(this.addGroupForm.value).subscribe( () => {
       this.modalFormRef.hide();
     });
   }

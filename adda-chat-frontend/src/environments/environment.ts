@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiPath: 'http://52.242.24.91:9000/api/',
-  ws_url: 'http://52.242.24.91:9000'
+  apiPath: 'http://localhost:9000/api/',
+  ws_url: 'http://localhost:9000'
 };
 
 /*

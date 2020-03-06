@@ -14,8 +14,8 @@ export class ChatHttpService {
   constructor(private http: HttpClient) {
   }
 
-  addGroup(data: FormData) {
-    return this.http.post(`${this.apiPath}groups`, data);
+  addGroup(group: Group) {
+    return this.http.post<Group>(`${this.apiPath}groups`, group);
   }
 
   updateGroup(groupId: string, group: Group) {

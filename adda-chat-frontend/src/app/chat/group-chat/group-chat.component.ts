@@ -22,6 +22,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   myUserName: string;
   messages: ChatMessage[];
   publicGroups: Group[];
+  privateGroups: Group[];
   activeGroup: Group;
   onlineMembers: Account[] = [];
   groupMembers: Account[] = [];
@@ -31,6 +32,10 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   msgForm = new FormGroup({
     message: new FormControl(''),
   });
+
+  chatTypes: { id: number, name: string }[] = [
+    {id: 1, name: 'Public'}, {id: 2, name: 'Private'}
+  ];
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -128,7 +133,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     this.subscription.add(combineLatest(groups$, users$)
       .subscribe(([groups, users]) => {
         this.users = users;
-        this.publicGroups = this.findMyGroups(groups);
+        this.publicGroups = this.findMyPublicGroups(groups);
         this.initGroupChat();
       }));
   }
@@ -162,11 +167,29 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       ));
   }
 
-  private findMyGroups(groups: Group[]) {
+  onCreatePrivateChat(user: User) {
+    const group = new Group();
+    group.isPrivate = true;
+    group.groupName = user.email + '-' + this.myUserName;
+    group.members = [];
+    group.members.push(user._id);
+    group.members.push(this.myUserId);
+
+    this.chatHttpService.addGroup(group).subscribe((gr) => {
+      if (this.activeGroup) {
+        this.leaveRoom();
+      }
+      this.activeGroup = gr;
+      this.initGroupChat();
+      this.ref.markForCheck();
+    });
+  }
+
+  private findMyPublicGroups(groups: Group[]) {
     const myGroups: Group[] = [];
     for (const g of groups) {
       for (const m of g.members) {
-        if (m === this.myUserId) {
+        if (m === this.myUserId && !g.isPrivate) {
           myGroups.push(g);
         }
       }
@@ -248,7 +271,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onJoinGroup(group: Group) {
-    if(this.activeGroup) {
+    if (this.activeGroup) {
       this.leaveRoom();
     }
     this.activeGroup = group;

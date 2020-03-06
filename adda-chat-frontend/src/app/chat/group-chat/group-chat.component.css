@@ -401,6 +401,10 @@ member_list li:hover {
   color:white !important;
 }
 
+.caption {
+  padding: 10px;
+}
+
 
 
 
