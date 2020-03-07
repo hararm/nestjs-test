@@ -10,8 +10,9 @@ export class WebsocketService {
 
   // Our socket connection
   private socket: Socket;
-  private jwt = localStorage.getItem('authJwtToken');
+  private readonly jwt;
   constructor() {
+    this.jwt = localStorage.getItem('authJwtToken');
   }
 
   connect(userId: string, userLogin: string) {

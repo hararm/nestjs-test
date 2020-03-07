@@ -2,14 +2,14 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {ActivatedRoute, Router} from '@angular/router';
 import {ChatIOService} from '../services/chat-io.service';
 import {FormControl, FormGroup} from '@angular/forms';
-import {combineLatest, Subscription} from 'rxjs';
+import {combineLatest, EMPTY, Subscription} from 'rxjs';
 import {ChatHttpService} from '../services/chat-http.service';
 import * as moment from 'moment';
 import {ChatMessage} from '../models/chat-message.model';
 import {Account} from '../models/account.model';
 import {User} from '../models/user.model';
 import {Group} from '../models/group.model';
-import {switchMap} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-chat',
@@ -168,21 +168,29 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onCreatePrivateChat(user: User) {
-    const group = new Group();
-    group.isPrivate = true;
-    group.groupName = user.email + '-' + this.myUserName;
-    group.members = [];
-    group.members.push(user._id);
-    group.members.push(this.myUserId);
-
-    this.chatHttpService.addGroup(group).subscribe((gr) => {
-      if (this.activeGroup) {
-        this.leaveRoom();
+    if (this.activeGroup) {
+      this.leaveRoom();
+    }
+    const groupName = user.email + '-' + this.myUserName;
+    this.subscription.add(this.chatHttpService.findGroupByName(groupName).pipe(switchMap(exGroup => {
+      if (exGroup) {
+        this.activeGroup = exGroup;
+        this.initGroupChat();
+        this.ref.markForCheck();
+        return EMPTY;
       }
+      const group = new Group();
+      group.isPrivate = true;
+      group.groupName = groupName;
+      group.members = [];
+      group.members.push(user._id);
+      group.members.push(this.myUserId);
+      return this.chatHttpService.addGroup(group);
+    })).subscribe((gr) => {
       this.activeGroup = gr;
       this.initGroupChat();
       this.ref.markForCheck();
-    });
+    }));
   }
 
   private findMyPublicGroups(groups: Group[]) {

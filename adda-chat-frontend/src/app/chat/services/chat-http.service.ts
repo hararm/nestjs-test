@@ -14,12 +14,12 @@ export class ChatHttpService {
   constructor(private http: HttpClient) {
   }
 
-  addGroup(group: Group) {
+  addGroup(group: Group): Observable<Group> {
     return this.http.post<Group>(`${this.apiPath}groups`, group);
   }
 
-  updateGroup(groupId: string, group: Group) {
-    return this.http.put(`${this.apiPath}groups/${groupId}`, group);
+  updateGroup(groupId: string, group: Group): Observable<Group> {
+    return this.http.put<Group>(`${this.apiPath}groups/${groupId}`, group);
   }
 
   findAllUsers(): Observable<User[]> {
