@@ -167,18 +167,29 @@ export class GroupChatComponent implements OnInit, OnDestroy {
       ));
   }
 
-  onCreatePrivateChat(user: User) {
+  onCreateJoinPrivateGroup(user: User) {
     if (this.activeGroup) {
       this.leaveRoom();
     }
     const groupName = user.email + '-' + this.myUserName;
+    const reverseGroupName = this.myUserName + '-' + user.email;
     this.subscription.add(this.chatHttpService.findGroupByName(groupName).pipe(switchMap(exGroup => {
+        if (exGroup) {
+          this.activeGroup = exGroup;
+          this.initGroupChat();
+          this.ref.markForCheck();
+          return EMPTY;
+        }
+        return this.chatHttpService.findGroupByName(reverseGroupName);
+      })
+    ).pipe(switchMap(exGroup => {
       if (exGroup) {
         this.activeGroup = exGroup;
         this.initGroupChat();
         this.ref.markForCheck();
         return EMPTY;
       }
+
       const group = new Group();
       group.isPrivate = true;
       group.groupName = groupName;
@@ -252,6 +263,25 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     return id === this.myUserId;
   }
 
+  isCurrentlyActiveGroup(group: Group): boolean {
+    if(!group) {
+      return false;
+    }
+    return group?._id === this.activeGroup?._id
+  }
+
+  isCurrentlyActiveUser(user: User): boolean {
+    if(this.activeGroup && this.activeGroup.isPrivate) {
+      if(this.activeGroup.members.length && this.activeGroup.members.length === 2) {
+        const groupName = user.email + '-' + this.myUserName;
+        const reverseGroupName = this.myUserName + '-' + user.email;
+        return this.activeGroup.groupName === groupName || this.activeGroup.groupName === reverseGroupName;
+      }
+      return false;
+    }
+    return false;
+  }
+
   leaveRoom() {
     delete this.onlineMembers;
     this.onlineMembers = [];
@@ -278,7 +308,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  onJoinGroup(group: Group) {
+  onJoinPublicGroup(group: Group) {
     if (this.activeGroup) {
       this.leaveRoom();
     }

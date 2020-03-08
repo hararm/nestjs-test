@@ -18,7 +18,7 @@
           <div *dxTemplate="let type of 'item'">
             <div *ngIf="type.id === 1">
               <div *ngFor="let group of publicGroups" class="category-list"
-                   [ngClass]="{'category-current': group?._id === activeGroup?._id}">
+                   [ngClass]="{'category-current': isCurrentlyActiveGroup(group)}">
                 <div style="padding: 10px">
                   <div class="thumbnail">
                     <img alt="">
@@ -31,8 +31,8 @@
                           </p>
                         </div>
                         <div class="col-xs-12 col-md-6">
-                          <button *ngIf="isMyGroup(group)" [disabled]="activeGroup._id === group._id"
-                                  class="btn add-fav" (click)="onJoinGroup(group)">
+                          <button *ngIf="isMyGroup(group)" [disabled]="isCurrentlyActiveGroup(group)"
+                                  class="btn add-fav" (click)="onJoinPublicGroup(group)">
                             Join
                           </button>
                         </div>
@@ -44,15 +44,15 @@
             </div>
             <div *ngIf="type.id=== 2">
               <div *ngFor="let user of users" class="category-list"
-                   [ngClass]="{'category-current': user?._id === activeGroup?._id}">
+                   [ngClass]="{'category-current': isCurrentlyActiveUser(user)}">
                 <div *ngIf="!isMyUser(user._id)" class="caption">
                   <h4>{{user?.email}}</h4>
                   <div class="row">
                     <div class="col-xs-12 col-md-6">
                     </div>
                     <div class="col-xs-12 col-md-6">
-                      <button
-                              class="btn add-fav" (click)="onCreatePrivateChat(user)">
+                      <button [disabled]="isCurrentlyActiveUser(user)"
+                              class="btn add-fav" (click)="onCreateJoinPrivateGroup(user)">
                         Private Chat
                       </button>
                     </div>
