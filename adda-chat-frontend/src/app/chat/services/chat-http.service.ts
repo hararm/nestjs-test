@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {ChatMessage} from '../models/chat-message.model';
 import {User} from '../models/user.model';
+import {map} from "rxjs/operators";
 
 
 @Injectable()
@@ -30,8 +31,14 @@ export class ChatHttpService {
     return this.http.get<User>(`${this.apiPath}users/findById/${id}`)
   }
 
-  findAllGroups(): Observable<Group[]> {
+  findAllPublicGroups(): Observable<Group[]> {
     return this.http.get<Group[]>(`${this.apiPath}groups`)
+      .pipe(map( (groups: Group[]) => groups.filter( g => !g.isPrivate)));
+  }
+
+  findAllPrivateGroups(): Observable<Group[]> {
+    return this.http.get<Group[]>(`${this.apiPath}groups`)
+      .pipe(map( (groups: Group[]) => groups.filter( g => g.isPrivate)));
   }
 
   findGroupByName(groupName: string): Observable<Group> {

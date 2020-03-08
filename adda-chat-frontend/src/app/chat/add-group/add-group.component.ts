@@ -29,15 +29,14 @@ export class AddGroupComponent implements OnInit {
 
   initForm() {
     this.addGroupForm = this.fb.group({
-      name: [null, Validators.required],
+      groupName: [null, Validators.required],
       clinicName: [null],
-      image: [''],
     });
   }
 
   fillForm() {
     this.addGroupForm.patchValue({
-      name: this.group.groupName,
+      groupName: this.group.groupName,
       clinicName: this.group.clinicName
     });
   }

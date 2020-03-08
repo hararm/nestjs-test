@@ -127,7 +127,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   private getPublicGroups() {
-    const groups$ = this.chatHttpService.findAllGroups();
+    const groups$ = this.chatHttpService.findAllPublicGroups();
     const users$ = this.chatHttpService.findAllUsers();
 
     this.subscription.add(combineLatest(groups$, users$)

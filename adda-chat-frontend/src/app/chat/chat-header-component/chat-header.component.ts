@@ -50,7 +50,7 @@ export class ChatHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.subscription.add(this.chatHttpService.findAllGroups().subscribe(groups => {
+    this.subscription.add(this.chatHttpService.findAllPublicGroups().subscribe(groups => {
       this.chatGroups = groups;
       this.ref.markForCheck();
     }));
