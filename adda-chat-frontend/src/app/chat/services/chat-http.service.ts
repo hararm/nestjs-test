@@ -4,8 +4,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {ChatMessage} from '../models/chat-message.model';
-import {User} from '../models/user.model';
-import {map} from "rxjs/operators";
+import {SignUpUser, User} from '../models/user.model';
+import {map} from 'rxjs/operators';
 
 
 @Injectable()
@@ -23,7 +23,7 @@ export class ChatHttpService {
     return this.http.put<Group>(`${this.apiPath}groups/${groupId}`, group);
   }
 
-  signUpUser(user: User): Observable<User> {
+  signUpUser(user: SignUpUser): Observable<User> {
     return this.http.post<User>(`${this.apiPath}signup`, user);
   }
 

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {SignUpUser} from '../models/user.model';
+import {BsModalRef} from 'ngx-bootstrap';
+import {ChatHttpService} from '../services/chat-http.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {User} from "../models/user.model";
-import {BsModalRef} from "ngx-bootstrap";
-import {ChatHttpService} from "../services/chat-http.service";
 
 @Component({
   selector: 'app-add-user',
@@ -11,13 +11,14 @@ import {ChatHttpService} from "../services/chat-http.service";
 })
 export class AddUserComponent implements OnInit {
   addUserForm: FormGroup;
-  user: User;
+  user: SignUpUser;
   roles: FormArray;
   isNew: boolean;
+  roleNames = ['ADMIN', 'PRACTITIONER'];
 
   constructor(public modalFormRef: BsModalRef, private fb: FormBuilder, private chatHttpService: ChatHttpService) {
     if (!this.isNew) {
-      this.user = new User('', '', '');
+      this.user = new SignUpUser('', '', '');
     }
   }
 
@@ -30,18 +31,19 @@ export class AddUserComponent implements OnInit {
     this.addUserForm = this.fb.group({
       email: [null, Validators.required],
       userName: [null],
+      password: [null],
       roles: this.fb.array(([this.createRole()]))
     });
   }
 
   createRole(): FormGroup {
     return this.fb.group({
-     role: 'PRACTITIONER'
+     role: this.roleNames[0]
     });
   }
 
   addRole(): void {
-    this.roles = this.addUserForm.get('roles') as FormArray;
+    this.roles = this.addUserForm.controls.roles as FormArray;
     this.roles.push(this.createRole());
   }
 
@@ -49,6 +51,7 @@ export class AddUserComponent implements OnInit {
     this.addUserForm.patchValue({
       email: this.user.email,
       userName: this.user.userName,
+      roles: this.user.roles || []
     });
   }
 

@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
     this.form = fb.group({
       email: ['armen@addatech.ca', [Validators.required]],
-      password: ['password', [Validators.required]]
+      password: ['Cm.12345', [Validators.required]]
     });
 
   }

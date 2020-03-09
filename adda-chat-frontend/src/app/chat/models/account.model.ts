@@ -8,4 +8,6 @@ export class Account implements IUser {
     public isOnline: boolean,
     public _id: string = null,) {
   }
+
+  roles: string[];
 }
