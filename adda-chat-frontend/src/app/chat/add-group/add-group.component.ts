@@ -14,7 +14,6 @@ export class AddGroupComponent implements OnInit {
   addGroupForm: FormGroup;
   group: Group;
   isNew: boolean;
-  file: any;
 
   constructor(public modalFormRef: BsModalRef, private fb: FormBuilder, private chatHttpService: ChatHttpService) {
     if(!this.isNew) {
@@ -39,10 +38,6 @@ export class AddGroupComponent implements OnInit {
       groupName: this.group.groupName,
       clinicName: this.group.clinicName
     });
-  }
-
-  fileChanged(e) {
-    this.file = e.target.files[0];
   }
 
   submitClick() {

@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 import {EditGroupMemberComponent} from '../add-group-member/edit-group-member.component';
 import {User} from '../models/user.model';
 import * as _ from 'lodash';
+import {AddUserComponent} from "../add-user/add-user.component";
 
 @Component({
   selector: 'app-chat-header-component',
@@ -64,6 +65,13 @@ export class ChatHeaderComponent implements OnInit {
       data: {}
     };
     this.modalFormRef = this.modalService.show(AddGroupComponent, Object.assign({}, this.modalConfig));
+  }
+
+  onAddUser() {
+    this.modalConfig.initialState = {
+      data: {}
+    };
+    this.modalFormRef = this.modalService.show(AddUserComponent, Object.assign({}, this.modalConfig));
   }
 
   onEditGroupMembers() {

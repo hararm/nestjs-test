@@ -10,6 +10,7 @@ import {SelectDropDownModule} from 'ngx-select-dropdown';
 import {GroupChatComponent} from './group-chat/group-chat.component';
 import { EditGroupMemberComponent } from './add-group-member/edit-group-member.component';
 import {DxModule} from '../dx.module';
+import { AddUserComponent } from './add-user/add-user.component';
 
 export const chatRoutes: Routes = [
   {
@@ -32,7 +33,8 @@ export const chatRoutes: Routes = [
     ChatHeaderComponent,
     AddGroupComponent,
     GroupChatComponent,
-    EditGroupMemberComponent
+    EditGroupMemberComponent,
+    AddUserComponent
   ],
   exports: [
     ChatHeaderComponent,
@@ -42,6 +44,7 @@ export const chatRoutes: Routes = [
   ],
   entryComponents: [
     AddGroupComponent,
+    AddUserComponent,
     EditGroupMemberComponent
   ]
 })

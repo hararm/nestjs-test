@@ -289,11 +289,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   onAddGroupMember(user: User) {
-    this.chatIOService.inviteMember(this.activeGroup._id, new User(user._id, user.email));
+    this.chatIOService.inviteMember(this.activeGroup._id, new User(user._id, user.email, user.userName));
   }
 
   onRemoveGroupMember(member: Account) {
-    this.chatIOService.unInviteMember(this.activeGroup._id, new User(member._id, member.email));
+    this.chatIOService.unInviteMember(this.activeGroup._id, new User(member._id, member.email, member.userName));
   }
 
   onDeleteMessage(message: ChatMessage) {

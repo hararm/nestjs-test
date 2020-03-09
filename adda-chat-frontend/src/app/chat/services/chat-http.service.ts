@@ -23,6 +23,10 @@ export class ChatHttpService {
     return this.http.put<Group>(`${this.apiPath}groups/${groupId}`, group);
   }
 
+  signUpUser(user: User): Observable<User> {
+    return this.http.post<User>(`${this.apiPath}signup`, user);
+  }
+
   findAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiPath}users`)
   }
