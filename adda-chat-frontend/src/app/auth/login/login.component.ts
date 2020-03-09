@@ -6,7 +6,7 @@ import {tap} from 'rxjs/operators';
 import {noop} from 'rxjs';
 import {Router} from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import {ChatIOService} from "../../chat/services/chat-io.service";
+import {ChatIOService} from '../../chat/services/chat-io.service';
 
 @Component({
   selector: 'login',

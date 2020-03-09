@@ -139,9 +139,6 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   private initGroupChat() {
-    if (!this.publicGroups || this.publicGroups.length === 0) {
-      return;
-    }
     if (!this.activeGroup || !this.activeGroup._id) {
       this.activeGroup = this.publicGroups[0];
     }
